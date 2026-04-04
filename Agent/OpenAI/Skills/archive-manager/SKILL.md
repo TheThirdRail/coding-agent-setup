@@ -5,110 +5,165 @@ description: |
   memory). Use when the user wants to preserve, search, or inspect project
   context but has not selected a specific archive mechanism.
 ---
+# Skill: archive-manager
+Attributes: name="archive-manager", version="2.0.0"
 
-<skill name="archive-manager" version="2.0.0">
-  <metadata>
-    <keywords>archive, router, context, history, memory, indexing</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>archive-manager</id>
-    <name>archive-manager</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Select and dispatch the correct archive capability based on the requested context operation.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: archive, router, context, history, memory, indexing
 
-  <goal>Select and dispatch the correct archive capability based on the requested context operation.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Intent-Based Routing">
-      <rule>Route based on the data type and retrieval intent, not tool familiarity.</rule>
-      <rule>Choose one primary archive path first, then compose with others only when needed.</rule>
-    </principle>
+- `id`: archive-manager
 
-    <principle name="Storage Awareness">
-      <rule>Keep archive outputs project-scoped unless explicitly requested otherwise.</rule>
-      <rule>Prefer deterministic paths under Agent-Context/Archives.</rule>
-    </principle>
+- `name`: archive-manager
 
-    <principle name="Traceable Hand-Offs">
-      <rule>State which archive skill is selected and what artifact will be produced.</rule>
-    </principle>
+- `version`: 2.0.0
 
-    <principle name="Archive Lifecycle Enforcement">
-      <rule>After code/docs/config changes, require archive updates before declaring task completion.</rule>
-      <rule>Prefer archive-first retrieval when archive freshness is adequate; fall back to direct file reads only when needed.</rule>
-    </principle>
-  </core_principles>
+- `last_updated`: 2026-02-09
 
-  <workflow>
-    <step number="0" name="Identify Archive Event">
-      <instruction>Classify the request into one of the canonical events: setup, planning, research, handoff, or release.</instruction>
-      <instruction>For implementation/refactor/fix activity, treat completion-time indexing as part of the release event.</instruction>
-    </step>
+- `purpose`: Select and dispatch the correct archive capability based on the requested context operation.
 
-    <step number="1" name="Classify Archive Need">
-      <question>Need symbol index/navigation? Route to archive-code.</question>
-      <question>Need semantic document retrieval? Route to archive-docs.</question>
-      <question>Need repository evolution/history? Route to archive-git.</question>
-      <question>Need structural code graph? Route to archive-graph.</question>
-      <question>Need durable decision/context store? Route to archive-memory.</question>
-      <question>Is this retrieval-only, post-change indexing, or both?</question>
-    </step>
+### Inputs (`inputs`)
 
-    <step number="2" name="Dispatch to Specialized Skill">
-      <decision_tree>
-        <branch condition="Code symbol navigation">archive-code</branch>
-        <branch condition="Document embedding and semantic search">archive-docs</branch>
-        <branch condition="Git history or commit tracing">archive-git</branch>
-        <branch condition="Structural node/edge code graph">archive-graph</branch>
-        <branch condition="Persistent key/value memory context">archive-memory</branch>
-      </decision_tree>
-    </step>
+- `input`: User request and relevant project context.
 
-    <step number="3" name="Record Archive Contract">
-      <instruction>Capture chosen skill, project path, output path, retrieval command, and freshness status.</instruction>
-    </step>
+### Outputs (`outputs`)
 
-    <step number="4" name="Enforce Archive Read/Write Policy">
-      <instruction>If code/docs/config changed, execute required archive writes before completion.</instruction>
-      <instruction>For context gathering, use fresh archives first; if stale/missing, read source files then refresh archives.</instruction>
-    </step>
-  </workflow>
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
 
-  <best_practices>
-    <do>Use archive-code and archive-graph together for deep structural analysis</do>
-    <do>Use archive-memory for decisions and archive-docs for long-form references</do>
-    <do>Pair archive-git with other archives when validating historical context</do>
-    <dont>Store the same payload redundantly in every archive store</dont>
-    <dont>Route to multiple archive skills before clarifying retrieval intent</dont>
-  </best_practices>
+### Triggers (`triggers`)
 
-  <related_skills>
-    <skill>archive-code</skill>
-    <skill>archive-docs</skill>
-    <skill>archive-git</skill>
-    <skill>archive-graph</skill>
-    <skill>archive-memory</skill>
-  </related_skills>
-</skill>
+- `trigger`: Use when the frontmatter description conditions are met.
+
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Select and dispatch the correct archive capability based on the requested context operation.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Intent-Based Routing"
+
+- `rule`: Route based on the data type and retrieval intent, not tool familiarity.
+
+- `rule`: Choose one primary archive path first, then compose with others only when needed.
+
+### Principle (`principle`)
+Attributes: name="Storage Awareness"
+
+- `rule`: Keep archive outputs project-scoped unless explicitly requested otherwise.
+
+- `rule`: Prefer deterministic paths under Agent-Context/Archives.
+
+### Principle (`principle`)
+Attributes: name="Traceable Hand-Offs"
+
+- `rule`: State which archive skill is selected and what artifact will be produced.
+
+### Principle (`principle`)
+Attributes: name="Prefer Best-Fit MCP First"
+
+- `rule`: When an archive skill has a clear MCP equivalent, use the MCP path first and keep the local archive implementation as the fallback.
+
+- `rule`: Current preferred mappings are Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory.
+
+### Principle (`principle`)
+Attributes: name="Archive Lifecycle Enforcement"
+
+- `rule`: After code/docs/config changes, require archive updates before declaring task completion.
+
+- `rule`: Prefer archive-first retrieval when archive freshness is adequate; fall back to direct file reads only when needed.
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="0", name="Identify Archive Event"
+
+- `instruction`: Classify the request into one of the canonical events: setup, planning, research, handoff, or release.
+
+- `instruction`: For implementation/refactor/fix activity, treat completion-time indexing as part of the release event.
+
+### Step (`step`)
+Attributes: number="1", name="Classify Archive Need"
+
+- `question`: Need symbol index/navigation? Route to archive-code.
+
+- `question`: Need semantic document retrieval? Route to archive-docs.
+
+- `question`: Need repository evolution/history? Route to archive-git.
+
+- `question`: Need structural code graph? Route to archive-graph.
+
+- `question`: Need durable decision/context store? Route to archive-memory.
+
+- `instruction`: Prefer Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory when those servers are available.
+
+- `question`: Is this retrieval-only, post-change indexing, or both?
+
+### Step (`step`)
+Attributes: number="2", name="Dispatch to Specialized Skill"
+
+#### Decision Tree (`decision_tree`)
+
+- `branch` (condition="Code symbol navigation"): archive-code
+
+- `branch` (condition="Document embedding and semantic search"): archive-docs
+
+- `branch` (condition="Git history or commit tracing"): archive-git
+
+- `branch` (condition="Structural node/edge code graph"): archive-graph
+
+- `branch` (condition="Persistent key/value memory context"): archive-memory
+
+### Step (`step`)
+Attributes: number="3", name="Record Archive Contract"
+
+- `instruction`: Capture chosen skill, project path, output path, retrieval command, and freshness status.
+
+- `instruction`: Record whether the request used the preferred MCP path or the local archive fallback.
+
+### Step (`step`)
+Attributes: number="4", name="Enforce Archive Read/Write Policy"
+
+- `instruction`: If code/docs/config changed, execute required archive writes before completion.
+
+- `instruction`: For context gathering, use fresh archives first; if stale/missing, read source files then refresh archives.
+
+## Best Practices (`best_practices`)
+
+- `do`: Use archive-code and archive-graph together for deep structural analysis
+
+- `do`: Prefer Serena, RAGDocs, CodeGraph, and Memory MCP for their matching archive lanes before falling back to local scripts
+
+- `do`: Use archive-memory for decisions and archive-docs for long-form references
+
+- `do`: Pair archive-git with other archives when validating historical context
+
+- `dont`: Store the same payload redundantly in every archive store
+
+- `dont`: Route to multiple archive skills before clarifying retrieval intent
+
+## Related Skills (`related_skills`)
+
+- `skill`: archive-code
+
+- `skill`: archive-docs
+
+- `skill`: archive-git
+
+- `skill`: archive-graph
+
+- `skill`: archive-memory

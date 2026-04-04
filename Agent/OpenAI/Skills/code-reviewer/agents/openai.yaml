@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Reviewer"
+  short_description: "Help with Code Reviewer tasks"
+  default_prompt: "Use $code-reviewer to automated code review for pull requests and code changes. Identifies bugs, security vulnerabilities, performance issues, and style violations."

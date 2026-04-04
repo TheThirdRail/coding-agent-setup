@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$EnvFilePath = ''
+    [string]$EnvFilePath = '',
+    [switch]$DryRun
 )
 
 $ErrorActionPreference = 'Stop'
@@ -14,31 +15,19 @@ if (-not (Test-Path $EnvFilePath)) {
     exit 1
 }
 
-$mappings = @{
-    # Core and overlap-safe mappings
+$dockerSecretMappings = [ordered]@{
     'GITHUB_PERSONAL_ACCESS_TOKEN' = @('github.token', 'github.personal_access_token')
-    'BRAVE_API_KEY'                = @('brave-search.api_key', 'brave.api_key')
-    'TODOIST_API_TOKEN'            = @('todoist.api_key')
-    'SUPABASE_ACCESS_TOKEN'        = @('supabase.access_token')
-    'NOTION_API_KEY'               = @('notion.key', 'notion.internal_integration_token')
     'FIRECRAWL_API_KEY'            = @('firecrawl.api_key', 'firecrawl.key')
-    'SENTRY_AUTH_TOKEN'            = @('sentry.auth_token')
-    'SENTRY_ORG'                   = @('sentry.org')
-
-    # Custom runtime catalog mappings
-    'CLOUDFLARE_API_TOKEN'         = @('cloudflare.api_token')
-    'CLOUDFLARE_ACCOUNT_ID'        = @('cloudflare.account_id')
-    'SNYK_TOKEN'                   = @('snyk.api_key')
-    'MEM0_API_KEY'                 = @('mem0.key')
-    'PUBMED_EMAIL'                 = @('pubmed.email')
-    'QDRANT_URL'                   = @('qdrant.url')
-    'QDRANT_API_KEY'               = @('qdrant.api_key')
-    'SEARXNG_URL'                  = @('searxng.url')
-    'NEXUS_API_KEY'                = @('nexus.key')
 }
 
-function Normalize-EnvValue {
+$directOnlyVariables = [ordered]@{
+    'SEARXNG_URL'      = 'Direct client config value for the local SearXNG adapter. Not written to Docker secrets.'
+    'CONTEXT7_API_KEY' = 'Optional direct-client Context7 auth. Not written to Docker secrets by this script.'
+}
+
+function ConvertTo-NormalizedEnvValue {
     param([string]$Value)
+
     $trimmed = $Value.Trim()
     if (
         ($trimmed.StartsWith('"') -and $trimmed.EndsWith('"')) -or
@@ -46,45 +35,66 @@ function Normalize-EnvValue {
     ) {
         return $trimmed.Substring(1, $trimmed.Length - 2)
     }
+
     return $trimmed
 }
+
+function Get-EnvEntries {
+    param([string]$Path)
+
+    $entries = @{}
+    foreach ($rawLine in Get-Content $Path) {
+        $line = $rawLine.Trim()
+        if ([string]::IsNullOrWhiteSpace($line) -or $line.StartsWith('#')) {
+            continue
+        }
+
+        $parts = $line.Split('=', 2)
+        if ($parts.Count -ne 2) {
+            continue
+        }
+
+        $name = $parts[0].Trim()
+        $value = ConvertTo-NormalizedEnvValue -Value $parts[1]
+        if ([string]::IsNullOrWhiteSpace($name) -or [string]::IsNullOrWhiteSpace($value)) {
+            continue
+        }
+
+        $entries[$name] = $value
+    }
+
+    return $entries
+}
+
+if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+    Write-Error 'Docker CLI not found on PATH.'
+    exit 1
+}
+
+$envEntries = Get-EnvEntries -Path $EnvFilePath
+$setCount = 0
+$failCount = 0
 
 Write-Host '+--------------------------------------------+' -ForegroundColor Cyan
 Write-Host '|   Docker MCP Secrets Configuration         |' -ForegroundColor Cyan
 Write-Host '+--------------------------------------------+' -ForegroundColor Cyan
-Write-Host "Reading secrets from $EnvFilePath..." -ForegroundColor Yellow
+Write-Host "Reading environment values from $EnvFilePath..." -ForegroundColor Yellow
 Write-Host ''
 
-$setCount = 0
-$failCount = 0
-$seenEnv = New-Object System.Collections.Generic.HashSet[string]
-
-Get-Content $EnvFilePath | ForEach-Object {
-    $line = $_.Trim()
-    if ([string]::IsNullOrWhiteSpace($line) -or $line.StartsWith('#')) {
-        return
+foreach ($envName in $dockerSecretMappings.Keys) {
+    if (-not $envEntries.ContainsKey($envName)) {
+        continue
     }
 
-    $parts = $line.Split('=', 2)
-    if ($parts.Count -ne 2) {
-        return
-    }
+    foreach ($secretName in $dockerSecretMappings[$envName]) {
+        if ($DryRun) {
+            Write-Host "[DRY RUN] Would set $secretName from $envName" -ForegroundColor Yellow
+            continue
+        }
 
-    $envName = $parts[0].Trim()
-    $envValue = Normalize-EnvValue -Value $parts[1]
-    if ([string]::IsNullOrWhiteSpace($envValue)) {
-        return
-    }
-
-    $seenEnv.Add($envName) | Out-Null
-    if (-not $mappings.ContainsKey($envName)) {
-        return
-    }
-
-    foreach ($secretName in $mappings[$envName]) {
         Write-Host "  Setting $secretName..." -NoNewline
         try {
-            $envValue | docker mcp secret set $secretName 2>&1 | Out-Null
+            $envEntries[$envName] | docker mcp secret set $secretName 2>&1 | Out-Null
             if ($LASTEXITCODE -eq 0) {
                 Write-Host ' [OK]' -ForegroundColor Green
                 $setCount++
@@ -101,20 +111,31 @@ Get-Content $EnvFilePath | ForEach-Object {
     }
 }
 
-$missingMapped = @()
-foreach ($envName in $mappings.Keys) {
-    if (-not $seenEnv.Contains($envName)) {
-        $missingMapped += $envName
+Write-Host ''
+Write-Host 'Direct-client variables detected in .env:' -ForegroundColor Cyan
+foreach ($name in $directOnlyVariables.Keys) {
+    if ($envEntries.ContainsKey($name)) {
+        Write-Host "  - $name" -ForegroundColor Gray
+        Write-Host "    $($directOnlyVariables[$name])" -ForegroundColor DarkGray
     }
 }
 
+$missingDockerVars = @($dockerSecretMappings.Keys | Where-Object { -not $envEntries.ContainsKey($_) })
+
 Write-Host ''
 Write-Host '--------------------------------------------' -ForegroundColor Cyan
-Write-Host "Results: $setCount secrets set, $failCount failed" -ForegroundColor $(if ($failCount -eq 0) { 'Green' } else { 'Yellow' })
-if ($missingMapped.Count -gt 0) {
-    Write-Host 'Missing optional env vars (not set):' -ForegroundColor Yellow
-    foreach ($name in $missingMapped | Sort-Object) {
+if ($DryRun) {
+    Write-Host '[DRY RUN] No Docker secrets were changed.' -ForegroundColor Yellow
+}
+else {
+    Write-Host "Results: $setCount secrets set, $failCount failed" -ForegroundColor $(if ($failCount -eq 0) { 'Green' } else { 'Yellow' })
+}
+
+if ($missingDockerVars.Count -gt 0) {
+    Write-Host 'Missing optional Docker-secret env vars:' -ForegroundColor Yellow
+    foreach ($name in $missingDockerVars) {
         Write-Host "  - $name" -ForegroundColor Gray
     }
 }
-Write-Host "Run 'docker mcp secret ls' to verify." -ForegroundColor Gray
+
+Write-Host "Run 'docker mcp secret ls' to verify stored Docker secrets." -ForegroundColor Gray

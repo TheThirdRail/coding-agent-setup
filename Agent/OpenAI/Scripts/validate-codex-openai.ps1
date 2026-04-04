@@ -99,7 +99,10 @@ $refFiles += Get-Item $canonicalAgentsPath -ErrorAction SilentlyContinue
 foreach ($file in $refFiles) {
     if (-not $file) { continue }
     $content = Get-Content $file.FullName -Raw
-    $refs = [regex]::Matches($content, '<skill\s+ref="([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
+    $refs = @()
+    $refs += [regex]::Matches($content, '(?m)^- `skill`: ([a-z0-9-]+)\s*$') | ForEach-Object { $_.Groups[1].Value }
+    $refs += [regex]::Matches($content, 'related skill `([a-z0-9-]+)`') | ForEach-Object { $_.Groups[1].Value }
+    $refs += [regex]::Matches($content, 'Invoke related skill `([a-z0-9-]+)`') | ForEach-Object { $_.Groups[1].Value }
     foreach ($r in $refs) {
         if ($skillNames -notcontains $r) {
             $failures += "Missing skill reference '$r' in $($file.FullName)"

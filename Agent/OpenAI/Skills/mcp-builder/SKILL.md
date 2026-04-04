@@ -5,64 +5,84 @@ description: |
   use mcp-manager's code-mode feature instead.
   Use when no existing MCP server provides the required capability and a custom MCP tool is needed.
 ---
+# Skill: mcp-builder
+Attributes: name="mcp-builder", version="2.0.0"
 
-<skill name="mcp-builder" version="2.0.0">
-  <metadata>
-    <keywords>mcp, tools, custom, schema, handlers, development</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>mcp-builder</id>
-    <name>mcp-builder</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Create custom MCP tools to extend Antigravity&apos;s capabilities.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: mcp, tools, custom, schema, handlers, development
 
+## Spec Contract (`spec_contract`)
 
+- `id`: mcp-builder
 
-  <goal>Create custom MCP tools to extend Antigravity's capabilities.</goal>
+- `name`: mcp-builder
 
-  <core_principles>
-    <principle name="Schema-First Design">
-      <rule>Define the tool's interface (schema) before implementation</rule>
-      <rule>Use JSON Schema for input validation</rule>
-      <rule>Include clear descriptions for AI understanding</rule>
-    </principle>
+- `version`: 2.0.0
 
-    <principle name="Structured Returns">
-      <rule>Always return structured data (objects), not raw strings</rule>
-      <rule>Include success/error status in responses</rule>
-      <rule>Provide contextual error messages</rule>
-    </principle>
+- `last_updated`: 2026-02-09
 
-    <principle name="Single Responsibility">
-      <rule>Each tool should do one thing well</rule>
-      <rule>Combine multiple tools using code-mode</rule>
-      <rule>Keep input parameters focused and minimal</rule>
-    </principle>
-  </core_principles>
+- `purpose`: Create custom MCP tools to extend Antigravity's capabilities.
 
-  <tool_anatomy><![CDATA[
+### Inputs (`inputs`)
+
+- `input`: User request and relevant project context.
+
+### Outputs (`outputs`)
+
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
+
+### Triggers (`triggers`)
+
+- `trigger`: Use when the frontmatter description conditions are met.
+
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Create custom MCP tools to extend Antigravity's capabilities.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Schema-First Design"
+
+- `rule`: Define the tool's interface (schema) before implementation
+
+- `rule`: Use JSON Schema for input validation
+
+- `rule`: Include clear descriptions for AI understanding
+
+### Principle (`principle`)
+Attributes: name="Structured Returns"
+
+- `rule`: Always return structured data (objects), not raw strings
+
+- `rule`: Include success/error status in responses
+
+- `rule`: Provide contextual error messages
+
+### Principle (`principle`)
+Attributes: name="Single Responsibility"
+
+- `rule`: Each tool should do one thing well
+
+- `rule`: Combine multiple tools using code-mode
+
+- `rule`: Keep input parameters focused and minimal
+
+- `tool_anatomy`:
+```text
 ┌──────────────────────────────────────────┐
 │                MCP Tool                   │
 ├──────────────────────────────────────────┤
@@ -76,11 +96,15 @@ description: |
 │     - Executes business logic             │
 │     - Returns structured result           │
 └──────────────────────────────────────────┘
-  ]]></tool_anatomy>
+```
 
-  <workflow>
-    <step number="1" name="Define Tool Schema">
-      <template><![CDATA[
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Define Tool Schema"
+
+- `template`:
+```text
 {
   name: "fetch_weather",
   description: "Get current weather for a city.",
@@ -93,11 +117,13 @@ description: |
     required: ["city"]
   }
 }
-      ]]></template>
-    </step>
+```
 
-    <step number="2" name="Implement Handler">
-      <template><![CDATA[
+### Step (`step`)
+Attributes: number="2", name="Implement Handler"
+
+- `template`:
+```text
 async function handler({ city, units = "celsius" }) {
   try {
     const result = await fetchData(city);
@@ -106,19 +132,20 @@ async function handler({ city, units = "celsius" }) {
     return { success: false, error: error.message, code: "API_ERROR" };
   }
 }
-      ]]></template>
-    </step>
+```
 
-    <step number="3" name="Register with MCP Server">
-      <instruction>Add to tools/list and tools/call handlers</instruction>
-    </step>
+### Step (`step`)
+Attributes: number="3", name="Register with MCP Server"
 
-    <step number="4" name="Test with mcp-exec">
-      <action>mcp-exec(name: "fetch_weather", arguments: {city: "London"})</action>
-    </step>
-  </workflow>
+- `instruction`: Add to tools/list and tools/call handlers
 
-  <decision_tree><![CDATA[
+### Step (`step`)
+Attributes: number="4", name="Test with mcp-exec"
+
+- `action`: mcp-exec(name: "fetch_weather", arguments: {city: "London"})
+
+- `decision_tree`:
+```text
 Need custom functionality?
     ↓
 Check if existing MCP server provides it
@@ -128,31 +155,39 @@ Is it a one-off operation?
     YES → Use code-mode to script it
     NO  ↓
 Define tool schema → Implement handler → Test → Register
-  ]]></decision_tree>
+```
 
-  <schema_best_practices>
-    <practice aspect="Names" bad="do_thing" good="create_github_issue"/>
-    <practice aspect="Descriptions" bad="Does stuff" good="Creates a new issue in a GitHub repository"/>
-    <practice aspect="Required fields" bad="Everything optional" good="Mark truly required fields"/>
-    <practice aspect="Defaults" bad="No defaults" good="default: 'main' for branch"/>
-    <practice aspect="Constraints" bad="Free text for status" good="enum: ['open', 'closed']"/>
-  </schema_best_practices>
+## Schema Best Practices (`schema_best_practices`)
 
-  <tool_categories>
-    <category name="Query Tools" description="Read-Only">
-      <example name="search_customers" inputs="query, limit" returns="matching records"/>
-    </category>
+- `practice` (aspect="Names", bad="do_thing", good="create_github_issue")
 
-    <category name="Action Tools" description="Write Operations">
-      <example name="deploy_application" inputs="environment, version, dry_run" returns="deployment status"/>
-    </category>
+- `practice` (aspect="Descriptions", bad="Does stuff", good="Creates a new issue in a GitHub repository")
 
-    <category name="Composite Tools" description="Multi-Step">
-      <example name="analyze_project" inputs="path, include_security" returns="summary report"/>
-    </category>
-  </tool_categories>
+- `practice` (aspect="Required fields", bad="Everything optional", good="Mark truly required fields")
 
-  <error_handling_pattern><![CDATA[
+- `practice` (aspect="Defaults", bad="No defaults", good="default: 'main' for branch")
+
+- `practice` (aspect="Constraints", bad="Free text for status", good="enum: ['open', 'closed']")
+
+## Tool Categories (`tool_categories`)
+
+### Category (`category`)
+Attributes: name="Query Tools", description="Read-Only"
+
+- `example` (name="search_customers", inputs="query, limit", returns="matching records")
+
+### Category (`category`)
+Attributes: name="Action Tools", description="Write Operations"
+
+- `example` (name="deploy_application", inputs="environment, version, dry_run", returns="deployment status")
+
+### Category (`category`)
+Attributes: name="Composite Tools", description="Multi-Step"
+
+- `example` (name="analyze_project", inputs="path, include_security", returns="summary report")
+
+- `error_handling_pattern`:
+```text
 async function handler(input) {
   // 1. Validate input
   if (!input.required_field) {
@@ -169,31 +204,43 @@ async function handler(input) {
     return { success: false, error: error.message, code: "UNKNOWN_ERROR" };
   }
 }
-  ]]></error_handling_pattern>
+```
 
-  <best_practices>
-    <do>Use verb_noun naming (create_issue, search_repos)</do>
-    <do>Include parameter descriptions for AI</do>
-    <do>Return structured objects with success/error status</do>
-    <do>Validate inputs before processing</do>
-    <do>Include helpful error messages</do>
-    <do>Test with mcp-exec before registering</do>
-    <dont>Return raw strings</dont>
-    <dont>Create tools for one-off tasks (use code-mode)</dont>
-    <dont>Make all parameters optional</dont>
-    <dont>Catch errors silently</dont>
-    <dont>Create mega-tools</dont>
-    <dont>Skip input validation</dont>
-  </best_practices>
+## Best Practices (`best_practices`)
 
-  <resource_folders>
-    <folder name="scripts/" purpose="Utility scripts">
-      <file>set-mcp-secrets.ps1</file>
-    </folder>
-  </resource_folders>
+- `do`: Use verb_noun naming (create_issue, search_repos)
 
-  <related_skills>
-    <skill>mcp-manager</skill>
-    <skill>docker-ops</skill>
-  </related_skills>
-</skill>
+- `do`: Include parameter descriptions for AI
+
+- `do`: Return structured objects with success/error status
+
+- `do`: Validate inputs before processing
+
+- `do`: Include helpful error messages
+
+- `do`: Test with mcp-exec before registering
+
+- `dont`: Return raw strings
+
+- `dont`: Create tools for one-off tasks (use code-mode)
+
+- `dont`: Make all parameters optional
+
+- `dont`: Catch errors silently
+
+- `dont`: Create mega-tools
+
+- `dont`: Skip input validation
+
+## Resource Folders (`resource_folders`)
+
+### Folder (`folder`)
+Attributes: name="scripts/", purpose="Utility scripts"
+
+- `file`: set-mcp-secrets.ps1
+
+## Related Skills (`related_skills`)
+
+- `skill`: mcp-manager
+
+- `skill`: docker-ops

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Archive Code"
+  short_description: "Search and navigate code using ripgrep (grep)"
+  default_prompt: "Use $archive-code to search and navigate code using ripgrep (grep)."

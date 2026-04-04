@@ -1,0 +1,116 @@
+{
+  "mcpServers": {
+    "serena": {
+      "command": "docker.exe",
+      "startup_timeout_sec": 60,
+      "tool_timeout_sec": 120,
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-w",
+        "/workspace",
+        "-v",
+        "D:/Coding/Tools/mcp-docker-stack:/workspace",
+        "ghcr.io/oraios/serena:latest",
+        "serena-mcp-server",
+        "--transport",
+        "stdio",
+        "--project-from-cwd"
+      ]
+    },
+    "codegraph": {
+      "command": "docker.exe",
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 120,
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-w",
+        "/workspace",
+        "-v",
+        "D:/Coding/Tools/mcp-docker-stack:/workspace",
+        "mcp-local-adapters:latest",
+        "--mode",
+        "codegraph"
+      ]
+    },
+    "context7": {
+      "serverUrl": "https://mcp.context7.com/mcp",
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 60
+    },
+    "searxng": {
+      "command": "docker.exe",
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 90,
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-w",
+        "/workspace",
+        "-e",
+        "SEARXNG_URL=http://host.docker.internal:8080",
+        "-v",
+        "D:/Coding/Tools/mcp-docker-stack:/workspace",
+        "mcp-local-adapters:latest",
+        "--mode",
+        "searxng"
+      ]
+    },
+    "fetch": {
+      "command": "npx",
+      "startup_timeout_sec": 20,
+      "tool_timeout_sec": 60,
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 120,
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "startup_timeout_sec": 20,
+      "tool_timeout_sec": 60,
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "shrimp_task_manager": {
+      "command": "npx",
+      "startup_timeout_sec": 20,
+      "tool_timeout_sec": 60,
+      "args": [
+        "-y",
+        "mcp-shrimp-task-manager"
+      ]
+    },
+    "MCP_DOCKER": {
+      "command": "docker.exe",
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 120,
+      "args": [
+        "mcp",
+        "gateway",
+        "run",
+        "--transport",
+        "stdio",
+        "--registry",
+        "D:/Coding/Tools/mcp-docker-stack/MCP-Servers/mcp-docker-stack/registry.supplementals.yaml",
+        "--additional-catalog",
+        "D:/Coding/Tools/mcp-docker-stack/MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml"
+      ]
+    }
+  }
+}

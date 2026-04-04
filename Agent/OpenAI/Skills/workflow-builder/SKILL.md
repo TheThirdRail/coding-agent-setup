@@ -5,220 +5,294 @@ description: |
   automation, and portable install targets. Use when defining repeatable
   operational or engineering procedures that should run consistently.
 ---
+# Skill: workflow-builder
+Attributes: name="workflow-builder", version="2.0.0"
 
-<skill name="workflow-builder" version="2.0.0">
-  <metadata>
-    <keywords>workflows, meta, template, builder, automation</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>workflow-builder</id>
-    <name>workflow-builder</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Guide creation of AI agent workflows with clear numbered steps, turbo annotations, and placeholders.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: workflows, meta, template, builder, automation
 
-  <goal>Guide creation of AI agent workflows with clear numbered steps, turbo annotations, and placeholders.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Clarity First">
-      <rule>Each step should be a single, clear action</rule>
-      <rule>Use numbered steps for sequencing</rule>
-      <rule>Keep workflows under 10 steps</rule>
-    </principle>
+- `id`: workflow-builder
 
-    <principle name="Safe Automation">
-      <rule>Use // turbo only for safe, reversible commands</rule>
-      <rule>Never auto-execute destructive operations</rule>
-      <rule>Always allow manual override</rule>
-    </principle>
+- `name`: workflow-builder
 
-    <principle name="Reusability">
-      <rule>Use placeholders like [ComponentName] or $ARGUMENTS</rule>
-      <rule>Document prerequisites clearly</rule>
-      <rule>Include success criteria</rule>
-    </principle>
-  </core_principles>
+- `version`: 2.0.0
 
-  <workflow>
-    <step number="1" name="Define the Workflow">
-      <question>What task does this workflow accomplish?</question>
-      <question>What triggers its use?</question>
-      <question>What inputs does it need?</question>
-      <question>What is the expected outcome?</question>
-      <question>What could go wrong?</question>
-    </step>
+- `last_updated`: 2026-02-09
 
-    <step number="2" name="Choose Location">
-      <platform name="Antigravity">
-        <workspace>.agent/workflows/</workspace>
-        <global>~/.gemini/antigravity/global_workflows/</global>
-      </platform>
-      <naming>kebab-case, match slash command: arch.md → /arch</naming>
-    </step>
+- `purpose`: Guide creation of AI agent workflows with clear numbered steps, turbo annotations, and placeholders.
 
-    <step number="3" name="Write Workflow File">
-      <format>Embedded XML in Markdown (YAML frontmatter + XML body)</format>
-      <template><![CDATA[
+### Inputs (`inputs`)
+
+- `input`: User request and relevant project context.
+
+### Outputs (`outputs`)
+
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
+
+### Triggers (`triggers`)
+
+- `trigger`: Use when the frontmatter description conditions are met.
+
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Guide creation of AI agent workflows with clear numbered steps, turbo annotations, and placeholders.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Clarity First"
+
+- `rule`: Each step should be a single, clear action
+
+- `rule`: Use numbered steps for sequencing
+
+- `rule`: Keep workflows under 10 steps
+
+### Principle (`principle`)
+Attributes: name="Safe Automation"
+
+- `rule`: Use // turbo only for safe, reversible commands
+
+- `rule`: Never auto-execute destructive operations
+
+- `rule`: Always allow manual override
+
+### Principle (`principle`)
+Attributes: name="Reusability"
+
+- `rule`: Use placeholders like [ComponentName] or $ARGUMENTS
+
+- `rule`: Document prerequisites clearly
+
+- `rule`: Include success criteria
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Define the Workflow"
+
+- `question`: What task does this workflow accomplish?
+
+- `question`: What triggers its use?
+
+- `question`: What inputs does it need?
+
+- `question`: What is the expected outcome?
+
+- `question`: What could go wrong?
+
+### Step (`step`)
+Attributes: number="2", name="Choose Location"
+
+#### Platform (`platform`)
+Attributes: name="Antigravity"
+
+- `workspace`: .agent/workflows/
+
+- `global`: ~/.gemini/antigravity/global_workflows/
+
+- `naming`: kebab-case, match slash command: arch.md → /arch
+
+### Step (`step`)
+Attributes: number="3", name="Write Workflow File"
+
+- `format`: Embedded XML in Markdown (YAML frontmatter + XML body)
+
+- `template`:
+```text
 ---
 description: Brief description of what this workflow does
 ---
 
-<workflow name="workflow-name" thinking="MAX">
-  <metadata>
-    <description>Full description of the workflow</description>
-  </metadata>
+&lt;workflow name="workflow-name" thinking="MAX"&gt;
+  &lt;metadata&gt;
+    &lt;description&gt;Full description of the workflow&lt;/description&gt;
+  &lt;/metadata&gt;
 
-  <spec_contract>
-    <id>workflow-builder</id>
-    <name>workflow-builder</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Guide creation of AI agent workflows with clear numbered steps, turbo annotations, and placeholders.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+  &lt;spec_contract&gt;
+    &lt;id&gt;workflow-builder&lt;/id&gt;
+    &lt;name&gt;workflow-builder&lt;/name&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
+    &lt;last_updated&gt;2026-02-09&lt;/last_updated&gt;
+    &lt;purpose&gt;Guide creation of AI agent workflows with clear numbered steps, turbo annotations, and placeholders.&lt;/purpose&gt;
+    &lt;inputs&gt;
+      &lt;input&gt;User request and relevant project context.&lt;/input&gt;
+    &lt;/inputs&gt;
+    &lt;outputs&gt;
+      &lt;output&gt;Completed guidance, actions, or artifacts produced by this skill.&lt;/output&gt;
+    &lt;/outputs&gt;
+    &lt;triggers&gt;
+      &lt;trigger&gt;Use when the frontmatter description conditions are met.&lt;/trigger&gt;
+    &lt;/triggers&gt;
+    &lt;procedure&gt;Follow the ordered steps in the workflow section.&lt;/procedure&gt;
+    &lt;edge_cases&gt;
+      &lt;edge_case&gt;If required context is missing, gather or request it before continuing.&lt;/edge_case&gt;
+    &lt;/edge_cases&gt;
+    &lt;safety_constraints&gt;
+      &lt;constraint&gt;Avoid destructive operations without explicit user intent.&lt;/constraint&gt;
+    &lt;/safety_constraints&gt;
+    &lt;examples&gt;
+      &lt;example&gt;Activate this skill when the request matches its trigger conditions.&lt;/example&gt;
+    &lt;/examples&gt;
+  &lt;/spec_contract&gt;
 
-  <important>Key instruction the agent must follow</important>
+  &lt;important&gt;Key instruction the agent must follow&lt;/important&gt;
 
-  <steps>
-    <step number="1" name="Step Name">
-      <instruction>What to do in this step</instruction>
-    </step>
+  &lt;steps&gt;
+    &lt;step number="1" name="Step Name"&gt;
+      &lt;instruction&gt;What to do in this step&lt;/instruction&gt;
+    &lt;/step&gt;
 
-    <!-- turbo annotation for auto-run -->
-    <step number="2" name="Safe Command" turbo="true">
-      <command>npm test</command>
-    </step>
+    &lt;!-- turbo annotation for auto-run --&gt;
+    &lt;step number="2" name="Safe Command" turbo="true"&gt;
+      &lt;command&gt;npm test&lt;/command&gt;
+    &lt;/step&gt;
 
-    <step number="3" name="Decision Point">
-      <condition type="if">If [condition A], proceed</condition>
-      <condition type="else">Otherwise, return</condition>
-    </step>
-  </steps>
+    &lt;step number="3" name="Decision Point"&gt;
+      &lt;condition type="if"&gt;If [condition A], proceed&lt;/condition&gt;
+      &lt;condition type="else"&gt;Otherwise, return&lt;/condition&gt;
+    &lt;/step&gt;
+  &lt;/steps&gt;
 
-  <exit_criteria>
-    <criterion>What must be true for workflow to complete</criterion>
-  </exit_criteria>
-</workflow>
-      ]]></template>
-      <note>The YAML frontmatter is for discovery; the XML body contains structured steps</note>
-    </step>
+  &lt;exit_criteria&gt;
+    &lt;criterion&gt;What must be true for workflow to complete&lt;/criterion&gt;
+  &lt;/exit_criteria&gt;
+&lt;/workflow&gt;
+```
 
-    <step number="4" name="Use Turbo Annotations">
-      <annotation name="// turbo" purpose="Auto-run ONE step" placement="Line before step"/>
-      <annotation name="// turbo-all" purpose="Auto-run ALL steps" placement="Anywhere in file"/>
-    </step>
+- `note`: The YAML frontmatter is for discovery; the XML body contains structured steps
 
-    <step number="5" name="Add Placeholders">
-      <placeholder syntax="[Name]" use="Visual prompt for user" example="Create [ComponentName]"/>
-      <placeholder syntax="$ARGUMENTS" use="All text after command" example="/fix-issue $ARGUMENTS"/>
-      <placeholder syntax="$1, $2" use="Positional arguments" example="git checkout $1"/>
-    </step>
+### Step (`step`)
+Attributes: number="4", name="Use Turbo Annotations"
 
-    <step number="6" name="Validate">
-      <checklist>
-        <item>Description explains what AND when to use</item>
-        <item>Steps are numbered and clear</item>
-        <item>Turbo annotations only on safe commands</item>
-        <item>Placeholders documented</item>
-        <item>Success criteria defined</item>
-        <item>Error handling/rollback included</item>
-      </checklist>
-    </step>
+- `annotation` (name="// turbo", purpose="Auto-run ONE step", placement="Line before step")
 
-    <step number="7" name="Install Workflow">
-      <instruction>Move the workflow to the appropriate location.</instruction>
-      <decision_tree>
-        <branch condition="Global Workflow (Apply to ALL projects)">
-          <action>Run: scripts/move-global-workflow.ps1 -Name "workflow-name.md" -Vendor "anthropic|openai|google"</action>
-        </branch>
-        <branch condition="Workspace Workflow (Apply to THIS project only)">
-          <action>Run: scripts/move-local-workflow.ps1 -Name "workflow-name.md" -Vendor "mine|anthropic|openai|google"</action>
-        </branch>
-      </decision_tree>
-    </step>
-  </workflow>
+- `annotation` (name="// turbo-all", purpose="Auto-run ALL steps", placement="Anywhere in file")
 
-  <patterns>
-    <pattern name="RIPER">
-      <step>RESEARCH: Gather information</step>
-      <step>INNOVATE: Brainstorm solutions</step>
-      <step>PLAN: Document approach</step>
-      <step>EXECUTE: Implement exactly as planned</step>
-      <step>REVIEW: Validate and reflect</step>
-    </pattern>
+### Step (`step`)
+Attributes: number="5", name="Add Placeholders"
 
-    <pattern name="TDD">
-      <step>Write failing test</step>
-      <step turbo="true">Run test (confirm failure)</step>
-      <step>Implement minimum code</step>
-      <step turbo="true">Run test (confirm success)</step>
-      <step>Refactor if needed</step>
-    </pattern>
-  </patterns>
+- `placeholder` (syntax="[Name]", use="Visual prompt for user", example="Create [ComponentName]")
 
-  <best_practices>
-    <do>Keep steps numbered and sequential</do>
-    <do>Use // turbo only for safe commands</do>
-    <do>Include success criteria</do>
-    <do>Document prerequisites</do>
-    <do>Add rollback instructions for risky workflows</do>
-    <do>Version control workflow files</do>
-    <dont>Auto-run destructive commands</dont>
-    <dont>Create mega-workflows (split into smaller ones)</dont>
-    <dont>Hardcode paths or credentials</dont>
-    <dont>Skip error handling</dont>
-    <dont>Use vague steps</dont>
-  </best_practices>
+- `placeholder` (syntax="$ARGUMENTS", use="All text after command", example="/fix-issue $ARGUMENTS")
 
-  <troubleshooting>
-    <issue problem="Workflow not discovered">Check file location and extension (.md)</issue>
-    <issue problem="Turbo annotation ignored">Ensure it's on line BEFORE the step</issue>
-    <issue problem="Arguments not working">Use $ARGUMENTS or $1 format</issue>
-    <issue problem="Steps skipped">Add explicit numbering</issue>
-  </troubleshooting>
+- `placeholder` (syntax="$1, $2", use="Positional arguments", example="git checkout $1")
 
-  <related_skills>
-    <skill>skill-builder</skill>
-    <skill>mcp-manager</skill>
-    <skill>docker-ops</skill>
-  </related_skills>
-</skill>
+### Step (`step`)
+Attributes: number="6", name="Validate"
+
+#### Checklist (`checklist`)
+
+- `item`: Description explains what AND when to use
+
+- `item`: Steps are numbered and clear
+
+- `item`: Turbo annotations only on safe commands
+
+- `item`: Placeholders documented
+
+- `item`: Success criteria defined
+
+- `item`: Error handling/rollback included
+
+### Step (`step`)
+Attributes: number="7", name="Install Workflow"
+
+- `instruction`: Move the workflow to the appropriate location.
+
+#### Decision Tree (`decision_tree`)
+
+##### Branch (`branch`)
+Attributes: condition="Global Workflow (Apply to ALL projects)"
+
+- `action`: Run: scripts/move-global-workflow.ps1 -Name "workflow-name.md" -Vendor "anthropic|openai|google"
+
+##### Branch (`branch`)
+Attributes: condition="Workspace Workflow (Apply to THIS project only)"
+
+- `action`: Run: scripts/move-local-workflow.ps1 -Name "workflow-name.md" -Vendor "mine|anthropic|openai|google"
+
+## Patterns (`patterns`)
+
+### Pattern (`pattern`)
+Attributes: name="RIPER"
+
+- `step`: RESEARCH: Gather information
+
+- `step`: INNOVATE: Brainstorm solutions
+
+- `step`: PLAN: Document approach
+
+- `step`: EXECUTE: Implement exactly as planned
+
+- `step`: REVIEW: Validate and reflect
+
+### Pattern (`pattern`)
+Attributes: name="TDD"
+
+- `step`: Write failing test
+
+- `step` (turbo="true"): Run test (confirm failure)
+
+- `step`: Implement minimum code
+
+- `step` (turbo="true"): Run test (confirm success)
+
+- `step`: Refactor if needed
+
+## Best Practices (`best_practices`)
+
+- `do`: Keep steps numbered and sequential
+
+- `do`: Use // turbo only for safe commands
+
+- `do`: Include success criteria
+
+- `do`: Document prerequisites
+
+- `do`: Add rollback instructions for risky workflows
+
+- `do`: Version control workflow files
+
+- `dont`: Auto-run destructive commands
+
+- `dont`: Create mega-workflows (split into smaller ones)
+
+- `dont`: Hardcode paths or credentials
+
+- `dont`: Skip error handling
+
+- `dont`: Use vague steps
+
+## Troubleshooting (`troubleshooting`)
+
+- `issue` (problem="Workflow not discovered"): Check file location and extension (.md)
+
+- `issue` (problem="Turbo annotation ignored"): Ensure it's on line BEFORE the step
+
+- `issue` (problem="Arguments not working"): Use $ARGUMENTS or $1 format
+
+- `issue` (problem="Steps skipped"): Add explicit numbering
+
+## Related Skills (`related_skills`)
+
+- `skill`: skill-builder
+
+- `skill`: mcp-manager
+
+- `skill`: docker-ops

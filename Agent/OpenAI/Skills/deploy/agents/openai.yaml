@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deploy"
+  short_description: "Help with Deploy tasks"
+  default_prompt: "Use $deploy to run the deploy workflow for this repository."

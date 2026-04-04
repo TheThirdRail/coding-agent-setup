@@ -1,0 +1,50 @@
+registry:
+  # Code intelligence and codebase orientation
+  filescopemcp:
+    ref: ''
+  mindpilot:
+    ref: ''
+  repomapper:
+    ref: ''
+
+  # Docs, packages, and GitHub research
+  registry:
+    ref: ''
+  gitmcp:
+    ref: ''
+  octocode:
+    ref: ''
+  github-official:
+    ref: ''
+
+  # Web and paper research
+  arxiv:
+    ref: ''
+  firecrawl:
+    ref: ''
+
+  # Browser and frontend supplementals
+  puppeteer:
+    ref: ''
+  react:
+    ref: ''
+  vue:
+    ref: ''
+  shadcn:
+    ref: ''
+  magic:
+    ref: ''
+
+  # Security and archive supplementals
+  semgrep:
+    ref: ''
+  gitleaks:
+    ref: ''
+  mcp-security-audit:
+    ref: ''
+  ragdocs:
+    ref: ''
+
+  # Container and platform supplementals
+  docker-mcp:
+    ref: ''

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Setup"
+  short_description: "Project Setup workflow guidance"
+  default_prompt: "Use $project-setup to run the project-setup workflow for this repository."

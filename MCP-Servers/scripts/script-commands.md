@@ -1,32 +1,39 @@
 # MCP Server Script Commands
 
-Quick reference for the shared MCP gateway setup scripts in `MCP-Servers/scripts`.
+Quick reference for the shared MCP setup scripts in `MCP-Servers/scripts`.
 
 ## Prerequisites
 
 1. Open PowerShell in `MCP-Servers/scripts`.
 2. Ensure Docker Desktop is running.
 3. Ensure project root `.env` exists for secret setup.
-4. Ensure runtime catalog exists: `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml`.
+4. Build the local adapter image once:
 
-## 1) Sync Client Gateway Config
+```powershell
+docker build -t mcp-local-adapters:latest -f ..\local\adapters\Dockerfile ..\..
+```
 
-This updates clients to use:
-- `--transport stdio`
-- `--registry <repo>/MCP-Servers/mcp-docker-stack/registry.all.yaml`
-- `--additional-catalog <repo>/MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml`
+5. Start local SearXNG once:
+
+```powershell
+docker compose -f ..\local\searxng\docker-compose.yml up -d
+```
+
+## 1) Install Hybrid Client Configs
+
+This installs the repo-owned hybrid config templates:
+- direct always-on MCP servers in each client config
+- one `MCP_DOCKER` entry for supplemental lazy-load servers only
 
 ```powershell
 .\install-mcp-servers.ps1 -Vendor openai
 .\install-mcp-servers.ps1 -Vendor google
-.\install-mcp-servers.ps1 -Vendor anthropic
 .\install-mcp-servers.ps1 -Vendor all
 ```
 
 Targets:
 - `openai` -> `~/.codex/config.toml`
 - `google` -> `~/.gemini/antigravity/mcp_config.json`
-- `anthropic` -> `~/.claude.json`
 
 Dry run:
 
@@ -41,38 +48,76 @@ Dry run:
 .\set-mcp-secrets.ps1 -EnvFilePath "..\..\.env"
 ```
 
-## 3) Generate Registry + Probe All Servers
+Important:
+- this script only writes Docker-managed secrets needed by the current hybrid stack
+- direct-client values such as `SEARXNG_URL` and optional `CONTEXT7_API_KEY` are not written into Docker secrets
 
-This script:
-- Regenerates `registry.all.yaml` from inventory catalog (`docker-mcp-catalog.yaml`)
-- Validates overlap policy (runtime catalog cannot include official-overlap servers)
-- Syncs Docker's configured `custom-stack.yaml` to the runtime catalog
-- Optionally sets secrets
-- Probes each server through gateway in isolated mode
-- Writes reports to `MCP-Servers/reports`
-
-```powershell
-.\setup_lazy_load.ps1 -ClientName "All Clients"
-.\setup_lazy_load.ps1 -ClientName "All Clients" -SkipSecrets
-```
-
-Outputs:
-- `MCP-Servers/reports/mcp-health-<timestamp>.json`
-- `MCP-Servers/reports/mcp-health-<timestamp>.md`
-
-## 4) Manual Gateway Run (for debugging)
+## 3) Manual Gateway Run (for debugging)
 
 ```powershell
 docker mcp gateway run --transport stdio `
-  --registry "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.all.yaml" `
+  --registry "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.supplementals.yaml" `
   --additional-catalog "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml"
 ```
 
-## 5) Spot-check a Single Server
+## 4) Spot-check a Single Supplemental Server
 
 ```powershell
 docker mcp tools count `
-  --gateway-arg="--registry=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.all.yaml" `
+  --gateway-arg="--registry=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.supplementals.yaml" `
   --gateway-arg="--additional-catalog=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml" `
-  --gateway-arg="--servers=serena"
+  --gateway-arg="--servers=octocode"
+```
+
+## 5) Deprecated Gateway-First Bootstrap
+
+The old gateway-first bootstrap script was moved to:
+
+- `deprecated-Scripts/setup_lazy_load.ps1`
+
+That script is intentionally deprecated because it assumed the Docker gateway owned both the base servers and the supplemental servers. The current stack is hybrid instead.
+
+## 6) Diagnose Random Background Container Activity
+
+This watches short-lived container lifecycle events and checks your client MCP config wiring.
+
+```powershell
+.\diagnose-mcp-background.ps1 -ObserveSeconds 30
+.\diagnose-mcp-background.ps1 -ObserveSeconds 45 -ReportPath "..\reports\mcp-background.json"
+```
+
+Tip:
+- Add `-SkipEventWatch` for a fast config/process-only check.
+
+## 7) Normalize Client Config Encoding (Fix BOM/UTF-16 Issues)
+
+This rewrites client config files as UTF-8 without BOM. It creates backups by default.
+
+```powershell
+.\normalize-mcp-config-encoding.ps1 -Vendor all
+.\normalize-mcp-config-encoding.ps1 -Vendor google
+```
+
+Dry run:
+
+```powershell
+.\normalize-mcp-config-encoding.ps1 -Vendor all -WhatIf
+```
+
+## 8) Check for Stale Agent Host Processes
+
+This finds duplicate long-running host processes (for example duplicate `app-server` hosts) that can keep polling MCP in the background.
+
+```powershell
+.\check-agent-host-processes.ps1
+.\check-agent-host-processes.ps1 -StaleMinutes 60 -IncludeCommandLine
+```
+
+## 9) Diagnose Codex Extension + Standalone MCP Client Behavior
+
+This captures a control baseline, current Codex config state, latest standalone/extension logs, and a short process observation window. It writes both JSON and Markdown reports to `MCP-Servers/reports`.
+
+```powershell
+.\diagnose-codex-mcp-clients.ps1
+.\diagnose-codex-mcp-clients.ps1 -ObserveSeconds 40
 ```

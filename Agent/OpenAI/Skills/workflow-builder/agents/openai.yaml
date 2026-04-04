@@ -1,0 +1,4 @@
+interface:
+  display_name: "Workflow Builder"
+  short_description: "Help with Workflow Builder tasks"
+  default_prompt: "Use $workflow-builder to create reusable agent workflows with clear numbered steps, turbo-safe automation, and portable install targets."

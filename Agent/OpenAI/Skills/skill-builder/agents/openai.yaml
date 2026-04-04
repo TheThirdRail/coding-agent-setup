@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Builder"
+  short_description: "Help with Skill Builder tasks"
+  default_prompt: "Use $skill-builder to create and upgrade skills using strict v2 structure, validation, and packaging conventions."

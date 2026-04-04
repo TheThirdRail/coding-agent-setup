@@ -1,97 +1,143 @@
 ---
 name: archive-docs
 description: |
-  Store and search project documents semantically with ChromaDB embeddings.
-  Use when you need retrieval-ready documentation memory for design notes,
-  architecture explanations, runbooks, and long-form references.
+  Store and search project documents semantically, preferring RAGDocs MCP when
+  available and falling back to the local Chroma archive scripts. Use when you
+  need retrieval-ready documentation memory for design notes, architecture
+  explanations, runbooks, and long-form references.
 ---
+# Skill: archive-docs
+Attributes: name="archive-docs", version="2.0.0"
 
-<skill name="archive-docs" version="2.0.0">
-  <metadata>
-    <keywords>archive, docs, embeddings, chromadb, semantic-search, knowledge-base</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>archive-docs</id>
-    <name>archive-docs</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Preserve searchable project documentation context using embedding-based retrieval.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: archive, docs, embeddings, chromadb, semantic-search, knowledge-base
 
-  <goal>Preserve searchable project documentation context using embedding-based retrieval.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Semantic Retrieval Over Keyword-Only Search">
-      <rule>Index documents with metadata to support meaning-based lookup.</rule>
-      <rule>Use consistent document IDs for stable updates and deletions.</rule>
-    </principle>
+- `id`: archive-docs
 
-    <principle name="Traceable Sources">
-      <rule>Include metadata like source path, topic, and timestamp when adding documents.</rule>
-      <rule>Keep original source text accessible outside the vector store.</rule>
-    </principle>
+- `name`: archive-docs
 
-    <principle name="Project-Scoped Persistence">
-      <rule>Persist vectors in [PROJECT_PATH]/Agent-Context/Archives/chroma.</rule>
-    </principle>
-  </core_principles>
+- `version`: 2.0.0
 
-  <workflow>
-    <step number="1" name="Install Prerequisites">
-      <command>pip install chromadb sentence-transformers</command>
-    </step>
+- `last_updated`: 2026-02-09
 
-    <step number="2" name="Add Documents">
-      <command>python Agent\OpenAI\Skills\archive-docs\scripts\add.py --id "doc-id" --content "Document text" --metadata "{\"source\":\"docs/architecture.md\"}"</command>
-      <command>python Agent\OpenAI\Skills\archive-docs\scripts\add.py --file "docs/architecture.md" --id "architecture"</command>
-    </step>
+- `purpose`: Preserve searchable project documentation context using RAGDocs first and the local Chroma archive as the fallback.
 
-    <step number="3" name="Search Semantically">
-      <command>python Agent\OpenAI\Skills\archive-docs\scripts\search.py --query "authentication flow" --limit 5</command>
-    </step>
+### Inputs (`inputs`)
 
-    <step number="4" name="Delete or Replace Stale Entries">
-      <command>python Agent\OpenAI\Skills\archive-docs\scripts\delete.py --id "doc-id"</command>
-    </step>
-  </workflow>
+- `input`: User request and relevant project context.
 
-  <resources>
-    <script file="scripts/add.py">Add or update archived documentation entries.</script>
-    <script file="scripts/search.py">Semantic search over archived documents.</script>
-    <script file="scripts/delete.py">Delete archived document entries by ID.</script>
-  </resources>
+### Outputs (`outputs`)
 
-  <best_practices>
-    <do>Use deterministic IDs so updates replace the right document</do>
-    <do>Attach source metadata for every document entry</do>
-    <do>Batch related docs by topic for better retrieval quality</do>
-    <dont>Index transient or generated noise files without curation</dont>
-    <dont>Rely on embeddings alone when exact command/code matches are required</dont>
-  </best_practices>
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
 
-  <related_skills>
-    <skill>archive-manager</skill>
-    <skill>research-capability</skill>
-    <skill>documentation-generator</skill>
-  </related_skills>
-</skill>
+### Triggers (`triggers`)
+
+- `trigger`: Use when the frontmatter description conditions are met.
+
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Preserve searchable project documentation context using embedding-based retrieval.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Semantic Retrieval Over Keyword-Only Search"
+
+- `rule`: Index documents with metadata to support meaning-based lookup.
+
+- `rule`: Use consistent document IDs for stable updates and deletions.
+
+### Principle (`principle`)
+Attributes: name="Traceable Sources"
+
+- `rule`: Include metadata like source path, topic, and timestamp when adding documents.
+
+- `rule`: Keep original source text accessible outside the vector store.
+
+### Principle (`principle`)
+Attributes: name="Project-Scoped Persistence"
+
+- `rule`: Persist vectors in [PROJECT_PATH]/Agent-Context/Archives/chroma.
+
+### Principle (`principle`)
+Attributes: name="Prefer RAGDocs MCP When Available"
+
+- `rule`: Use RAGDocs MCP first for fast semantic indexing and retrieval when the server is available.
+
+- `rule`: Fall back to the local archive-docs scripts when RAGDocs is unavailable or when you need deterministic local archive maintenance.
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="0", name="Choose Retrieval Mode"
+
+- `instruction`: Use RAGDocs MCP first for semantic search and lightweight document indexing.
+
+- `instruction`: Use the local Chroma-based scripts when MCP is unavailable or when you need stable local add, replace, and delete behavior.
+
+### Step (`step`)
+Attributes: number="1", name="Install Prerequisites"
+
+- `command`: pip install chromadb sentence-transformers
+
+### Step (`step`)
+Attributes: number="2", name="Add Documents"
+
+- `command`: python Agent\OpenAI\Skills\archive-docs\scripts\add.py --id "doc-id" --content "Document text" --metadata "{\"source\":\"docs/architecture.md\"}"
+
+- `command`: python Agent\OpenAI\Skills\archive-docs\scripts\add.py --file "docs/architecture.md" --id "architecture"
+
+### Step (`step`)
+Attributes: number="3", name="Search Semantically"
+
+- `command`: python Agent\OpenAI\Skills\archive-docs\scripts\search.py --query "authentication flow" --limit 5
+
+### Step (`step`)
+Attributes: number="4", name="Delete or Replace Stale Entries"
+
+- `command`: python Agent\OpenAI\Skills\archive-docs\scripts\delete.py --id "doc-id"
+
+## Resources (`resources`)
+
+- `script` (file="scripts/add.py"): Add or update archived documentation entries.
+
+- `script` (file="scripts/search.py"): Semantic search over archived documents.
+
+- `script` (file="scripts/delete.py"): Delete archived document entries by ID.
+
+## Best Practices (`best_practices`)
+
+- `do`: Use deterministic IDs so updates replace the right document
+
+- `do`: Attach source metadata for every document entry
+
+- `do`: Batch related docs by topic for better retrieval quality
+
+- `do`: Use RAGDocs MCP for day-to-day semantic retrieval, then use the local scripts when you need explicit local archive maintenance
+
+- `dont`: Index transient or generated noise files without curation
+
+- `dont`: Rely on embeddings alone when exact command/code matches are required
+
+## Related Skills (`related_skills`)
+
+- `skill`: archive-manager
+
+- `skill`: research
+
+- `skill`: documentation-generator

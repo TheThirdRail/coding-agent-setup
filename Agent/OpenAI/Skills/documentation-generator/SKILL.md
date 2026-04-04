@@ -5,114 +5,157 @@ description: |
   and runtime behavior. Use when creating or updating README, API references,
   ADRs, deployment guides, or troubleshooting docs that must stay accurate.
 ---
+# Skill: documentation-generator
+Attributes: name="documentation-generator", version="2.0.0"
 
-<skill name="documentation-generator" version="2.0.0">
-  <metadata>
-    <keywords>documentation, readme, api-docs, adr, deployment, troubleshooting</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>documentation-generator</id>
-    <name>documentation-generator</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Produce clear, accurate documentation artifacts that reduce onboarding and operational friction.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: documentation, readme, api-docs, adr, deployment, troubleshooting
 
-  <goal>Produce clear, accurate documentation artifacts that reduce onboarding and operational friction.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Audience-First Writing">
-      <rule>Document for the intended reader (developer, operator, end user) with explicit assumptions.</rule>
-      <rule>Match depth to audience skill level and use case urgency.</rule>
-    </principle>
+- `id`: documentation-generator
 
-    <principle name="Source Traceability">
-      <rule>Derive statements from code, configs, tests, and observed behavior whenever possible.</rule>
-      <rule>Flag unknowns instead of inventing details.</rule>
-    </principle>
+- `name`: documentation-generator
 
-    <principle name="Template Discipline">
-      <rule>Use canonical templates from references/templates.md for consistency.</rule>
-      <rule>Remove placeholders before output is finalized.</rule>
-    </principle>
-  </core_principles>
+- `version`: 2.0.0
 
-  <workflow>
-    <step number="1" name="Identify Document Type">
-      <option>README</option>
-      <option>API Reference</option>
-      <option>Architecture Decision Record (ADR)</option>
-      <option>Deployment Guide</option>
-      <option>Troubleshooting Guide</option>
-      <option>Changelog Entry</option>
-    </step>
+- `last_updated`: 2026-02-09
 
-    <step number="2" name="Lock Audience and Scope">
-      <instruction>Define who will read the document and what decisions/tasks it must support.</instruction>
-      <check>Audience is explicit (developers, ops, support, end users)</check>
-      <check>Scope excludes speculative or unrelated sections</check>
-    </step>
+- `purpose`: Produce clear, accurate documentation artifacts that reduce onboarding and operational friction.
 
-    <step number="3" name="Gather Ground Truth">
-      <source>Source code and interfaces</source>
-      <source>Configuration and environment files</source>
-      <source>Tests and examples</source>
-      <source>Existing docs and runbooks</source>
-    </step>
+### Inputs (`inputs`)
 
-    <step number="4" name="Draft Using Canonical Templates">
-      <instruction>Load structure and examples from references/templates.md.</instruction>
-      <quality_check>Code snippets are executable or clearly marked pseudocode</quality_check>
-      <quality_check>No unresolved placeholders or TODO markers</quality_check>
-      <quality_check>Version and dependency details are current</quality_check>
-    </step>
+- `input`: User request and relevant project context.
 
-    <step number="5" name="Finalize and Verify">
-      <instruction>Run consistency pass for terminology, links, commands, and headings.</instruction>
-      <output>Documentation artifact ready for review or commit</output>
-    </step>
-  </workflow>
+### Outputs (`outputs`)
 
-  <resources>
-    <reference file="references/templates.md">Canonical README, ADR, API endpoint, and changelog templates.</reference>
-  </resources>
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
 
-  <best_practices>
-    <do>Prefer concise, actionable sections over narrative filler</do>
-    <do>Include runnable examples with expected output where feasible</do>
-    <do>Keep language consistent with code and config naming</do>
-    <do>Record assumptions and constraints explicitly</do>
-    <dont>Ship placeholders, stale versions, or unverified commands</dont>
-    <dont>Duplicate large template payloads directly in SKILL.md</dont>
-  </best_practices>
+### Triggers (`triggers`)
 
-  <related_skills>
-    <skill>api-builder</skill>
-    <skill>architecture-planner</skill>
-  </related_skills>
+- `trigger`: Use when the frontmatter description conditions are met.
 
-  <related_workflows>
-    <workflow>/tutor</workflow>
-    <workflow>/handoff</workflow>
-  </related_workflows>
-</skill>
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Produce clear, accurate documentation artifacts that reduce onboarding and operational friction.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Audience-First Writing"
+
+- `rule`: Document for the intended reader (developer, operator, end user) with explicit assumptions.
+
+- `rule`: Match depth to audience skill level and use case urgency.
+
+### Principle (`principle`)
+Attributes: name="Source Traceability"
+
+- `rule`: Derive statements from code, configs, tests, and observed behavior whenever possible.
+
+- `rule`: Flag unknowns instead of inventing details.
+
+### Principle (`principle`)
+Attributes: name="Template Discipline"
+
+- `rule`: Use canonical templates from references/templates.md for consistency.
+
+- `rule`: Remove placeholders before output is finalized.
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Identify Document Type"
+
+- `option`: README
+
+- `option`: API Reference
+
+- `option`: Architecture Decision Record (ADR)
+
+- `option`: Deployment Guide
+
+- `option`: Troubleshooting Guide
+
+- `option`: Changelog Entry
+
+### Step (`step`)
+Attributes: number="2", name="Lock Audience and Scope"
+
+- `instruction`: Define who will read the document and what decisions/tasks it must support.
+
+- `check`: Audience is explicit (developers, ops, support, end users)
+
+- `check`: Scope excludes speculative or unrelated sections
+
+### Step (`step`)
+Attributes: number="3", name="Gather Ground Truth"
+
+- `source`: Source code and interfaces
+
+- `source`: Configuration and environment files
+
+- `source`: Tests and examples
+
+- `source`: Existing docs and runbooks
+
+### Step (`step`)
+Attributes: number="4", name="Draft Using Canonical Templates"
+
+- `instruction`: Load structure and examples from references/templates.md.
+
+- `quality_check`: Code snippets are executable or clearly marked pseudocode
+
+- `quality_check`: No unresolved placeholders or TODO markers
+
+- `quality_check`: Version and dependency details are current
+
+### Step (`step`)
+Attributes: number="5", name="Finalize and Verify"
+
+- `instruction`: Run consistency pass for terminology, links, commands, and headings.
+
+- `output`: Documentation artifact ready for review or commit
+
+## Resources (`resources`)
+
+- `reference` (file="references/templates.md"): Canonical README, ADR, API endpoint, and changelog templates.
+
+## Best Practices (`best_practices`)
+
+- `do`: Prefer concise, actionable sections over narrative filler
+
+- `do`: Include runnable examples with expected output where feasible
+
+- `do`: Keep language consistent with code and config naming
+
+- `do`: Record assumptions and constraints explicitly
+
+- `dont`: Ship placeholders, stale versions, or unverified commands
+
+- `dont`: Duplicate large template payloads directly in SKILL.md
+
+## Related Skills (`related_skills`)
+
+- `skill`: api-builder
+
+- `skill`: architecture-planner
+
+## Related Workflows (`related_workflows`)
+
+- `workflow`: /tutor
+
+- `workflow`: /handoff

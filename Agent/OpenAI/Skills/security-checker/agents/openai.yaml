@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Checker"
+  short_description: "Help with Security Checker tasks"
+  default_prompt: "Use $security-checker to analyze code for vulnerabilities, exposed secrets, and insecure patterns before merge or release."

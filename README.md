@@ -1,240 +1,232 @@
-# AI Agent Setup Kit (OpenAI Codex + Anthropic Claude Code + Google Antigravity)
+# AI Agent Setup Kit
 
-This repository helps you set up a practical AI coding workspace with:
+This repository is a Windows-first setup kit for two local AI clients:
+
+1. OpenAI Codex
+2. Google Antigravity
+
+It gives you:
+
+- vendor-specific global instructions
 - reusable skills
-- repeatable workflows
-- safety rules
-- MCP server integrations
-- local archive tools for project memory and search
+- Antigravity workflows
+- hybrid MCP configuration
+- Docker lazy-load support for supplemental MCP servers
+- local archive tools for code, docs, graph, git, and memory
 
-This guide is written for non-technical and low-technical users. Copy and paste the commands exactly as shown.
+This README is written as a step-by-step operator guide. The install flow now uses the new remove/install wrapper scripts instead of the older piecemeal setup path.
 
-## What You Get
+## What Gets Installed
 
-- OpenAI catalog under `Agent/OpenAI/`
-- Anthropic catalog under `Agent/Anthropic/`
-- Google catalog under `Agent/Google/`
-- MCP catalog under `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.yaml`
-- Local helper scripts under vendor-specific `Scripts/` folders (root scripts are deprecated)
-- Local archive storage under `Agent-Context/` (kept local, not versioned)
+### Codex
 
-## Before You Start
-
-Install these first:
-
-1. Git
-2. Docker Desktop (with Docker MCP support available)
-3. PowerShell (Windows 10/11 is fine)
-4. Your AI client:
-- OpenAI Codex and/or ChatGPT desktop app
-- Anthropic Claude Code and/or Claude Desktop
-- Google Antigravity
-
-## One-Time Repo Setup
-
-From a terminal:
-
-```powershell
-git clone https://github.com/TheThirdRail/coding-agent-setup.git
-cd coding-agent-setup
-Copy-Item example.env .env
-```
-
-Open `.env` and fill in keys you actually use. Start with:
-
-- `GITHUB_PERSONAL_ACCESS_TOKEN`
-- `BRAVE_API_KEY`
-
-Use `secrets-acquisition-guide.md` if you need help getting keys.
-
-## Setup Path A: OpenAI Codex
-
-Use this path if you want Codex-style skills, rules, and automations.
-
-### Install OpenAI Artifacts
-
-```powershell
-cd Agent\OpenAI\Scripts
-.\validate-codex-openai.ps1
-.\install-rules.ps1 -DryRun
-.\install-rules.ps1
-```
-
-What this installs:
+The Codex wrapper installs:
 
 - `~/.codex/AGENTS.md`
-- `~/.codex/rules/default.rules`
 - `~/.codex/skills/*`
+- `~/.codex/config.toml`
+
+Optional extra Codex artifacts can still be installed separately:
+
+- `~/.codex/rules/default.rules`
 - `~/.codex/automations/*.automation.md`
 
-Optional mirror to `~/.agents/*` too:
+### Antigravity
 
-```powershell
-.\install-rules.ps1 -Target both
-```
-
-### Configure MCP for OpenAI Clients
-
-```powershell
-..\..\..\MCP-Servers\scripts\install-mcp-servers.ps1 -Vendor openai -ServerNames "filesystem", "github", "desktop-commander", "context7"
-..\..\..\MCP-Servers\scripts\set-mcp-secrets.ps1
-..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1 -ClientName "OpenAI ChatGPT/Codex"
-```
-
-Then restart Codex/ChatGPT so it reloads config.
-
-## Setup Path B: Google Antigravity
-
-Use this path if you want slash-command workflows in Antigravity.
-
-### Install Google Artifacts
-
-```powershell
-cd Agent\Google\Scripts
-.\deprecation-checker.ps1 -DryRun
-.\deprecation-checker.ps1
-.\install-rules.ps1
-.\install-skills.ps1
-.\install-workflows.ps1
-```
-
-What this installs:
+The Antigravity wrapper installs:
 
 - `~/.gemini/GEMINI.md`
 - `~/.gemini/antigravity/skills/*`
 - `~/.gemini/antigravity/global_workflows/*.md`
+- `~/.gemini/antigravity/mcp_config.json`
 
-### Configure MCP for Google
+## Important Behavior
 
-```powershell
-..\..\..\MCP-Servers\scripts\install-mcp-servers.ps1 -Vendor google -ServerNames "filesystem", "github", "desktop-commander", "context7"
-..\..\..\MCP-Servers\scripts\set-mcp-secrets.ps1
-..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1 -ClientName "Google Antigravity"
-```
+- The new remove scripts `backup by default`.
+- They move existing files or folders to timestamped `.bak-...` paths.
+- Use `-Purge` only if you want hard deletion instead of backup.
+- The Codex skills cleanup preserves `~/.codex/skills/.system`.
 
-Then restart Antigravity.
+## Prerequisites
 
-## Setup Path C: Anthropic Claude Code
+Install these first:
 
-Use this path if you want Anthropic subagents with canonical `CLAUDE.md` policy routing.
+1. Git
+2. Docker Desktop
+3. PowerShell
+4. OpenAI Codex and/or Google Antigravity
 
-### Install Anthropic Artifacts
+## One-Time Repo Preparation
 
-```powershell
-cd Agent\Anthropic\Scripts
-.\validate-rule-length.ps1
-.\validate-subagents.ps1
-.\deprecation-checker.ps1 -DryRun
-.\install-rules.ps1
-.\install-skills.ps1
-.\install-subagents.ps1
-.\install-settings.ps1
-```
-
-What this installs:
-
-- `~/.claude/CLAUDE.md`
-- `~/.claude/rules/*.md`
-- `~/.claude/skills/*`
-- `~/.claude/agents/*.md`
-- `~/.claude/settings.json` (merged baseline)
-
-### Configure MCP for Anthropic
+Open PowerShell at the repo root and prepare `.env`:
 
 ```powershell
-..\..\..\MCP-Servers\scripts\install-mcp-servers.ps1 -Vendor anthropic -ServerNames "filesystem", "github", "desktop-commander", "context7"
-..\..\..\MCP-Servers\scripts\set-mcp-secrets.ps1
-..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1 -ClientName "Anthropic Claude Code"
+Copy-Item example.env .env
 ```
 
-Then restart Claude Code/Claude Desktop.
+Then open `.env` and fill in what you actually use.
 
-## MCP Catalog Overview
+Start with:
 
-The project catalog currently defines 46 MCP servers in categories like:
+- `SEARXNG_URL`
+- `GITHUB_PERSONAL_ACCESS_TOKEN` if you plan to use GitHub MCP tools
+- `FIRECRAWL_API_KEY` only if you plan to use Firecrawl
+- `CONTEXT7_API_KEY` only if you decide to wire authenticated direct Context7 access later
 
-- development and command execution
-- search and research
-- security scanning
-- data and vector databases
-- frontend and utility tools
+## Shared MCP Prerequisites
 
-Main file:
+Both Codex and Antigravity use the same local adapter image and the same local SearXNG container.
 
-- `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.yaml`
+Run these once from the repo root:
 
-## Local Archives (Project Memory)
-
-This repo includes archive skills that use local data stores:
-
-- semantic docs archive (Chroma)
-- code structure graph (SQLite)
-- durable memory notes (SQLite)
-- git-history and code search helpers
-
-Local archive path:
-
-- `Agent-Context/Archives/`
-
-Important:
-
-- `Agent-Context/` is local-only and ignored by Git
-- do not store secrets in archive data
-
-## Folder Map
-
-```text
-.
-├── Agent/
-│   ├── OpenAI/
-│   │   ├── AGENTS.md
-│   │   ├── default.rules
-│   │   ├── Automations/
-│   │   ├── Skills/
-│   │   └── Scripts/
-│   ├── Anthropic/
-│   │   ├── Rules/
-│   │   ├── Skills/
-│   │   ├── Subagents/
-│   │   └── Scripts/
-│   └── Google/
-│       ├── Rules/
-│       ├── Skills/
-│       ├── Workflows/
-│       └── Scripts/
-├── MCP-Servers/
-│   ├── mcp-docker-stack/
-│   └── scripts/
-├── deprecated-Scripts/
-├── Agent-Context/
-├── example.env
-├── secrets-acquisition-guide.md
-└── README.md
+```powershell
+docker build -t mcp-local-adapters:latest -f .\MCP-Servers\local\adapters\Dockerfile .
+docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml up -d
+.\MCP-Servers\scripts\set-mcp-secrets.ps1
 ```
 
-## Which File Should I Read Next?
+What this prepares:
 
-If you use OpenAI Codex:
+- local adapter image for repo-owned MCP adapters
+- self-hosted SearXNG for the `searxng` MCP server
+- Docker secrets for supplemental lazy-load servers
 
-- `Agent/OpenAI/AGENTS.md`
-- `Agent/OpenAI/Scripts/script-commands.md`
-- `codex-sample-workflow.md`
+## Codex Setup
 
-If you use Google Antigravity:
+### Recommended Reset and Reinstall Flow
 
-- `Agent/Google/Rules/GEMINI.md`
-- `Agent/Google/Scripts/script-commands.md`
-- `antigravity-sample-workflow.md`
+Run these from the repo root:
 
-If you use Anthropic Claude Code:
+```powershell
+.\Agent\OpenAI\Scripts\remove-global-agents.ps1
+.\Agent\OpenAI\Scripts\remove-global-skills.ps1
+.\Agent\OpenAI\Scripts\remove-global-mcp-config.ps1
+.\Agent\OpenAI\Scripts\install-codex-from-repo.ps1
+```
 
-- `Agent/Anthropic/Rules/CLAUDE.md`
-- `Agent/Anthropic/Scripts/script-commands.md`
-- `claude-code-sample-workflow.md`
+What this does:
+
+1. Backs up and removes the current global `~/.codex/AGENTS.md`
+2. Backs up and removes installed Codex skills while preserving `.system`
+3. Backs up and removes the current `~/.codex/config.toml`
+4. Reinstalls the repo-owned Codex AGENTS, skills, and MCP config
+
+### Dry Run First
+
+If you want to preview before changing anything:
+
+```powershell
+.\Agent\OpenAI\Scripts\remove-global-agents.ps1 -DryRun
+.\Agent\OpenAI\Scripts\remove-global-skills.ps1 -DryRun
+.\Agent\OpenAI\Scripts\remove-global-mcp-config.ps1 -DryRun
+.\Agent\OpenAI\Scripts\install-codex-from-repo.ps1 -DryRun
+```
+
+### Optional Codex Extras
+
+If you also want the OpenAI rules and automations installed:
+
+```powershell
+.\Agent\OpenAI\Scripts\install-rules.ps1
+```
+
+That additional script installs:
+
+- `~/.codex/rules/default.rules`
+- `~/.codex/automations/*.automation.md`
+
+### Restart and Verify
+
+After install:
+
+1. Restart Codex
+2. Verify these exist:
+
+```powershell
+Test-Path "$HOME\.codex\AGENTS.md"
+Test-Path "$HOME\.codex\config.toml"
+Get-ChildItem "$HOME\.codex\skills" -Directory | Select-Object -ExpandProperty Name
+```
+
+## Antigravity Setup
+
+### Recommended Reset and Reinstall Flow
+
+Run these from the repo root:
+
+```powershell
+.\Agent\Google\Scripts\remove-global-gemini.ps1
+.\Agent\Google\Scripts\remove-global-skills.ps1
+.\Agent\Google\Scripts\remove-global-workflows.ps1
+.\Agent\Google\Scripts\remove-global-mcp-config.ps1
+.\Agent\Google\Scripts\install-antigravity-from-repo.ps1
+```
+
+What this does:
+
+1. Backs up and removes the current global `~/.gemini/GEMINI.md`
+2. Backs up and removes installed Antigravity skills
+3. Backs up and removes installed global workflows
+4. Backs up and removes the current `~/.gemini/antigravity/mcp_config.json`
+5. Reinstalls the repo-owned GEMINI file, skills, workflows, and MCP config
+
+### Dry Run First
+
+If you want to preview before changing anything:
+
+```powershell
+.\Agent\Google\Scripts\remove-global-gemini.ps1 -DryRun
+.\Agent\Google\Scripts\remove-global-skills.ps1 -DryRun
+.\Agent\Google\Scripts\remove-global-workflows.ps1 -DryRun
+.\Agent\Google\Scripts\remove-global-mcp-config.ps1 -DryRun
+.\Agent\Google\Scripts\install-antigravity-from-repo.ps1 -DryRun
+```
+
+### Restart and Verify
+
+After install:
+
+1. Restart Antigravity
+2. Verify these exist:
+
+```powershell
+Test-Path "$HOME\.gemini\GEMINI.md"
+Test-Path "$HOME\.gemini\antigravity\mcp_config.json"
+Get-ChildItem "$HOME\.gemini\antigravity\skills" -Directory | Select-Object -ExpandProperty Name
+Get-ChildItem "$HOME\.gemini\antigravity\global_workflows" -File | Select-Object -ExpandProperty Name
+```
+
+## Recommended Order If You Use Both
+
+From the repo root:
+
+1. Prepare `.env`
+2. Build the local adapter image
+3. Start SearXNG
+4. Run `.\MCP-Servers\scripts\set-mcp-secrets.ps1`
+5. Reset and reinstall Codex
+6. Reset and reinstall Antigravity
+7. Restart both clients
+
+## Root Checklists
+
+If you want a short runbook for an agent to follow, use:
+
+- [codex-checklist.md](./codex-checklist.md)
+- [antigravity-checklist.md](./antigravity-checklist.md)
+
+## Useful Paths
+
+- OpenAI policy source: `Agent/OpenAI/AGENTS.md`
+- Google policy source: `Agent/Google/Rules/GEMINI.md`
+- Codex MCP template: `Agent/OpenAI/Codex/mcp/config.toml`
+- Antigravity MCP template: `Agent/Google/Antigravity/mcp/mcp_config.json`
+- Supplemental registry: `MCP-Servers/mcp-docker-stack/registry.supplementals.yaml`
+- Runtime catalog: `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml`
 
 ## Common Problems
 
-### Script says it cannot run
+### PowerShell says a script cannot run
 
 Use:
 
@@ -242,43 +234,47 @@ Use:
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### MCP command fails
+### MCP commands fail
 
-- make sure Docker Desktop is running
-- make sure your `.env` file exists and has needed keys
-- rerun `MCP-Servers/scripts/set-mcp-secrets.ps1`
+Check these in order:
 
-### Changes do not appear in the AI client
+1. Docker Desktop is running
+2. `.env` exists at the repo root
+3. `docker build -t mcp-local-adapters:latest -f .\MCP-Servers\local\adapters\Dockerfile .` completed successfully
+4. `docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml up -d` completed successfully
+5. `.\MCP-Servers\scripts\set-mcp-secrets.ps1` completed successfully
 
-- restart the client after install scripts run
+### Config changes do not appear in the client
 
-## Safe Daily Update Routine
+Restart the client after installation.
 
-OpenAI:
+### Docker MCP keeps starting and stopping short-lived containers
 
-```powershell
-cd Agent\OpenAI\Scripts
-.\install-rules.ps1
-```
-
-Google:
+That is usually normal. To diagnose background activity:
 
 ```powershell
-cd Agent\Google\Scripts
-.\install-rules.ps1
-.\install-skills.ps1
-.\install-workflows.ps1
+.\MCP-Servers\scripts\diagnose-mcp-background.ps1 -ObserveSeconds 30
 ```
 
-Anthropic:
+### Config encoding issues on Windows
+
+If you see BOM or UTF-16 related problems:
 
 ```powershell
-cd Agent\Anthropic\Scripts
-.\install-rules.ps1
-.\install-skills.ps1
-.\install-subagents.ps1
-.\install-settings.ps1
+.\MCP-Servers\scripts\normalize-mcp-config-encoding.ps1 -Vendor all
 ```
+
+## Archive and Local Memory
+
+This repo includes local archive tooling under `Agent-Context/Archives/` for:
+
+- document memory
+- graph snapshots
+- code search
+- git history lookup
+- durable project memory
+
+Do not store credentials or secrets in archive data.
 
 ## License
 

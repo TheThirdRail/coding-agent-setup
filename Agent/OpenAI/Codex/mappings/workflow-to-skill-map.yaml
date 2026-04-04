@@ -1,56 +1,56 @@
 version: 1
 mappings:
   - workflow: analyze
-    skill: wf-analyze
+    skill: analyze
     automation: false
   - workflow: architect
-    skill: wf-architect
+    skill: architect
     automation: false
   - workflow: code
-    skill: wf-code
+    skill: code
     automation: false
   - workflow: dependency-check
-    skill: wf-dependency-check
+    skill: dependency-check
     automation: true
   - workflow: deploy
-    skill: wf-deploy
+    skill: deploy
     automation: optional
   - workflow: fix-issue
-    skill: wf-fix-issue
+    skill: fix-issue
     automation: optional
   - workflow: handoff
-    skill: wf-handoff
+    skill: handoff
     automation: true
   - workflow: morning
-    skill: wf-morning
+    skill: morning
     automation: true
   - workflow: onboard
-    skill: wf-onboard
+    skill: onboard
     automation: false
   - workflow: performance-tune
-    skill: wf-performance-tune
+    skill: performance-tune
     automation: optional
   - workflow: pr
-    skill: wf-pr
+    skill: pr
     automation: optional
   - workflow: project-setup
-    skill: wf-project-setup
+    skill: project-setup
     automation: false
   - workflow: refactor
-    skill: wf-refactor
+    skill: refactor
     automation: false
   - workflow: research
-    skill: wf-research
+    skill: research
     automation: optional
   - workflow: review
-    skill: wf-review
+    skill: review
     automation: optional
   - workflow: security-audit
-    skill: wf-security-audit
+    skill: security-audit
     automation: true
   - workflow: test-developer
-    skill: wf-test-developer
+    skill: test-developer
     automation: false
   - workflow: tutor
-    skill: wf-tutor
+    skill: tutor
     automation: false

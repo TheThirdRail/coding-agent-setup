@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCP Builder"
+  short_description: "Help with MCP Builder tasks"
+  default_prompt: "Use $mcp-builder to create custom MCP tools from scratch. For combining existing MCP tools, use mcp-manager's code-mode feature instead."

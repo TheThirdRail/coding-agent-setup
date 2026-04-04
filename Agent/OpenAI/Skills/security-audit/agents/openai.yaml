@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Audit"
+  short_description: "Security Audit workflow guidance"
+  default_prompt: "Use $security-audit to run the security-audit workflow for this repository."

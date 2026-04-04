@@ -1,0 +1,116 @@
+---
+name: review
+description: |
+  OpenAI Codex orchestration skill converted from `review.md`.
+  Use when Request a code review on specific files; Review changes before committing; Get a second opinion on implementation.
+  Routes to specialized skills and preserves the original execution sequence.
+---
+# Skill: review
+Attributes: name="review", version="1.0.0"
+
+## Metadata (`metadata`)
+
+- `keywords`: workflow, orchestration, review, openai, codex
+
+- `source_workflow`: review.md
+
+## Spec Contract (`spec_contract`)
+
+- `id`: review
+
+- `name`: review
+
+- `version`: 1.0.0
+
+- `last_updated`: 2026-02-09
+
+- `purpose`: Standalone code review for specific files or changes
+
+### Inputs (`inputs`)
+
+- `input`: User request and relevant project context.
+
+### Outputs (`outputs`)
+
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
+
+### Triggers (`triggers`)
+
+- `trigger`: Use when the frontmatter description conditions are met.
+
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Standalone code review for specific files or changes
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Orchestrate First"
+
+- `rule`: Act as an orchestration skill: sequence actions, call specialized skills, and keep task focus.
+
+### Principle (`principle`)
+Attributes: name="Deterministic Flow"
+
+- `rule`: Follow the ordered step flow from the source workflow unless constraints require adaptation.
+
+### Principle (`principle`)
+Attributes: name="Validation Before Completion"
+
+- `rule`: Require verification checks before marking the workflow complete.
+
+### Principle (`principle`)
+Attributes: name="Source Constraints"
+
+- `rule`: Focus on code quality, not deployment
+
+- `rule`: Use for targeted review, not full project audits
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Identify Scope"
+
+- `instruction`: Ask user which files or folders to review. Clarify review focus (security, performance, style, all). List of files to review.
+
+### Step (`step`)
+Attributes: number="2", name="Run Code Review"
+
+- `instruction`: Invoke full code review analysis Include if security focus requested Review for: bugs, style, complexity, maintainability.
+
+### Step (`step`)
+Attributes: number="3", name="Report Findings"
+
+- `instruction`: Present prioritized list of issues. 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low File: Issue description → Suggested fix Offer to fix issues if user approves.
+
+## Best Practices (`best_practices`)
+
+- `do`: Summarize progress after each major phase when the task is long-running.
+
+- `do`: Use specialized skills where referenced for domain-specific quality.
+
+- `do`: Invoke related skill `code-reviewer` when that capability is required.
+
+- `do`: Invoke related skill `security-checker` when that capability is required.
+
+- `dont`: Skip validation or testing steps when the workflow defines them.
+
+- `dont`: Expand scope beyond the workflow objective without explicit user direction.
+
+## Related Skills (`related_skills`)
+
+- `skill`: code-reviewer
+
+- `skill`: security-checker

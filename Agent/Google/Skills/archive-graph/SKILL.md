@@ -1,9 +1,10 @@
 ---
 name: archive-graph
 description: |
-  Build and query a local structural code graph using Tree-sitter and SQLite.
-  Use when you need file/function/class structure context and lightweight
-  relationship exploration for impact analysis.
+  Build and query a structural code graph, preferring CodeGraph MCP for quick
+  snapshots and falling back to the local Tree-sitter and SQLite archive tools
+  for repeatable local graph analysis. Use when you need file, function, or
+  class structure context and lightweight relationship exploration.
 ---
 
 <skill name="archive-graph" version="2.0.0">
@@ -11,7 +12,7 @@ description: |
     <keywords>archive, graph, tree-sitter, sqlite, structure, impact-analysis</keywords>
   </metadata>
 
-  <goal>Create and query a project-local structural graph of files and code symbols.</goal>
+  <goal>Create and query structural code relationships, using CodeGraph first and the local graph archive as the fallback.</goal>
 
   <core_principles>
     <principle name="Build Before Query">
@@ -27,9 +28,19 @@ description: |
     <principle name="Project-Scoped Persistence">
       <rule>Store graph database at [PROJECT_PATH]/Agent-Context/Archives/graph.db.</rule>
     </principle>
+
+    <principle name="Prefer CodeGraph MCP For Fast Snapshots">
+      <rule>Use CodeGraph MCP first when you need a quick structural snapshot or impact-analysis overview.</rule>
+      <rule>Fall back to the local build and query scripts when you need a repeatable project-local graph database and supported query modes.</rule>
+    </principle>
   </core_principles>
 
   <workflow>
+    <step number="0" name="Choose Graph Mode">
+      <instruction>Use CodeGraph MCP first for quick structure and relationship snapshots.</instruction>
+      <instruction>Use the local archive-graph scripts when you need the persistent SQLite graph database or supported local query flows.</instruction>
+    </step>
+
     <step number="1" name="Install Prerequisites">
       <command>pip install tree-sitter tree-sitter-languages</command>
     </step>
@@ -61,6 +72,7 @@ description: |
     <do>Rebuild graph after refactors to avoid stale symbol locations</do>
     <do>Use symbol search first, then narrow with structure queries</do>
     <do>Pair graph results with archive-git when validating change history</do>
+    <do>Use CodeGraph MCP for fast orientation, then fall back to the local graph database when you need stable repeatable queries</do>
     <dont>Assume unsupported query flags or Cypher-style syntax</dont>
     <dont>Treat graph output as runtime call graph truth</dont>
   </best_practices>

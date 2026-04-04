@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refactor"
+  short_description: "Refactor workflow guidance"
+  default_prompt: "Use $refactor to run the refactor workflow for this repository."

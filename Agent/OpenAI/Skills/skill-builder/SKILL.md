@@ -1,329 +1,95 @@
 ---
 name: skill-builder
 description: |
-  Create and upgrade skills using strict v2 structure, validation, and
-  packaging conventions. Use when building new skills, modernizing legacy
-  skills, or preparing skills for distribution and CI enforcement.
+  Create and upgrade OpenAI Codex skills using the current `SKILL.md` plus
+  `agents/openai.yaml` format. Use when building a new skill, converting a
+  legacy XML or metadata-based skill, validating skill structure, or preparing
+  a skill for local or global installation.
 ---
 
-<skill name="skill-builder" version="2.1.0">
-  <metadata>
-    <keywords>skills, meta, template, builder, creation, packaging</keywords>
-  </metadata>
+# Skill Builder
 
-  <spec_contract>
-    <id>skill-builder</id>
-    <name>skill-builder</name>
-    <version>2.1.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Guide creation of AI agent skills with progressive disclosure, clear descriptions, proper structure, and automation scripts.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+## Overview
 
-  <goal>Guide creation of AI agent skills with progressive disclosure, clear descriptions, proper structure, and automation scripts.</goal>
+Create or modernize a skill so another Codex instance can discover it from frontmatter, follow concise Markdown instructions, and load scripts, references, or assets only when needed.
 
-  <core_principles>
-    <principle name="Progressive Disclosure">
-      <level name="Metadata" tokens="~50">Name + description loaded at startup</level>
-      <level name="Instructions" tokens="~2-5K">Full SKILL.md when activated</level>
-      <level name="Resources" tokens="variable">Scripts/examples loaded on-demand</level>
-    </principle>
+## Working Rules
 
-    <principle name="Single Responsibility">
-      <rule>One skill = one capability</rule>
-      <rule>If scope creeps, split into multiple skills</rule>
-      <rule>Skills can reference other skills for composition</rule>
-    </principle>
+- Use only `name` and `description` in `SKILL.md` frontmatter.
+- Put trigger language in `description`, not in a separate "When to Use" body section.
+- Write the body as plain Markdown. Do not embed XML in `SKILL.md`.
+- Add `agents/openai.yaml` with `display_name`, `short_description`, and `default_prompt`.
+- Create `scripts/`, `references/`, and `assets/` only when they provide repeatable value.
+- Keep references one level deep from `SKILL.md`.
 
-    <principle name="Discovery-First Design">
-      <rule>Description must explain WHEN to use (not just what)</rule>
-      <rule>Include trigger conditions in description, NOT in body</rule>
-      <rule>Use keywords for searchability</rule>
-    </principle>
+## Workflow
 
-    <principle name="Strict Validation Gate">
-      <rule>Body must not include trigger-only sections such as &lt;when_to_use&gt;.</rule>
-      <rule>Every skill must pass XML structure, metadata schema, and reference checks before packaging.</rule>
-      <rule>Warnings are promoted to errors in strict mode.</rule>
-    </principle>
+### 1. Define the skill
 
-    <principle name="Degrees of Freedom">
-      <level name="High Freedom" use="text-based instructions">
-        Use when multiple approaches are valid or decisions depend on context
-      </level>
-      <level name="Medium Freedom" use="pseudocode or scripts with parameters">
-        Use when a preferred pattern exists but some variation is acceptable
-      </level>
-      <level name="Low Freedom" use="specific scripts, few parameters">
-        Use when operations are fragile, consistency is critical, or a specific sequence must be followed
-      </level>
-      <note>Narrow bridge with cliffs → low freedom; open field → high freedom</note>
-    </principle>
-  </core_principles>
+- Clarify what the skill does, when it should trigger, and what outputs it should produce.
+- Ask for concrete usage examples if the scope is still fuzzy.
 
-  <resource_folders>
-    <folder name="scripts/" purpose="Executable code">
-      <when>Same code is rewritten repeatedly OR deterministic reliability needed</when>
-      <examples>rotate_pdf.py, validate_yaml.ps1, lint_schema.sh</examples>
-      <benefit>Token efficient, deterministic, can execute without loading into context</benefit>
-    </folder>
+### 2. Plan reusable resources
 
-    <folder name="references/" purpose="Documentation for context">
-      <when>Claude needs to reference while working (schemas, APIs, policies)</when>
-      <examples>schema.md, api_docs.md, company_policies.md</examples>
-      <benefit>Keeps SKILL.md lean; loaded only when needed</benefit>
-      <tip>For files >10k words, include grep search patterns in SKILL.md</tip>
-    </folder>
+- Put repeatable automation in `scripts/`.
+- Put detailed documentation or schemas in `references/`.
+- Put templates, boilerplate, or binary resources in `assets/`.
 
-    <folder name="assets/" purpose="Output resources">
-      <when>Files used in final output (not loaded into context)</when>
-      <examples>logo.png, template.pptx, frontend-boilerplate/</examples>
-      <benefit>Separates output resources from documentation</benefit>
-    </folder>
+### 3. Initialize the folder
 
-    <decision_guide>
-      <case trigger="Rotating a PDF">scripts/rotate_pdf.py — same code every time</case>
-      <case trigger="Building frontend app">assets/hello-world/ — boilerplate template</case>
-      <case trigger="Querying database">references/schema.md — needs schema knowledge</case>
-    </decision_guide>
-  </resource_folders>
+- Run `scripts/init_skill.ps1 -Name "skill-name" -Path ".agent/skills"`.
+- Pass `-Resources "scripts,references,assets"` only for folders the skill actually needs.
+- Pass repeated `-Interface key=value` values when you already know the UI metadata.
 
-  <anti_patterns>
-    <rule severity="critical">Do NOT create extraneous documentation files:</rule>
-    <forbidden>README.md</forbidden>
-    <forbidden>INSTALLATION_GUIDE.md</forbidden>
-    <forbidden>QUICK_REFERENCE.md</forbidden>
-    <forbidden>CHANGELOG.md</forbidden>
-    <forbidden>CONTRIBUTING.md</forbidden>
-    <reason>Skills are for AI agents, not humans. Extra docs add clutter and confusion.</reason>
-    <rule>Information lives in SKILL.md OR references/, never both</rule>
-    <rule>Keep references one level deep (no nested directories)</rule>
-  </anti_patterns>
+### 4. Write the skill
 
-  <workflow>
-    <step number="1" name="Define the Skill">
-      <question>What capability does this skill provide?</question>
-      <question>When should an agent use this skill? (triggers)</question>
-      <question>What inputs does it need?</question>
-      <question>What outputs does it produce?</question>
-      <question>Can you give concrete examples of how it would be used?</question>
-      <tip>Ask 2-3 questions at a time; don't overwhelm the user</tip>
-    </step>
+- Keep the frontmatter concise and discovery-focused.
+- Use imperative instructions in the body.
+- Link to bundled resources directly from `SKILL.md`.
+- Remove placeholder/example files that are no longer needed.
 
-    <step number="2" name="Plan Resource Types">
-      <instruction>For each example, decide: script, reference, or asset?</instruction>
-      <decision_tree>
-        <if condition="Same code rewritten repeatedly">→ scripts/</if>
-        <if condition="Needs documentation while working">→ references/</if>
-        <if condition="File used in output (not in context)">→ assets/</if>
-      </decision_tree>
-    </step>
+### 5. Generate UI metadata
 
-    <step number="3" name="Initialize Skill Structure">
-      <instruction>Run the init script to scaffold the skill</instruction>
-      <command>scripts/init_skill.ps1 -Name "skill-name" -Path ".agent/skills"</command>
-      <generates>
-        <item>skill-name/SKILL.md — template with frontmatter</item>
-        <item>skill-name/scripts/ — example script</item>
-        <item>skill-name/references/ — example reference</item>
-        <item>skill-name/assets/ — example asset</item>
-      </generates>
-      <note>Delete unused example files after initialization</note>
-    </step>
+- Run `python scripts/generate_openai_yaml.py <path-to-skill>`.
+- Override interface fields only when the defaults are not good enough.
 
-    <step number="4" name="Implement Resources">
-      <instruction>Create scripts, references, and assets identified in Step 2</instruction>
-      <rule>Test all scripts by running them</rule>
-      <rule>If many similar scripts, test representative sample</rule>
-      <rule>Delete example files not needed</rule>
-    </step>
+### 6. Validate
 
-    <step number="5" name="Write SKILL.md">
-      <format>YAML frontmatter + XML body</format>
-      <template><![CDATA[
----
-name: skill-name
-description: |
-  Brief description of what the skill does.
-  Include WHEN to use this skill (triggers).
-  Keep under 200 words.
----
+- Run `python scripts/quick_validate.py <path-to-skill>`.
+- Run `scripts/validate-links.ps1 -SkillsRoot <skills-root>` to verify related skill references.
+- Run `scripts/package_skill.ps1 -Path <path-to-skill> -OutputDir <dist-dir>` when you need a packaged artifact.
 
-<skill name="skill-name" version="2.0.0">
-  <metadata>
-    <keywords>keyword1, keyword2, keyword3</keywords>
-  </metadata>
+### 7. Install
 
-  <spec_contract>
-    <id>skill-builder</id>
-    <name>skill-builder</name>
-    <version>2.1.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Guide creation of AI agent skills with progressive disclosure, clear descriptions, proper structure, and automation scripts.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- Use `scripts/move-global-skill.ps1` for a global install.
+- Use `scripts/move-local-skill.ps1` for a workspace-local install.
 
-  <goal>One sentence describing the skill's purpose.</goal>
+### 8. Iterate
 
-  <core_principles>
-    <principle name="Key Principle">
-      <rule>Specific rule or guideline</rule>
-    </principle>
-  </core_principles>
+- Improve the description when discovery is weak.
+- Split large or unfocused skills instead of growing them indefinitely.
+- Re-run validation after every structural change.
 
-  <workflow>
-    <step number="1" name="Step Name">
-      <instruction>What to do in this step</instruction>
-    </step>
-  </workflow>
+## Commands
 
-  <best_practices>
-    <do>What to do</do>
-    <dont>What to avoid</dont>
-  </best_practices>
-</skill>
-      ]]></template>
+```powershell
+scripts/init_skill.ps1 -Name "skill-name" -Path ".agent/skills"
+python scripts/generate_openai_yaml.py .agent/skills/skill-name
+python scripts/quick_validate.py .agent/skills/skill-name
+scripts/validate-links.ps1 -SkillsRoot .agent/skills
+scripts/package_skill.ps1 -Path .agent/skills/skill-name -OutputDir .\dist
+```
 
-      <frontmatter_rules>
-        <rule>name: The skill name (kebab-case)</rule>
-        <rule>description: Primary trigger mechanism — explain WHEN to use</rule>
-        <rule>Do NOT include "When to Use" in body (loaded after trigger)</rule>
-        <rule>Do NOT include &lt;when_to_use&gt; in body XML</rule>
-        <rule>No other fields in frontmatter</rule>
-      </frontmatter_rules>
-    </step>
+## Best Practices
 
-    <step number="6" name="Package for Distribution">
-      <instruction>Validate and package the skill</instruction>
-      <command>scripts/package_skill.ps1 -Path "skill-name" -OutputDir "./dist"</command>
-      <validates>
-        <check>YAML frontmatter format and required fields</check>
-        <check>Skill naming conventions (kebab-case, max 64 chars)</check>
-        <check>Description completeness</check>
-        <check>Required XML sections and workflow step sequencing</check>
-        <check>Metadata schema validation (metadata.json)</check>
-        <check>Related skill/workflow references resolve</check>
-        <check>File organization and resource references</check>
-      </validates>
-      <output>Creates skill-name.skill (zip with .skill extension)</output>
-    </step>
+- Keep `description` specific enough that the right tasks trigger the skill.
+- Prefer short examples over long theory.
+- Store detailed docs in `references/` instead of bloating `SKILL.md`.
+- Test bundled scripts instead of assuming they work.
+- Remove obsolete files when converting a legacy skill.
 
-    <step number="7" name="Install Skill">
-      <instruction>Move the skill to the appropriate location.</instruction>
-      <decision_tree>
-        <branch condition="Global Skill (Apply to ALL projects)">
-          <action>Run: scripts/move-global-skill.ps1 -Name "skill-name" -Vendor "anthropic|openai|google"</action>
-        </branch>
-        <branch condition="Workspace Skill (Apply to THIS project only)">
-          <action>Run: scripts/move-local-skill.ps1 -Name "skill-name" -Vendor "mine|anthropic|openai|google"</action>
-        </branch>
-      </decision_tree>
-    </step>
+## Related Skills
 
-    <step number="8" name="Iterate">
-      <instruction>Improve based on real usage</instruction>
-      <cycle>
-        <action>Use the skill on real tasks</action>
-        <action>Notice struggles or inefficiencies</action>
-        <action>Identify what to update in SKILL.md or resources</action>
-        <action>Implement changes and test again</action>
-      </cycle>
-      <tip>Iterate immediately after use while context is fresh</tip>
-    </step>
-  </workflow>
-
-  <validation_gates>
-    <command>scripts/validate-links.ps1</command>
-    <command>scripts/audit-skills.ps1 -Strict</command>
-    <command>scripts/ci-validate-skills.ps1</command>
-  </validation_gates>
-
-  <platform_compatibility>
-    <platform name="Antigravity" location=".agent/skills/"/>
-    <platform name="Claude Code" location=".claude/skills/"/>
-    <platform name="GitHub Copilot" location=".github/skills/"/>
-    <platform name="Cursor" location=".cursor/skills/"/>
-  </platform_compatibility>
-
-  <installation_paths>
-    <global>
-      <vendor name="Anthropic" location="~/.claude/skills/"/>
-      <vendor name="OpenAI" location="~/.agents/skills/" legacy_location="~/.codex/skills/"/>
-      <vendor name="Google" location="~/.gemini/skills/"/>
-    </global>
-    <local>
-      <vendor name="Mine" location=".agent/skills/"/>
-      <vendor name="Anthropic" location=".claude/skills/"/>
-      <vendor name="OpenAI" location=".agents/skills/" legacy_location=".codex/skills/"/>
-      <vendor name="Google" location=".gemini/skills/"/>
-    </local>
-  </installation_paths>
-
-  <best_practices>
-    <do>Keep SKILL.md as the "reception desk" pointing to resources</do>
-    <do>Write descriptions that explain WHEN to use (triggers)</do>
-    <do>Include decision trees for complex branching</do>
-    <do>Provide concrete examples</do>
-    <do>Use tables for quick reference data</do>
-    <do>Keep references one level deep</do>
-    <do>Test scripts before packaging</do>
-    <do>Use imperative/infinitive form in instructions</do>
-    <dont>Put everything in one massive file (max ~500 lines)</dont>
-    <dont>Write vague descriptions ("Does stuff")</dont>
-    <dont>Create mega-skills (split if scope creeps)</dont>
-    <dont>Skip the "When to use" in description</dont>
-    <dont>Deeply nest file references</dont>
-    <dont>Create README, CHANGELOG, or other auxiliary docs</dont>
-    <dont>Duplicate info between SKILL.md and references/</dont>
-  </best_practices>
-
-  <troubleshooting>
-    <issue problem="Skill not discovered">Check description explains WHEN to use</issue>
-    <issue problem="Skill partially loaded">Keep references one level deep</issue>
-    <issue problem="Wrong skill activated">Make description more specific</issue>
-    <issue problem="Instructions ignored">Use numbered steps, not prose</issue>
-    <issue problem="Context window bloat">Split into reference files, stay under 500 lines</issue>
-  </troubleshooting>
-
-  <related_skills>
-    <skill>workflow-builder</skill>
-    <skill>mcp-manager</skill>
-    <skill>mcp-builder</skill>
-  </related_skills>
-</skill>
+- `workflow-builder`
+- `mcp-manager`
+- `mcp-builder`

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Archive Manager"
+  short_description: "Help with Archive Manager tasks"
+  default_prompt: "Use $archive-manager to route archive tasks to the correct archive skill (code, docs, git, graph, or memory)."

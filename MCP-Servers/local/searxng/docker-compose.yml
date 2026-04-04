@@ -1,0 +1,32 @@
+services:
+  valkey:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    command:
+      - valkey-server
+      - --save
+      - "30"
+      - "1"
+      - --loglevel
+      - warning
+    volumes:
+      - valkey-data:/data
+
+  searxng:
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    depends_on:
+      - valkey
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      SEARXNG_BASE_URL: "http://localhost:8080/"
+      BIND_ADDRESS: "0.0.0.0:8080"
+      FORCE_OWNERSHIP: "true"
+    volumes:
+      - ./searxng:/etc/searxng:rw
+      - searxng-cache:/var/cache/searxng
+
+volumes:
+  valkey-data:
+  searxng-cache:

@@ -1,7 +1,7 @@
 # Automation Template: wf-dependency-check
 
 schedule: weekly friday 08:30 local
-skill: wf-dependency-check
+skill: dependency-check
 
 Prompt template:
-Run `wf-dependency-check` and summarize outdated and vulnerable dependencies with recommended update order.
+Run `dependency-check` and summarize outdated and vulnerable dependencies with recommended update order.

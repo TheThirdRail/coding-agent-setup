@@ -1,0 +1,4 @@
+interface:
+  display_name: "Performance Tune"
+  short_description: "Performance Tune workflow guidance"
+  default_prompt: "Use $performance-tune to run the performance-tune workflow for this repository."

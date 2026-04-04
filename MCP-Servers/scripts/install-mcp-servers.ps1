@@ -1,281 +1,155 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('google', 'openai', 'anthropic', 'all')]
+    [ValidateSet('google', 'openai', 'all')]
     [string]$Vendor = 'all',
-    [switch]$DryRun
+    [switch]$DryRun,
+    [switch]$SkipBackup
 )
 
 $ErrorActionPreference = 'Stop'
 
 function Ensure-Directory {
     param([string]$Path)
+
     $parent = Split-Path -Parent $Path
     if ($parent -and -not (Test-Path $parent)) {
         New-Item -ItemType Directory -Path $parent -Force | Out-Null
     }
 }
 
-function Remove-TomlSection {
-    param(
-        [string[]]$Lines,
-        [string]$Header
-    )
-    $output = New-Object System.Collections.Generic.List[string]
-    $skip = $false
-    foreach ($line in $Lines) {
-        if ($line -match "^\[$([regex]::Escape($Header))\]\s*$") {
-            $skip = $true
-            continue
-        }
-        if ($skip -and $line -match '^\[.+\]\s*$') {
-            $skip = $false
-        }
-        if (-not $skip) {
-            $output.Add($line)
-        }
-    }
-    return $output
-}
-
-function Set-CodexGatewayConfig {
-    param(
-        [string]$Path,
-        [string]$RegistryPath,
-        [string]$RuntimeCatalogPath,
-        [switch]$DryRunMode
-    )
-
-    $content = ''
-    if (Test-Path $Path) {
-        $content = Get-Content $Path -Raw
-    }
-
-    $lines = @()
-    if (-not [string]::IsNullOrWhiteSpace($content)) {
-        $lines = $content -split "`r?`n"
-    }
-
-    $lines = Remove-TomlSection -Lines $lines -Header 'mcp_servers.MCP_DOCKER'
-
-    $hasParentTable = $false
-    foreach ($line in $lines) {
-        if ($line -match '^\[mcp_servers\]\s*$') {
-            $hasParentTable = $true
-            break
-        }
-    }
-
-    $trimmed = New-Object System.Collections.Generic.List[string]
-    foreach ($line in $lines) {
-        $trimmed.Add($line)
-    }
-
-    while ($trimmed.Count -gt 0 -and [string]::IsNullOrWhiteSpace($trimmed[$trimmed.Count - 1])) {
-        $trimmed.RemoveAt($trimmed.Count - 1)
-    }
-
-    if (-not $hasParentTable) {
-        if ($trimmed.Count -gt 0) {
-            $trimmed.Add('')
-        }
-        $trimmed.Add('[mcp_servers]')
-    }
-
-    if ($trimmed.Count -gt 0) {
-        $trimmed.Add('')
-    }
-    $trimmed.Add('[mcp_servers.MCP_DOCKER]')
-    $trimmed.Add("command = 'docker.exe'")
-    $trimmed.Add('args = [')
-    $trimmed.Add("    'mcp',")
-    $trimmed.Add("    'gateway',")
-    $trimmed.Add("    'run',")
-    $trimmed.Add("    '--transport',")
-    $trimmed.Add("    'stdio',")
-    $trimmed.Add("    '--registry',")
-    $trimmed.Add("    '$RegistryPath',")
-    $trimmed.Add("    '--additional-catalog',")
-    $trimmed.Add("    '$RuntimeCatalogPath',")
-    $trimmed.Add(']')
-    $trimmed.Add('')
-
-    if ($DryRunMode) {
-        Write-Host "[DRY RUN] Would update Codex config: $Path" -ForegroundColor Yellow
-        return
-    }
-
-    Ensure-Directory -Path $Path
-    Set-Content -Path $Path -Value ($trimmed -join "`r`n") -Encoding utf8
-    Write-Host "Updated Codex config: $Path" -ForegroundColor Green
-}
-
-function Read-JsonConfig {
+function New-BackupPath {
     param([string]$Path)
-    if (-not (Test-Path $Path)) {
-        return @{ mcpServers = @{} }
-    }
-    $raw = Get-Content $Path -Raw
-    if ([string]::IsNullOrWhiteSpace($raw)) {
-        return @{ mcpServers = @{} }
-    }
-    $obj = $raw | ConvertFrom-Json
-    return ConvertTo-Hashtable -InputObject $obj
+
+    $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+    return "$Path.bak-$timestamp"
 }
 
-function ConvertTo-Hashtable {
-    param([Parameter(ValueFromPipeline = $true)]$InputObject)
-    if ($null -eq $InputObject) {
-        return $null
-    }
-
-    if ($InputObject -is [System.Collections.IDictionary]) {
-        $hash = @{}
-        foreach ($key in $InputObject.Keys) {
-            $hash[$key] = ConvertTo-Hashtable -InputObject $InputObject[$key]
-        }
-        return $hash
-    }
-
-    if ($InputObject -is [System.Collections.IEnumerable] -and -not ($InputObject -is [string])) {
-        $list = @()
-        foreach ($item in $InputObject) {
-            $list += ,(ConvertTo-Hashtable -InputObject $item)
-        }
-        return $list
-    }
-
-    if ($InputObject -is [pscustomobject]) {
-        $hash = @{}
-        foreach ($prop in $InputObject.PSObject.Properties) {
-            $hash[$prop.Name] = ConvertTo-Hashtable -InputObject $prop.Value
-        }
-        return $hash
-    }
-
-    return $InputObject
-}
-
-function Set-JsonGatewayConfig {
+function Get-TemplateContent {
     param(
-        [string]$Path,
-        [string]$ServerKey,
-        [string]$RegistryPath,
-        [string]$RuntimeCatalogPath,
-        [switch]$DryRunMode
+        [string]$TemplatePath,
+        [string]$RepoRoot
     )
 
-    $config = Read-JsonConfig -Path $Path
-    if (-not $config.ContainsKey('mcpServers') -or $null -eq $config.mcpServers) {
-        $config['mcpServers'] = @{}
+    $content = Get-Content -Path $TemplatePath -Raw
+    $repoRootForward = $RepoRoot -replace '\\', '/'
+
+    # Keep templates portable if this repo is checked out somewhere else.
+    return $content.Replace('D:/Coding/Tools/mcp-docker-stack', $repoRootForward)
+}
+
+function Test-JsonContent {
+    param([string]$Content)
+
+    $null = $Content | ConvertFrom-Json
+}
+
+function Install-TemplateFile {
+    param(
+        [string]$Label,
+        [string]$TemplatePath,
+        [string]$DestinationPath,
+        [string]$RepoRoot,
+        [switch]$ValidateJson,
+        [switch]$DryRunMode,
+        [switch]$SkipBackupMode
+    )
+
+    if (-not (Test-Path $TemplatePath)) {
+        throw "Template not found: $TemplatePath"
     }
 
-    $existing = $null
-    if ($config.mcpServers.ContainsKey($ServerKey)) {
-        $existing = $config.mcpServers[$ServerKey]
+    $content = Get-TemplateContent -TemplatePath $TemplatePath -RepoRoot $RepoRoot
+    if ($ValidateJson) {
+        Test-JsonContent -Content $content
     }
-
-    $entry = @{
-        command = 'docker'
-        args    = @(
-            'mcp',
-            'gateway',
-            'run',
-            '--transport',
-            'stdio',
-            '--registry',
-            $RegistryPath,
-            '--additional-catalog',
-            $RuntimeCatalogPath
-        )
-    }
-
-    if ($existing -is [hashtable] -and $existing.ContainsKey('env') -and $existing.env) {
-        $entry['env'] = $existing.env
-    }
-
-    $keysToRemove = @()
-    foreach ($key in $config.mcpServers.Keys) {
-        if ($key -eq $ServerKey) {
-            continue
-        }
-        $candidate = $config.mcpServers[$key]
-        if ($candidate -isnot [hashtable]) {
-            continue
-        }
-        if (-not $candidate.ContainsKey('command') -or -not $candidate.ContainsKey('args')) {
-            continue
-        }
-        if ($candidate.command -notin @('docker', 'docker.exe')) {
-            continue
-        }
-        $argsText = ''
-        if ($candidate.args -is [array]) {
-            $argsText = ($candidate.args -join ' ')
-        }
-        if (
-            $argsText -match '\bmcp\b' -and
-            $argsText -match '\bgateway\b' -and
-            $argsText -match 'docker-mcp-catalog\.yaml'
-        ) {
-            $keysToRemove += $key
-        }
-    }
-    foreach ($removeKey in $keysToRemove) {
-        $config.mcpServers.Remove($removeKey) | Out-Null
-    }
-
-    $config.mcpServers[$ServerKey] = $entry
 
     if ($DryRunMode) {
-        Write-Host "[DRY RUN] Would update JSON config: $Path ($ServerKey)" -ForegroundColor Yellow
+        Write-Host "[DRY RUN] Would install $Label config" -ForegroundColor Yellow
+        Write-Host "  Template:    $TemplatePath" -ForegroundColor Gray
+        Write-Host "  Destination: $DestinationPath" -ForegroundColor Gray
+        if ((Test-Path $DestinationPath) -and -not $SkipBackupMode) {
+            Write-Host "  Backup:      $(New-BackupPath -Path $DestinationPath)" -ForegroundColor Gray
+        }
         return
     }
 
-    Ensure-Directory -Path $Path
-    $config | ConvertTo-Json -Depth 50 | Set-Content -Path $Path -Encoding utf8
-    Write-Host "Updated JSON config: $Path ($ServerKey)" -ForegroundColor Green
+    Ensure-Directory -Path $DestinationPath
+
+    if ((Test-Path $DestinationPath) -and -not $SkipBackupMode) {
+        $backupPath = New-BackupPath -Path $DestinationPath
+        Copy-Item -Path $DestinationPath -Destination $backupPath -Force
+        Write-Host "Backed up existing $Label config: $backupPath" -ForegroundColor DarkYellow
+    }
+
+    Set-Content -Path $DestinationPath -Value $content -Encoding utf8
+    Write-Host "Installed $Label config: $DestinationPath" -ForegroundColor Green
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-$runtimeCatalogPath = (Resolve-Path (Join-Path $repoRoot 'MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml')).Path
-$registryPath = (Resolve-Path (Join-Path $repoRoot 'MCP-Servers\mcp-docker-stack\registry.all.yaml')).Path
-
-Write-Host '=== MCP Gateway Client Sync ===' -ForegroundColor Cyan
-Write-Host "Runtime catalog: $runtimeCatalogPath" -ForegroundColor Gray
-Write-Host "Registry:        $registryPath" -ForegroundColor Gray
-Write-Host ''
-
 $targets = @()
+
 switch ($Vendor) {
     'openai' {
-        $targets += @{ Type = 'codex'; Path = (Join-Path $env:USERPROFILE '.codex\config.toml') }
+        $targets += @{
+            Label       = 'OpenAI Codex'
+            Template    = (Join-Path $repoRoot 'Agent\OpenAI\Codex\mcp\config.toml')
+            Destination = (Join-Path $env:USERPROFILE '.codex\config.toml')
+            Json        = $false
+        }
     }
     'google' {
-        $targets += @{ Type = 'json'; Path = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json'); Key = 'MCP_DOCKER' }
-    }
-    'anthropic' {
-        $targets += @{ Type = 'json'; Path = (Join-Path $env:USERPROFILE '.claude.json'); Key = 'MCP_DOCKER' }
+        $targets += @{
+            Label       = 'Google Antigravity'
+            Template    = (Join-Path $repoRoot 'Agent\Google\Antigravity\mcp\mcp_config.json')
+            Destination = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json')
+            Json        = $true
+        }
     }
     'all' {
-        $targets += @{ Type = 'codex'; Path = (Join-Path $env:USERPROFILE '.codex\config.toml') }
-        $targets += @{ Type = 'json'; Path = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json'); Key = 'MCP_DOCKER' }
-        $targets += @{ Type = 'json'; Path = (Join-Path $env:USERPROFILE '.claude.json'); Key = 'MCP_DOCKER' }
+        $targets += @{
+            Label       = 'OpenAI Codex'
+            Template    = (Join-Path $repoRoot 'Agent\OpenAI\Codex\mcp\config.toml')
+            Destination = (Join-Path $env:USERPROFILE '.codex\config.toml')
+            Json        = $false
+        }
+        $targets += @{
+            Label       = 'Google Antigravity'
+            Template    = (Join-Path $repoRoot 'Agent\Google\Antigravity\mcp\mcp_config.json')
+            Destination = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json')
+            Json        = $true
+        }
     }
 }
+
+Write-Host '=== Hybrid MCP Config Installer ===' -ForegroundColor Cyan
+Write-Host "Repo root: $repoRoot" -ForegroundColor Gray
+Write-Host 'This installs the repo-owned hybrid templates:' -ForegroundColor Gray
+Write-Host '- direct always-on MCP servers in each client config' -ForegroundColor Gray
+Write-Host '- one MCP_DOCKER gateway for supplemental lazy-load servers' -ForegroundColor Gray
+Write-Host ''
 
 foreach ($target in $targets) {
-    if ($target.Type -eq 'codex') {
-        Set-CodexGatewayConfig -Path $target.Path -RegistryPath $registryPath -RuntimeCatalogPath $runtimeCatalogPath -DryRunMode:$DryRun
-        continue
-    }
-    Set-JsonGatewayConfig -Path $target.Path -ServerKey $target.Key -RegistryPath $registryPath -RuntimeCatalogPath $runtimeCatalogPath -DryRunMode:$DryRun
+    Install-TemplateFile `
+        -Label $target.Label `
+        -TemplatePath $target.Template `
+        -DestinationPath $target.Destination `
+        -RepoRoot $repoRoot `
+        -ValidateJson:$target.Json `
+        -DryRunMode:$DryRun `
+        -SkipBackupMode:$SkipBackup
 }
 
+Write-Host ''
 if ($DryRun) {
-    Write-Host ''
     Write-Host '[DRY RUN] No files were modified.' -ForegroundColor Yellow
 }
 else {
-    Write-Host ''
-    Write-Host 'Client gateway configuration sync complete.' -ForegroundColor Cyan
+    Write-Host 'Next steps:' -ForegroundColor Cyan
+    Write-Host "1. Build the local adapter image:" -ForegroundColor Gray
+    Write-Host "   docker build -t mcp-local-adapters:latest -f $repoRoot\MCP-Servers\local\adapters\Dockerfile $repoRoot" -ForegroundColor Gray
+    Write-Host "2. Start local SearXNG:" -ForegroundColor Gray
+    Write-Host "   docker compose -f $repoRoot\MCP-Servers\local\searxng\docker-compose.yml up -d" -ForegroundColor Gray
+    Write-Host "3. Sync Docker secrets from .env:" -ForegroundColor Gray
+    Write-Host "   .\set-mcp-secrets.ps1" -ForegroundColor Gray
+    Write-Host "4. Restart Codex and/or Antigravity." -ForegroundColor Gray
 }

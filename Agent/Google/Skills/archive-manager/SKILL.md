@@ -28,6 +28,11 @@ description: |
       <rule>State which archive skill is selected and what artifact will be produced.</rule>
     </principle>
 
+    <principle name="Prefer Best-Fit MCP First">
+      <rule>When an archive skill has a clear MCP equivalent, use the MCP path first and keep the local archive implementation as the fallback.</rule>
+      <rule>Current preferred mappings are Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory.</rule>
+    </principle>
+
     <principle name="Archive Lifecycle Enforcement">
       <rule>After code/docs/config changes, require archive updates before declaring task completion.</rule>
       <rule>Prefer archive-first retrieval when archive freshness is adequate; fall back to direct file reads only when needed.</rule>
@@ -46,6 +51,7 @@ description: |
       <question>Need repository evolution/history? Route to archive-git.</question>
       <question>Need structural code graph? Route to archive-graph.</question>
       <question>Need durable decision/context store? Route to archive-memory.</question>
+      <instruction>Prefer Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory when those servers are available.</instruction>
       <question>Is this retrieval-only, post-change indexing, or both?</question>
     </step>
 
@@ -61,6 +67,7 @@ description: |
 
     <step number="3" name="Record Archive Contract">
       <instruction>Capture chosen skill, project path, output path, retrieval command, and freshness status.</instruction>
+      <instruction>Record whether the request used the preferred MCP path or the local archive fallback.</instruction>
     </step>
 
     <step number="4" name="Enforce Archive Read/Write Policy">
@@ -71,6 +78,7 @@ description: |
 
   <best_practices>
     <do>Use archive-code and archive-graph together for deep structural analysis</do>
+    <do>Prefer Serena, RAGDocs, CodeGraph, and Memory MCP for their matching archive lanes before falling back to local scripts</do>
     <do>Use archive-memory for decisions and archive-docs for long-form references</do>
     <do>Pair archive-git with other archives when validating historical context</do>
     <dont>Store the same payload redundantly in every archive store</dont>

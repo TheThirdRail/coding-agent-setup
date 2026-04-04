@@ -7,24 +7,24 @@
 
 | Legacy workflow trigger | Skill ID |
 |---|---|
-| `/analyze` | `wf-analyze` |
-| `/architect` | `wf-architect` |
-| `/code` | `wf-code` |
-| `/dependency-check` | `wf-dependency-check` |
-| `/deploy` | `wf-deploy` |
-| `/fix-issue` | `wf-fix-issue` |
-| `/handoff` | `wf-handoff` |
-| `/morning` | `wf-morning` |
-| `/onboard` | `wf-onboard` |
-| `/performance-tune` | `wf-performance-tune` |
-| `/pr` | `wf-pr` |
-| `/project-setup` | `wf-project-setup` |
-| `/refactor` | `wf-refactor` |
-| `/research` | `wf-research` |
-| `/review` | `wf-review` |
-| `/security-audit` | `wf-security-audit` |
-| `/test-developer` | `wf-test-developer` |
-| `/tutor` | `wf-tutor` |
+| `/analyze` | `analyze` |
+| `/architect` | `architect` |
+| `/code` | `code` |
+| `/dependency-check` | `dependency-check` |
+| `/deploy` | `deploy` |
+| `/fix-issue` | `fix-issue` |
+| `/handoff` | `handoff` |
+| `/morning` | `morning` |
+| `/onboard` | `onboard` |
+| `/performance-tune` | `performance-tune` |
+| `/pr` | `pr` |
+| `/project-setup` | `project-setup` |
+| `/refactor` | `refactor` |
+| `/research` | `research` |
+| `/review` | `review` |
+| `/security-audit` | `security-audit` |
+| `/test-developer` | `test-developer` |
+| `/tutor` | `tutor` |
 
 ## Active Artifacts
 

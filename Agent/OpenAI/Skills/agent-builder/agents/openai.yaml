@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Builder"
+  short_description: "Help with Agent Builder tasks"
+  default_prompt: "Use $agent-builder to meta-skill for extending Antigravity's capabilities. Acts as a router to help users build Skills, Workflows, Rules, or MCP Tools."

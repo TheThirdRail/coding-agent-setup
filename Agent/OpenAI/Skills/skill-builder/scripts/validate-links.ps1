@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Validate related skill and workflow references across all skills.
+    Validate related skill references across all skills.
 #>
 
 [CmdletBinding()]
@@ -14,22 +14,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-function Get-SkillXml {
-    param([string]$Content)
-
-    $match = [regex]::Match($Content, '(?s)(<skill\b[\s\S]*</skill>)')
-    if ($match.Success) {
-        return $match.Groups[1].Value
-    }
-    return $null
-}
-
 $SkillsRoot = (Resolve-Path $SkillsRoot -ErrorAction Stop).Path
-$WorkflowsRootResolved = $null
-if (Test-Path $WorkflowsRoot) {
-    $WorkflowsRootResolved = (Resolve-Path $WorkflowsRoot -ErrorAction Stop).Path
-}
-
 $skillDirs = Get-ChildItem $SkillsRoot -Directory | Where-Object {
     Test-Path (Join-Path $_.FullName "SKILL.md")
 } | Sort-Object Name
@@ -37,64 +22,39 @@ $skillDirs = Get-ChildItem $SkillsRoot -Directory | Where-Object {
 $skillNames = @($skillDirs.Name)
 $errors = [System.Collections.Generic.List[string]]::new()
 
-foreach ($skillDir in $skillDirs) {
-    $skillFile = Join-Path $skillDir.FullName "SKILL.md"
-    $content = Get-Content $skillFile -Raw
-    $skillXml = Get-SkillXml -Content $content
+function Get-SkillRefs {
+    param([string]$Content)
 
-    if (-not $skillXml) {
-        $errors.Add("$($skillDir.Name): missing <skill> XML root") | Out-Null
-        continue
+    $refs = [System.Collections.Generic.HashSet[string]]::new()
+
+    $patterns = @(
+        '(?m)^- `skill`: ([a-z0-9-]+)\s*$',
+        'related skill `([a-z0-9-]+)`',
+        'Invoke related skill `([a-z0-9-]+)`',
+        'Use `([a-z0-9-]+)` when'
+    )
+
+    foreach ($pattern in $patterns) {
+        foreach ($match in [regex]::Matches($Content, $pattern)) {
+            [void]$refs.Add($match.Groups[1].Value)
+        }
     }
 
-    try {
-        [xml]$xml = "<root>$skillXml</root>"
-        $skillNode = $xml.root.skill
-        if (-not $skillNode) {
-            $errors.Add("$($skillDir.Name): invalid <skill> XML root") | Out-Null
+    return @($refs)
+}
+
+foreach ($skillDir in $skillDirs) {
+    $content = Get-Content (Join-Path $skillDir.FullName "SKILL.md") -Raw
+    $refs = Get-SkillRefs -Content $content
+
+    foreach ($ref in $refs) {
+        if ($ref -eq $skillDir.Name) {
             continue
         }
 
-        $relatedSkillNodes = $skillNode.SelectNodes('.//related_skills/skill | .//integration_points/skill')
-        foreach ($node in $relatedSkillNodes) {
-            $ref = $null
-            if ($node.Attributes['ref']) {
-                $ref = $node.Attributes['ref'].Value.Trim()
-            }
-            elseif (-not [string]::IsNullOrWhiteSpace($node.InnerText)) {
-                $ref = $node.InnerText.Trim()
-            }
-
-            if ($ref -and ($skillNames -notcontains $ref)) {
-                $errors.Add("$($skillDir.Name): missing skill reference '$ref'") | Out-Null
-            }
+        if ($skillNames -notcontains $ref) {
+            $errors.Add("$($skillDir.Name): missing skill reference '$ref'") | Out-Null
         }
-
-        $workflowRefNodes = $skillNode.SelectNodes('.//related_workflows/workflow | .//integration_points/workflow')
-        foreach ($node in $workflowRefNodes) {
-            $ref = $null
-            if ($node.Attributes['ref']) {
-                $ref = $node.Attributes['ref'].Value.Trim()
-            }
-            elseif (-not [string]::IsNullOrWhiteSpace($node.InnerText)) {
-                $ref = $node.InnerText.Trim()
-            }
-
-            if ($ref -and ($ref -match '^/[a-z-]+$')) {
-                if ($null -eq $WorkflowsRootResolved) {
-                    $errors.Add("$($skillDir.Name): workflow reference '$ref' cannot be validated (archive missing)") | Out-Null
-                }
-                else {
-                    $wfPath = Join-Path $WorkflowsRootResolved ($ref.TrimStart('/') + '.md')
-                    if (-not (Test-Path $wfPath)) {
-                        $errors.Add("$($skillDir.Name): missing workflow reference '$ref'") | Out-Null
-                    }
-                }
-            }
-        }
-    }
-    catch {
-        $errors.Add("$($skillDir.Name): invalid XML ($($_.Exception.Message))") | Out-Null
     }
 }
 
@@ -106,5 +66,5 @@ if ($errors.Count -gt 0) {
     exit 1
 }
 
-Write-Host "All skill/workflow references are valid." -ForegroundColor Green
+Write-Host "All skill references are valid." -ForegroundColor Green
 exit 0

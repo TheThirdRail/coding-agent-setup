@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dependency Check"
+  short_description: "Dependency Check workflow guidance"
+  default_prompt: "Use $dependency-check to run the dependency-check workflow for this repository."

@@ -1,9 +1,10 @@
 ---
 name: archive-memory
 description: |
-  Persist structured project context in a local SQLite memory store. Use when
-  recording decisions, patterns, and durable notes that should survive across
-  sessions and remain queryable by category or text search.
+  Persist structured project context, preferring the Memory MCP server for
+  day-to-day recall and falling back to the local SQLite archive for explicit
+  project-scoped storage. Use when recording decisions, patterns, and durable
+  notes that should survive across sessions and remain queryable.
 ---
 
 <skill name="archive-memory" version="2.0.0">
@@ -11,7 +12,7 @@ description: |
     <keywords>archive, memory, sqlite, context, decisions, persistence</keywords>
   </metadata>
 
-  <goal>Maintain durable project memory with safe, parameterized read/write/delete operations.</goal>
+  <goal>Maintain durable project memory with Memory MCP as the default path and the local SQLite archive as the deterministic fallback.</goal>
 
   <core_principles>
     <principle name="Python as Canonical Implementation">
@@ -27,9 +28,19 @@ description: |
     <principle name="Structured Retrieval">
       <rule>Support targeted reads by category/key plus broad keyword search.</rule>
     </principle>
+
+    <principle name="Prefer Memory MCP When Available">
+      <rule>Use the Memory MCP server first for routine remember and recall operations when it is available.</rule>
+      <rule>Fall back to the local archive-memory scripts when you need deterministic category/key behavior, explicit project-local files, or MCP is unavailable.</rule>
+    </principle>
   </core_principles>
 
   <workflow>
+    <step number="0" name="Choose Memory Mode">
+      <instruction>Use the Memory MCP server first for normal conversational memory and recall.</instruction>
+      <instruction>Use the local SQLite scripts when you need strict category and key control or explicit project-local archive files.</instruction>
+    </step>
+
     <step number="1" name="Write Memory Entry">
       <command>python Agent\Google\Skills\archive-memory\scripts\write.py --category "decisions" --key "auth-strategy" --value "JWT with refresh tokens" --project-path "[PROJECT_PATH]"</command>
       <note>Valid categories: decisions, patterns, files, context, custom.</note>
@@ -61,6 +72,7 @@ description: |
 
   <best_practices>
     <do>Store concise keys and meaningful values with stable category usage</do>
+    <do>Use Memory MCP for everyday recall, then use the local archive scripts when you need deterministic project-scoped persistence</do>
     <do>Use project-path explicitly when operating outside project root</do>
     <do>Capture decisions with rationale, not only conclusions</do>
     <dont>Store credentials or sensitive secrets in memory archives</dont>

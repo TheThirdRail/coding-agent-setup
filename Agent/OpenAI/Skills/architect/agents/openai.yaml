@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architect"
+  short_description: "Architect workflow guidance"
+  default_prompt: "Use $architect to run the architect workflow for this repository."

@@ -5,151 +5,209 @@ description: |
   security vulnerabilities, performance issues, and style violations. Use when
   reviewing PRs, before merging code, or when requesting a second opinion on changes.
 ---
+# Skill: code-reviewer
+Attributes: name="code-reviewer", version="2.0.0"
 
-<skill name="code-reviewer" version="2.0.0">
-  <metadata>
-    <keywords>code-review, pr, pull-request, security, bugs</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>code-reviewer</id>
-    <name>code-reviewer</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Perform thorough code reviews that identify critical issues while providing actionable feedback.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: code-review, pr, pull-request, security, bugs
 
-  <goal>Perform thorough code reviews that identify critical issues while providing actionable feedback.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Priority Hierarchy">
-      <priority level="P0" category="Security vulnerabilities" action="Block merge" icon="🔴"/>
-      <priority level="P1" category="Bugs / Logic errors" action="Block merge" icon="🔴"/>
-      <priority level="P2" category="Performance issues" action="Strongly recommend fix" icon="🟠"/>
-      <priority level="P3" category="Code quality" action="Suggest improvement" icon="🟡"/>
-      <priority level="P4" category="Style / Formatting" action="Optional nitpick" icon="🟢"/>
-    </principle>
+- `id`: code-reviewer
 
-    <principle name="Constructive Feedback">
-      <rule>Explain WHY something is an issue</rule>
-      <rule>Provide HOW to fix it</rule>
-      <rule>Link to documentation when relevant</rule>
-      <rule>Be specific, not vague</rule>
-    </principle>
-  </core_principles>
+- `name`: code-reviewer
 
+- `version`: 2.0.0
 
+- `last_updated`: 2026-02-09
 
-  <recommended_mcp>
-    <server>snyk</server>
-    <server>serena</server>
-    <reason>Vulnerability scanning and semantic code context</reason>
-  </recommended_mcp>
+- `purpose`: Perform thorough code reviews that identify critical issues while providing actionable feedback.
 
-  <workflow>
-    <step number="1" name="Understand Context">
-      <question>What is this PR trying to accomplish?</question>
-      <question>What issue/ticket does it address?</question>
-    </step>
+### Inputs (`inputs`)
 
-    <step number="2" name="High-Level Scan">
-      <check>Does the change make sense for the stated goal?</check>
-      <check>Is the scope appropriate?</check>
-      <check>Are there any obvious red flags?</check>
-    </step>
+- `input`: User request and relevant project context.
 
-    <step number="3" name="Security Review">
-      <skill ref="security-checker">Use for detailed security analysis</skill>
-      <vulnerability name="Injection">Unsanitized user input in queries</vulnerability>
-      <vulnerability name="Auth Issues">Missing auth/authz checks</vulnerability>
-      <vulnerability name="Secrets">Hardcoded API keys, passwords</vulnerability>
-      <vulnerability name="XSS">Unescaped user content in HTML</vulnerability>
-      <vulnerability name="Path Traversal">User input in file paths</vulnerability>
-    </step>
+### Outputs (`outputs`)
 
-    <step number="4" name="Bug Detection">
-      <bug_type name="Null/Undefined">Missing null checks</bug_type>
-      <bug_type name="Off-by-One">Loop boundaries, array indexing</bug_type>
-      <bug_type name="Race Conditions">Async without sync</bug_type>
-      <bug_type name="Resource Leaks">Unclosed connections</bug_type>
-    </step>
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
 
-    <step number="5" name="Performance Review">
-      <issue name="N+1 Queries">Database calls inside loops</issue>
-      <issue name="Unnecessary Renders">React re-rendering issues</issue>
-      <issue name="Memory Leaks">Event listeners not cleaned up</issue>
-    </step>
+### Triggers (`triggers`)
 
-    <step number="6" name="Code Quality">
-      <check>Functions are focused (single responsibility)</check>
-      <check>Names are descriptive and clear</check>
-      <check>Complex logic is documented</check>
-      <check>DRY principle followed</check>
-    </step>
+- `trigger`: Use when the frontmatter description conditions are met.
 
-    <step number="7" name="Test Coverage">
-      <check>New code has corresponding tests</check>
-      <check>Tests cover happy path and edge cases</check>
-    </step>
-  </workflow>
+- `procedure`: Follow the ordered steps in the workflow section.
 
-  <feedback_templates>
-    <template priority="P0"><![CDATA[
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Perform thorough code reviews that identify critical issues while providing actionable feedback.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Priority Hierarchy"
+
+- `priority` (level="P0", category="Security vulnerabilities", action="Block merge", icon="🔴")
+
+- `priority` (level="P1", category="Bugs / Logic errors", action="Block merge", icon="🔴")
+
+- `priority` (level="P2", category="Performance issues", action="Strongly recommend fix", icon="🟠")
+
+- `priority` (level="P3", category="Code quality", action="Suggest improvement", icon="🟡")
+
+- `priority` (level="P4", category="Style / Formatting", action="Optional nitpick", icon="🟢")
+
+### Principle (`principle`)
+Attributes: name="Constructive Feedback"
+
+- `rule`: Explain WHY something is an issue
+
+- `rule`: Provide HOW to fix it
+
+- `rule`: Link to documentation when relevant
+
+- `rule`: Be specific, not vague
+
+## Recommended Mcp (`recommended_mcp`)
+
+- `server`: snyk
+
+- `server`: serena
+
+- `reason`: Vulnerability scanning and semantic code context
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Understand Context"
+
+- `question`: What is this PR trying to accomplish?
+
+- `question`: What issue/ticket does it address?
+
+### Step (`step`)
+Attributes: number="2", name="High-Level Scan"
+
+- `check`: Does the change make sense for the stated goal?
+
+- `check`: Is the scope appropriate?
+
+- `check`: Are there any obvious red flags?
+
+### Step (`step`)
+Attributes: number="3", name="Security Review"
+
+- `skill` (ref="security-checker"): Use for detailed security analysis
+
+- `vulnerability` (name="Injection"): Unsanitized user input in queries
+
+- `vulnerability` (name="Auth Issues"): Missing auth/authz checks
+
+- `vulnerability` (name="Secrets"): Hardcoded API keys, passwords
+
+- `vulnerability` (name="XSS"): Unescaped user content in HTML
+
+- `vulnerability` (name="Path Traversal"): User input in file paths
+
+### Step (`step`)
+Attributes: number="4", name="Bug Detection"
+
+- `bug_type` (name="Null/Undefined"): Missing null checks
+
+- `bug_type` (name="Off-by-One"): Loop boundaries, array indexing
+
+- `bug_type` (name="Race Conditions"): Async without sync
+
+- `bug_type` (name="Resource Leaks"): Unclosed connections
+
+### Step (`step`)
+Attributes: number="5", name="Performance Review"
+
+- `issue` (name="N+1 Queries"): Database calls inside loops
+
+- `issue` (name="Unnecessary Renders"): React re-rendering issues
+
+- `issue` (name="Memory Leaks"): Event listeners not cleaned up
+
+### Step (`step`)
+Attributes: number="6", name="Code Quality"
+
+- `check`: Functions are focused (single responsibility)
+
+- `check`: Names are descriptive and clear
+
+- `check`: Complex logic is documented
+
+- `check`: DRY principle followed
+
+### Step (`step`)
+Attributes: number="7", name="Test Coverage"
+
+- `check`: New code has corresponding tests
+
+- `check`: Tests cover happy path and edge cases
+
+## Feedback Templates (`feedback_templates`)
+
+- `template` (priority="P0"):
+```text
 🔴 **Security: [Issue Type]**
 **Problem:** [What the vulnerability is]
 **Risk:** [What could happen]
 **Fix:** [How to remediate]
-    ]]></template>
+```
 
-    <template priority="P1"><![CDATA[
+- `template` (priority="P1"):
+```text
 🔴 **Bug: [Brief Description]**
 **Problem:** [What the bug is]
 **Scenario:** [When this would fail]
 **Suggested Fix:** [Code example]
-    ]]></template>
+```
 
-    <template priority="P2"><![CDATA[
+- `template` (priority="P2"):
+```text
 🟠 **Performance: [Issue Type]**
 **Current:** [What's happening]
 **Suggested:** [Better approach]
-    ]]></template>
-  </feedback_templates>
+```
 
-  <best_practices>
-    <do>Start with security and correctness issues</do>
-    <do>Provide specific, actionable feedback</do>
-    <do>Explain the "why" behind suggestions</do>
-    <do>Acknowledge good code when you see it</do>
-    <do>Prioritize issues by severity</do>
-    <dont>Focus only on style nitpicks</dont>
-    <dont>Be vague ("this looks wrong")</dont>
-    <dont>Block on minor issues</dont>
-    <dont>Be condescending or harsh</dont>
-  </best_practices>
+## Best Practices (`best_practices`)
 
-  <related_skills>
-    <skill ref="security-checker" auto-invoke="true">Invoke for auth, input handling, or API changes</skill>
-    <skill>git-commit-generator</skill>
-    <skill>test-generator</skill>
-    <skill>architecture-planner</skill>
-  </related_skills>
-</skill>
+- `do`: Start with security and correctness issues
+
+- `do`: Provide specific, actionable feedback
+
+- `do`: Explain the "why" behind suggestions
+
+- `do`: Acknowledge good code when you see it
+
+- `do`: Prioritize issues by severity
+
+- `dont`: Focus only on style nitpicks
+
+- `dont`: Be vague ("this looks wrong")
+
+- `dont`: Block on minor issues
+
+- `dont`: Be condescending or harsh
+
+## Related Skills (`related_skills`)
+
+- `skill` (ref="security-checker", auto-invoke="true"): Invoke for auth, input handling, or API changes
+
+- `skill`: git-commit-generator
+
+- `skill`: test-generator
+
+- `skill`: architecture-planner

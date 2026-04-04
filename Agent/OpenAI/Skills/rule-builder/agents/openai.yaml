@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rule Builder"
+  short_description: "Help with Rule Builder tasks"
+  default_prompt: "Use $rule-builder to create or update reusable agent behavior rules with explicit constraints, activation modes, and install paths."

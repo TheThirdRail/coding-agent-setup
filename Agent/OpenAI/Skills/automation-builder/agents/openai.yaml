@@ -1,0 +1,4 @@
+interface:
+  display_name: "Automation Builder"
+  short_description: "Help with Automation Builder tasks"
+  default_prompt: "Use $automation-builder to build and maintain OpenAI Codex automation templates with clear schedule metadata and explicit skill invocation."

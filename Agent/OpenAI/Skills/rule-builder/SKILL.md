@@ -5,71 +5,100 @@ description: |
   activation modes, and install paths. Use when enforcing consistent
   guardrails (security, style, workflow) across a workspace or globally.
 ---
+# Skill: rule-builder
+Attributes: name="rule-builder", version="2.0.0"
 
-<skill name="rule-builder" version="2.0.0">
-  <metadata>
-    <keywords>rules, constraints, guardrails, GEMINI.md, agent behavior</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>rule-builder</id>
-    <name>rule-builder</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Guide creation of Antigravity agent rules with proper structure, activation modes, and clear behavioral constraints.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: rules, constraints, guardrails, GEMINI.md, agent behavior
 
-  <goal>Guide creation of Antigravity agent rules with proper structure, activation modes, and clear behavioral constraints.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Constraint Clarity">
-      <rule>Rules must be unambiguous - no room for interpretation</rule>
-      <rule>Use explicit ALLOW/DENY lists where possible</rule>
-      <rule>Start with restrictive defaults, then whitelist</rule>
-    </principle>
+- `id`: rule-builder
 
-    <principle name="Size Limit">
-      <rule>Rule files MUST be under 12,000 characters to respect context limits</rule>
-      <rule>Keep rules focused on specific domains (Security, Testing, etc.)</rule>
-    </principle>
+- `name`: rule-builder
 
-    <principle name="Activation Specificity">
-      <mode name="always_on">Rule is always active</mode>
-      <mode name="manual">User must explicitly invoke</mode>
-      <mode name="model_decision">Agent decides based on context</mode>
-      <mode name="glob">Applies to files matching pattern (e.g., *.ts)</mode>
-    </principle>
-  </core_principles>
+- `version`: 2.0.0
 
-  <workflow>
-    <step number="1" name="Define the Rule Purpose">
-      <question>What behavior are you constraining or enforcing?</question>
-      <question>Is this a MUST, MUST NOT, or PREFER rule?</question>
-      <question>Should this apply globally (all projects) or per-workspace?</question>
-    </step>
+- `last_updated`: 2026-02-09
 
-    <step number="2" name="Write Rule File">
-      <format>Embedded XML in Markdown (YAML frontmatter + XML body)</format>
-      <template><![CDATA[
+- `purpose`: Guide creation of Antigravity agent rules with proper structure, activation modes, and clear behavioral constraints.
+
+### Inputs (`inputs`)
+
+- `input`: User request and relevant project context.
+
+### Outputs (`outputs`)
+
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
+
+### Triggers (`triggers`)
+
+- `trigger`: Use when the frontmatter description conditions are met.
+
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Guide creation of Antigravity agent rules with proper structure, activation modes, and clear behavioral constraints.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Constraint Clarity"
+
+- `rule`: Rules must be unambiguous - no room for interpretation
+
+- `rule`: Use explicit ALLOW/DENY lists where possible
+
+- `rule`: Start with restrictive defaults, then whitelist
+
+### Principle (`principle`)
+Attributes: name="Size Limit"
+
+- `rule`: Rule files MUST be under 12,000 characters to respect context limits
+
+- `rule`: Keep rules focused on specific domains (Security, Testing, etc.)
+
+### Principle (`principle`)
+Attributes: name="Activation Specificity"
+
+- `mode` (name="always_on"): Rule is always active
+
+- `mode` (name="manual"): User must explicitly invoke
+
+- `mode` (name="model_decision"): Agent decides based on context
+
+- `mode` (name="glob"): Applies to files matching pattern (e.g., *.ts)
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Define the Rule Purpose"
+
+- `question`: What behavior are you constraining or enforcing?
+
+- `question`: Is this a MUST, MUST NOT, or PREFER rule?
+
+- `question`: Should this apply globally (all projects) or per-workspace?
+
+### Step (`step`)
+Attributes: number="2", name="Write Rule File"
+
+- `format`: Embedded XML in Markdown (YAML frontmatter + XML body)
+
+- `template`:
+```text
 ---
 
 name: rule-name
@@ -80,95 +109,105 @@ activation: always_on  # or: manual, model_decision, glob
 glob: "*.ts"  # only if activation is glob
 ---
 
-<rule name="rule-name" version="1.0.0">
-  <metadata>
-    <category>security|code-style|architecture|workflow</category>
-    <severity>error|warning|info</severity>
-  </metadata>
+&lt;rule name="rule-name" version="1.0.0"&gt;
+  &lt;metadata&gt;
+    &lt;category&gt;security|code-style|architecture|workflow&lt;/category&gt;
+    &lt;severity&gt;error|warning|info&lt;/severity&gt;
+  &lt;/metadata&gt;
 
-  <spec_contract>
-    <id>rule-builder</id>
-    <name>rule-builder</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Guide creation of Antigravity agent rules with proper structure, activation modes, and clear behavioral constraints.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+  &lt;spec_contract&gt;
+    &lt;id&gt;rule-builder&lt;/id&gt;
+    &lt;name&gt;rule-builder&lt;/name&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
+    &lt;last_updated&gt;2026-02-09&lt;/last_updated&gt;
+    &lt;purpose&gt;Guide creation of Antigravity agent rules with proper structure, activation modes, and clear behavioral constraints.&lt;/purpose&gt;
+    &lt;inputs&gt;
+      &lt;input&gt;User request and relevant project context.&lt;/input&gt;
+    &lt;/inputs&gt;
+    &lt;outputs&gt;
+      &lt;output&gt;Completed guidance, actions, or artifacts produced by this skill.&lt;/output&gt;
+    &lt;/outputs&gt;
+    &lt;triggers&gt;
+      &lt;trigger&gt;Use when the frontmatter description conditions are met.&lt;/trigger&gt;
+    &lt;/triggers&gt;
+    &lt;procedure&gt;Follow the ordered steps in the workflow section.&lt;/procedure&gt;
+    &lt;edge_cases&gt;
+      &lt;edge_case&gt;If required context is missing, gather or request it before continuing.&lt;/edge_case&gt;
+    &lt;/edge_cases&gt;
+    &lt;safety_constraints&gt;
+      &lt;constraint&gt;Avoid destructive operations without explicit user intent.&lt;/constraint&gt;
+    &lt;/safety_constraints&gt;
+    &lt;examples&gt;
+      &lt;example&gt;Activate this skill when the request matches its trigger conditions.&lt;/example&gt;
+    &lt;/examples&gt;
+  &lt;/spec_contract&gt;
 
-  <purpose>One sentence explaining what this rule prevents or enforces.</purpose>
+  &lt;purpose&gt;One sentence explaining what this rule prevents or enforces.&lt;/purpose&gt;
 
-  <constraints>
-    <must>
-      <behavior id="unique-id">Specific mandated behavior</behavior>
-    </must>
-    <must_not>
-      <behavior id="unique-id">Specific prohibited behavior</behavior>
-    </must_not>
-    <prefer>
-      <behavior id="unique-id">Preferred approach</behavior>
-    </prefer>
-  </constraints>
+  &lt;constraints&gt;
+    &lt;must&gt;
+      &lt;behavior id="unique-id"&gt;Specific mandated behavior&lt;/behavior&gt;
+    &lt;/must&gt;
+    &lt;must_not&gt;
+      &lt;behavior id="unique-id"&gt;Specific prohibited behavior&lt;/behavior&gt;
+    &lt;/must_not&gt;
+    &lt;prefer&gt;
+      &lt;behavior id="unique-id"&gt;Preferred approach&lt;/behavior&gt;
+    &lt;/prefer&gt;
+  &lt;/constraints&gt;
 
-  <examples>
-    <example type="good" description="Correct approach">
-      <code>...</code>
-    </example>
-    <example type="bad" description="What to avoid">
-      <code>...</code>
-    </example>
-  </examples>
-</rule>
-      ]]></template>
-    </step>
+  &lt;examples&gt;
+    &lt;example type="good" description="Correct approach"&gt;
+      &lt;code&gt;...&lt;/code&gt;
+    &lt;/example&gt;
+    &lt;example type="bad" description="What to avoid"&gt;
+      &lt;code&gt;...&lt;/code&gt;
+    &lt;/example&gt;
+  &lt;/examples&gt;
+&lt;/rule&gt;
+```
 
-    <step number="3" name="Validate Size">
-      <instruction>Ensure the file character count is under 12,000.</instruction>
-      <check>Is the content focused purely on rules? (Move detailed how-to instructions to Skills)</check>
-    </step>
+### Step (`step`)
+Attributes: number="3", name="Validate Size"
 
-    <step number="4" name="Install Rule">
-      <instruction>Move the rule to the appropriate location using helper scripts.</instruction>
-      <decision_tree>
-        <branch condition="Global Rule (Apply to ALL projects)">
-          <action>Run: scripts/move-global-rule.ps1 -Name "rule-name.md" -Vendor "anthropic|openai|google"</action>
-        </branch>
-        <branch condition="Workspace Rule (Apply to THIS project only)">
-          <action>Run: scripts/move-local-rule.ps1 -Name "rule-name.md" -Vendor "mine|anthropic|openai|google"</action>
-        </branch>
-      </decision_tree>
-    </step>
-  </workflow>
+- `instruction`: Ensure the file character count is under 12,000.
 
-  <resource_folders>
-    <folder name="scripts/" purpose="Installation utilities">
-      <file>move-global-rule.ps1</file>
-      <file>move-local-rule.ps1</file>
-    </folder>
-  </resource_folders>
+- `check`: Is the content focused purely on rules? (Move detailed how-to instructions to Skills)
 
-  <best_practices>
-    <do>Write constraints in enforceable terms (must, must_not, prefer)</do>
-    <do>Keep rule scope narrow and domain-specific</do>
-    <do>Install rules using script parameters instead of manual path edits</do>
-    <dont>Embed long tutorials or implementation guidance in rule files</dont>
-    <dont>Use ambiguous statements that cannot be validated in review</dont>
-  </best_practices>
-</skill>
+### Step (`step`)
+Attributes: number="4", name="Install Rule"
+
+- `instruction`: Move the rule to the appropriate location using helper scripts.
+
+#### Decision Tree (`decision_tree`)
+
+##### Branch (`branch`)
+Attributes: condition="Global Rule (Apply to ALL projects)"
+
+- `action`: Run: scripts/move-global-rule.ps1 -Name "rule-name.md" -Vendor "anthropic|openai|google"
+
+##### Branch (`branch`)
+Attributes: condition="Workspace Rule (Apply to THIS project only)"
+
+- `action`: Run: scripts/move-local-rule.ps1 -Name "rule-name.md" -Vendor "mine|anthropic|openai|google"
+
+## Resource Folders (`resource_folders`)
+
+### Folder (`folder`)
+Attributes: name="scripts/", purpose="Installation utilities"
+
+- `file`: move-global-rule.ps1
+
+- `file`: move-local-rule.ps1
+
+## Best Practices (`best_practices`)
+
+- `do`: Write constraints in enforceable terms (must, must_not, prefer)
+
+- `do`: Keep rule scope narrow and domain-specific
+
+- `do`: Install rules using script parameters instead of manual path edits
+
+- `dont`: Embed long tutorials or implementation guidance in rule files
+
+- `dont`: Use ambiguous statements that cannot be validated in review

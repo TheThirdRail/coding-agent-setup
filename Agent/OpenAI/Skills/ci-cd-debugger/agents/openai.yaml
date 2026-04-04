@@ -1,0 +1,4 @@
+interface:
+  display_name: "CI/CD Debugger"
+  short_description: "Help with CI/CD Debugger tasks"
+  default_prompt: "Use $ci-cd-debugger to debug failing CI/CD pipelines and GitHub Actions workflows. Analyzes build logs, identifies failure causes, and suggests fixes."

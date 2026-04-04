@@ -1,0 +1,4 @@
+interface:
+  display_name: "Archive Docs"
+  short_description: "Help with Archive Docs tasks"
+  default_prompt: "Use $archive-docs to store and search project documents semantically with ChromaDB embeddings."

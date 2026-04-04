@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Commit Generator"
+  short_description: "Help with Git Commit Generator tasks"
+  default_prompt: "Use $git-commit-generator to generate conventional commit messages from staged changes. Analyzes diffs to create semantic, descriptive commit messages following Conventional Commits specification."

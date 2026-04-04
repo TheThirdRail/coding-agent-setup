@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR"
+  short_description: "Help with PR tasks"
+  default_prompt: "Use $pr to run the pr workflow for this repository."

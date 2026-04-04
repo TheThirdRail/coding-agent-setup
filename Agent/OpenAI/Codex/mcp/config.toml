@@ -1,0 +1,108 @@
+# Repo-owned Codex MCP template for the hybrid stack.
+# Copy this file into ~/.codex/config.toml after backing up the live config.
+#
+# One-time local prerequisites:
+# 1. Build the local adapter image:
+#    docker build -t mcp-local-adapters:latest -f D:/Coding/Tools/mcp-docker-stack/MCP-Servers/local/adapters/Dockerfile D:/Coding/Tools/mcp-docker-stack
+# 2. Start SearXNG:
+#    docker compose -f D:/Coding/Tools/mcp-docker-stack/MCP-Servers/local/searxng/docker-compose.yml up -d
+
+[mcp_servers.serena]
+command = "docker.exe"
+args = [
+  "run",
+  "--rm",
+  "-i",
+  "-w",
+  "/workspace",
+  "-v",
+  "D:/Coding/Tools/mcp-docker-stack:/workspace",
+  "ghcr.io/oraios/serena:latest",
+  "serena-mcp-server",
+  "--transport",
+  "stdio",
+  "--project-from-cwd",
+]
+startup_timeout_sec = 60
+tool_timeout_sec = 120
+
+[mcp_servers.codegraph]
+command = "docker.exe"
+args = [
+  "run",
+  "--rm",
+  "-i",
+  "-w",
+  "/workspace",
+  "-v",
+  "D:/Coding/Tools/mcp-docker-stack:/workspace",
+  "mcp-local-adapters:latest",
+  "--mode",
+  "codegraph",
+]
+startup_timeout_sec = 30
+tool_timeout_sec = 120
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+startup_timeout_sec = 30
+tool_timeout_sec = 60
+
+[mcp_servers.searxng]
+command = "docker.exe"
+args = [
+  "run",
+  "--rm",
+  "-i",
+  "-w",
+  "/workspace",
+  "-e",
+  "SEARXNG_URL=http://host.docker.internal:8080",
+  "-v",
+  "D:/Coding/Tools/mcp-docker-stack:/workspace",
+  "mcp-local-adapters:latest",
+  "--mode",
+  "searxng",
+]
+startup_timeout_sec = 30
+tool_timeout_sec = 90
+
+[mcp_servers.fetch]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-fetch"]
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp"]
+startup_timeout_sec = 30
+tool_timeout_sec = 120
+
+[mcp_servers.memory]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-memory"]
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+
+[mcp_servers.shrimp_task_manager]
+command = "npx"
+args = ["-y", "mcp-shrimp-task-manager"]
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+
+[mcp_servers.MCP_DOCKER]
+command = "docker.exe"
+args = [
+  "mcp",
+  "gateway",
+  "run",
+  "--transport",
+  "stdio",
+  "--registry",
+  "D:/Coding/Tools/mcp-docker-stack/MCP-Servers/mcp-docker-stack/registry.supplementals.yaml",
+  "--additional-catalog",
+  "D:/Coding/Tools/mcp-docker-stack/MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml",
+]
+startup_timeout_sec = 30
+tool_timeout_sec = 120

@@ -5,110 +5,149 @@ description: |
   baselines and incremental changes. Use when diagnosing latency, throughput,
   memory, database, or frontend performance bottlenecks.
 ---
+# Skill: performance-analyzer
+Attributes: name="performance-analyzer", version="2.0.0"
 
-<skill name="performance-analyzer" version="2.0.0">
-  <metadata>
-    <keywords>performance, profiling, benchmarking, optimization, latency, throughput</keywords>
-  </metadata>
+## Metadata (`metadata`)
 
-  <spec_contract>
-    <id>performance-analyzer</id>
-    <name>performance-analyzer</name>
-    <version>2.0.0</version>
-    <last_updated>2026-02-09</last_updated>
-    <purpose>Identify the highest-impact bottlenecks and apply measured optimizations with verifiable improvements.</purpose>
-    <inputs>
-      <input>User request and relevant project context.</input>
-    </inputs>
-    <outputs>
-      <output>Completed guidance, actions, or artifacts produced by this skill.</output>
-    </outputs>
-    <triggers>
-      <trigger>Use when the frontmatter description conditions are met.</trigger>
-    </triggers>
-    <procedure>Follow the ordered steps in the workflow section.</procedure>
-    <edge_cases>
-      <edge_case>If required context is missing, gather or request it before continuing.</edge_case>
-    </edge_cases>
-    <safety_constraints>
-      <constraint>Avoid destructive operations without explicit user intent.</constraint>
-    </safety_constraints>
-    <examples>
-      <example>Activate this skill when the request matches its trigger conditions.</example>
-    </examples>
-  </spec_contract>
+- `keywords`: performance, profiling, benchmarking, optimization, latency, throughput
 
-  <goal>Identify the highest-impact bottlenecks and apply measured optimizations with verifiable improvements.</goal>
+## Spec Contract (`spec_contract`)
 
-  <core_principles>
-    <principle name="Measure Before Change">
-      <rule>Capture baseline metrics (p50/p95/p99 latency, throughput, resource utilization) before optimization.</rule>
-      <rule>Do not accept optimizations without measurable deltas.</rule>
-    </principle>
+- `id`: performance-analyzer
 
-    <principle name="Impact-First Prioritization">
-      <rule>Rank bottlenecks by user impact and system cost, then fix top offenders first.</rule>
-      <rule>Prefer 80/20 changes that reduce dominant latency contributors.</rule>
-    </principle>
+- `name`: performance-analyzer
 
-    <principle name="One Change at a Time">
-      <rule>Apply optimizations incrementally and re-measure after each change.</rule>
-      <rule>Document regressions and rollback if improvements are not sustained.</rule>
-    </principle>
-  </core_principles>
+- `version`: 2.0.0
 
-  <workflow>
-    <step number="1" name="Establish Baseline">
-      <metric>Response time distribution (p50, p95, p99)</metric>
-      <metric>Throughput and error rate</metric>
-      <metric>CPU, memory, disk I/O, and database timings</metric>
-    </step>
+- `last_updated`: 2026-02-09
 
-    <step number="2" name="Profile and Localize Bottlenecks">
-      <instruction>Use profilers and traces to determine where time and resources are spent.</instruction>
-      <category>CPU-bound</category>
-      <category>I/O-bound</category>
-      <category>Memory-bound</category>
-      <category>Network-bound</category>
-    </step>
+- `purpose`: Identify the highest-impact bottlenecks and apply measured optimizations with verifiable improvements.
 
-    <step number="3" name="Apply Targeted Optimizations">
-      <instruction>Select one optimization from references/optimization-patterns.md and implement it.</instruction>
-      <focus>Database, API calls, algorithmic complexity, caching, rendering, payload size</focus>
-    </step>
+### Inputs (`inputs`)
 
-    <step number="4" name="Re-Measure and Compare">
-      <instruction>Re-run benchmark/profile suite and compare against baseline.</instruction>
-      <output>Before/after table with quantifiable deltas</output>
-    </step>
+- `input`: User request and relevant project context.
 
-    <step number="5" name="Document Outcome">
-      <instruction>Record what changed, why it helped, and remaining risks or next bottlenecks.</instruction>
-    </step>
-  </workflow>
+### Outputs (`outputs`)
 
-  <resources>
-    <reference file="references/optimization-patterns.md">Optimization tactics and quick-win catalog.</reference>
-  </resources>
+- `output`: Completed guidance, actions, or artifacts produced by this skill.
 
-  <best_practices>
-    <do>Use representative workloads for benchmarks</do>
-    <do>Keep performance budgets explicit for critical paths</do>
-    <do>Validate database query plans after schema/index changes</do>
-    <do>Track improvements and regressions in repeatable reports</do>
-    <dont>Optimize based on intuition alone</dont>
-    <dont>Ship optimizations that increase complexity without clear gain</dont>
-    <dont>Ignore memory pressure when improving pure latency</dont>
-  </best_practices>
+### Triggers (`triggers`)
 
-  <related_skills>
-    <skill>api-builder</skill>
-    <skill>architecture-planner</skill>
-    <skill>database-optimizer</skill>
-  </related_skills>
+- `trigger`: Use when the frontmatter description conditions are met.
 
-  <related_workflows>
-    <workflow>/performance-tune</workflow>
-    <workflow>/analyze</workflow>
-  </related_workflows>
-</skill>
+- `procedure`: Follow the ordered steps in the workflow section.
+
+### Edge Cases (`edge_cases`)
+
+- `edge_case`: If required context is missing, gather or request it before continuing.
+
+### Safety Constraints (`safety_constraints`)
+
+- `constraint`: Avoid destructive operations without explicit user intent.
+
+### Examples (`examples`)
+
+- `example`: Activate this skill when the request matches its trigger conditions.
+
+- `goal`: Identify the highest-impact bottlenecks and apply measured optimizations with verifiable improvements.
+
+## Core Principles (`core_principles`)
+
+### Principle (`principle`)
+Attributes: name="Measure Before Change"
+
+- `rule`: Capture baseline metrics (p50/p95/p99 latency, throughput, resource utilization) before optimization.
+
+- `rule`: Do not accept optimizations without measurable deltas.
+
+### Principle (`principle`)
+Attributes: name="Impact-First Prioritization"
+
+- `rule`: Rank bottlenecks by user impact and system cost, then fix top offenders first.
+
+- `rule`: Prefer 80/20 changes that reduce dominant latency contributors.
+
+### Principle (`principle`)
+Attributes: name="One Change at a Time"
+
+- `rule`: Apply optimizations incrementally and re-measure after each change.
+
+- `rule`: Document regressions and rollback if improvements are not sustained.
+
+## Workflow (`workflow`)
+
+### Step (`step`)
+Attributes: number="1", name="Establish Baseline"
+
+- `metric`: Response time distribution (p50, p95, p99)
+
+- `metric`: Throughput and error rate
+
+- `metric`: CPU, memory, disk I/O, and database timings
+
+### Step (`step`)
+Attributes: number="2", name="Profile and Localize Bottlenecks"
+
+- `instruction`: Use profilers and traces to determine where time and resources are spent.
+
+- `category`: CPU-bound
+
+- `category`: I/O-bound
+
+- `category`: Memory-bound
+
+- `category`: Network-bound
+
+### Step (`step`)
+Attributes: number="3", name="Apply Targeted Optimizations"
+
+- `instruction`: Select one optimization from references/optimization-patterns.md and implement it.
+
+- `focus`: Database, API calls, algorithmic complexity, caching, rendering, payload size
+
+### Step (`step`)
+Attributes: number="4", name="Re-Measure and Compare"
+
+- `instruction`: Re-run benchmark/profile suite and compare against baseline.
+
+- `output`: Before/after table with quantifiable deltas
+
+### Step (`step`)
+Attributes: number="5", name="Document Outcome"
+
+- `instruction`: Record what changed, why it helped, and remaining risks or next bottlenecks.
+
+## Resources (`resources`)
+
+- `reference` (file="references/optimization-patterns.md"): Optimization tactics and quick-win catalog.
+
+## Best Practices (`best_practices`)
+
+- `do`: Use representative workloads for benchmarks
+
+- `do`: Keep performance budgets explicit for critical paths
+
+- `do`: Validate database query plans after schema/index changes
+
+- `do`: Track improvements and regressions in repeatable reports
+
+- `dont`: Optimize based on intuition alone
+
+- `dont`: Ship optimizations that increase complexity without clear gain
+
+- `dont`: Ignore memory pressure when improving pure latency
+
+## Related Skills (`related_skills`)
+
+- `skill`: api-builder
+
+- `skill`: architecture-planner
+
+- `skill`: database-optimizer
+
+## Related Workflows (`related_workflows`)
+
+- `workflow`: /performance-tune
+
+- `workflow`: /analyze

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fix Issue"
+  short_description: "Fix Issue workflow guidance"
+  default_prompt: "Use $fix-issue to run the fix-issue workflow for this repository."
