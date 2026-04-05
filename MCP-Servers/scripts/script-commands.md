@@ -19,13 +19,21 @@ docker build -t mcp-local-adapters:latest -f ..\local\adapters\Dockerfile ..\..
 docker compose -f ..\local\searxng\docker-compose.yml up -d
 ```
 
+6. Start the shared Serena HTTP server in a separate PowerShell window when you want Antigravity and Codex to share one Serena instance:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1
+```
+
 ## 1) Install Hybrid Client Configs
 
 This installs the repo-owned hybrid config templates:
 - direct always-on MCP servers in each client config
-- one `MCP_DOCKER` entry for supplemental lazy-load servers only
+- one `MCP_DOCKER` entry pointing at the per-user lazy-load registry
+- one shared local `serena` MCP URL at `http://127.0.0.1:9121/mcp`
 
 ```powershell
+.\setup_lazy_load.ps1
 .\install-mcp-servers.ps1 -Vendor openai
 .\install-mcp-servers.ps1 -Vendor google
 .\install-mcp-servers.ps1 -Vendor all
@@ -52,24 +60,51 @@ Important:
 - this script only writes Docker-managed secrets needed by the current hybrid stack
 - direct-client values such as `SEARXNG_URL` and optional `CONTEXT7_API_KEY` are not written into Docker secrets
 
-## 3) Manual Gateway Run (for debugging)
+## 3) Refresh the Empty Hybrid Lazy-Load Registry
+
+This resets the runtime registry used by `MCP_DOCKER` back to an empty Dynamic MCP control surface.
+
+```powershell
+.\setup_lazy_load.ps1
+.\setup_lazy_load.ps1 -DryRun
+```
+
+Target:
+- `~\.docker\mcp\registry.hybrid-supplementals.yaml`
+
+## 4) Start the Shared Serena HTTP Server
+
+This runs Serena once in `streamable-http` mode with `ide` context so both Antigravity and Codex can connect to the same MCP server instance.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1
+powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1 -Port 9122
+powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1 -ProjectPath "D:\Coding\SomeOtherRepo"
+```
+
+Default endpoint:
+- `http://127.0.0.1:9121/mcp`
+
+## 5) Manual Gateway Run (for debugging)
 
 ```powershell
 docker mcp gateway run --transport stdio `
-  --registry "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.supplementals.yaml" `
+  --registry "$HOME\.docker\mcp\registry.hybrid-supplementals.yaml" `
   --additional-catalog "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml"
 ```
 
-## 4) Spot-check a Single Supplemental Server
+At startup this should expose only the Dynamic MCP management tools.
+
+## 6) Spot-check a Single Supplemental Server
 
 ```powershell
 docker mcp tools count `
-  --gateway-arg="--registry=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.supplementals.yaml" `
+  --gateway-arg="--registry=$HOME\.docker\mcp\registry.hybrid-supplementals.yaml" `
   --gateway-arg="--additional-catalog=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml" `
-  --gateway-arg="--servers=octocode"
+  --gateway-arg="--servers=playwright"
 ```
 
-## 5) Deprecated Gateway-First Bootstrap
+## 7) Deprecated Gateway-First Bootstrap
 
 The old gateway-first bootstrap script was moved to:
 
@@ -77,7 +112,7 @@ The old gateway-first bootstrap script was moved to:
 
 That script is intentionally deprecated because it assumed the Docker gateway owned both the base servers and the supplemental servers. The current stack is hybrid instead.
 
-## 6) Diagnose Random Background Container Activity
+## 8) Diagnose Random Background Container Activity
 
 This watches short-lived container lifecycle events and checks your client MCP config wiring.
 
@@ -89,7 +124,7 @@ This watches short-lived container lifecycle events and checks your client MCP c
 Tip:
 - Add `-SkipEventWatch` for a fast config/process-only check.
 
-## 7) Normalize Client Config Encoding (Fix BOM/UTF-16 Issues)
+## 9) Normalize Client Config Encoding (Fix BOM/UTF-16 Issues)
 
 This rewrites client config files as UTF-8 without BOM. It creates backups by default.
 
@@ -104,7 +139,7 @@ Dry run:
 .\normalize-mcp-config-encoding.ps1 -Vendor all -WhatIf
 ```
 
-## 8) Check for Stale Agent Host Processes
+## 10) Check for Stale Agent Host Processes
 
 This finds duplicate long-running host processes (for example duplicate `app-server` hosts) that can keep polling MCP in the background.
 
@@ -113,7 +148,7 @@ This finds duplicate long-running host processes (for example duplicate `app-ser
 .\check-agent-host-processes.ps1 -StaleMinutes 60 -IncludeCommandLine
 ```
 
-## 9) Diagnose Codex Extension + Standalone MCP Client Behavior
+## 11) Diagnose Codex Extension + Standalone MCP Client Behavior
 
 This captures a control baseline, current Codex config state, latest standalone/extension logs, and a short process observation window. It writes both JSON and Markdown reports to `MCP-Servers/reports`.
 

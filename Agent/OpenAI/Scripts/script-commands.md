@@ -55,12 +55,14 @@ Options:
 ```powershell
 docker build -t mcp-local-adapters:latest -f ..\..\..\MCP-Servers\local\adapters\Dockerfile ..\..\..
 docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
+..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1
 ..\..\..\MCP-Servers\scripts\install-mcp-servers.ps1 -Vendor openai
 ..\..\..\MCP-Servers\scripts\set-mcp-secrets.ps1
 ```
 
 This installs the hybrid MCP layout:
 - direct always-on base servers in `~\.codex\config.toml`
+- an empty per-user lazy-load registry at `~\.docker\mcp\registry.hybrid-supplementals.yaml`
 - supplemental servers behind `MCP_DOCKER`
 
 ## MCP Runtime Cleanup (After Use)

@@ -24,7 +24,9 @@ registry:
     ref: ''
 
   # Browser and frontend supplementals
-  puppeteer:
+  playwright:
+    ref: ''
+  shrimp-task-manager:
     ref: ''
   react:
     ref: ''

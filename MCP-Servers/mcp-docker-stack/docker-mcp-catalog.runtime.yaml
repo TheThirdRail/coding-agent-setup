@@ -25,12 +25,11 @@ registry:
     description: AI-powered code understanding with LSP support for 20+ languages
     title: Serena
     type: server
-    image: ghcr.io/oraios/serena:latest
+    image: python:3.11-slim
     command:
-    - serena-mcp-server
-    - --transport
-    - stdio
-    - --project-from-cwd
+    - sh
+    - -lc
+    - pip install -q uv >/dev/null 2>&1 && exec uvx --from git+https://github.com/oraios/serena serena start-mcp-server --transport stdio --project-from-cwd --context ide
     volumes:
     - D:/Coding:/workspace
     metadata:

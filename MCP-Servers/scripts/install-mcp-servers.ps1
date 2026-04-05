@@ -27,14 +27,17 @@ function New-BackupPath {
 function Get-TemplateContent {
     param(
         [string]$TemplatePath,
-        [string]$RepoRoot
+        [string]$RepoRoot,
+        [string]$HybridRegistryPath
     )
 
     $content = Get-Content -Path $TemplatePath -Raw
     $repoRootForward = $RepoRoot -replace '\\', '/'
+    $hybridRegistryForward = $HybridRegistryPath -replace '\\', '/'
 
     # Keep templates portable if this repo is checked out somewhere else.
-    return $content.Replace('D:/Coding/Tools/mcp-docker-stack', $repoRootForward)
+    $content = $content.Replace('D:/Coding/Tools/mcp-docker-stack', $repoRootForward)
+    return $content.Replace('__HYBRID_REGISTRY_PATH__', $hybridRegistryForward)
 }
 
 function Test-JsonContent {
@@ -49,6 +52,7 @@ function Install-TemplateFile {
         [string]$TemplatePath,
         [string]$DestinationPath,
         [string]$RepoRoot,
+        [string]$HybridRegistryPath,
         [switch]$ValidateJson,
         [switch]$DryRunMode,
         [switch]$SkipBackupMode
@@ -58,7 +62,7 @@ function Install-TemplateFile {
         throw "Template not found: $TemplatePath"
     }
 
-    $content = Get-TemplateContent -TemplatePath $TemplatePath -RepoRoot $RepoRoot
+    $content = Get-TemplateContent -TemplatePath $TemplatePath -RepoRoot $RepoRoot -HybridRegistryPath $HybridRegistryPath
     if ($ValidateJson) {
         Test-JsonContent -Content $content
     }
@@ -86,6 +90,7 @@ function Install-TemplateFile {
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+$hybridRegistryPath = Join-Path $env:USERPROFILE '.docker\mcp\registry.hybrid-supplementals.yaml'
 $targets = @()
 
 switch ($Vendor) {
@@ -125,7 +130,8 @@ Write-Host '=== Hybrid MCP Config Installer ===' -ForegroundColor Cyan
 Write-Host "Repo root: $repoRoot" -ForegroundColor Gray
 Write-Host 'This installs the repo-owned hybrid templates:' -ForegroundColor Gray
 Write-Host '- direct always-on MCP servers in each client config' -ForegroundColor Gray
-Write-Host '- one MCP_DOCKER gateway for supplemental lazy-load servers' -ForegroundColor Gray
+Write-Host '- one MCP_DOCKER gateway wired to the per-user lazy-load registry' -ForegroundColor Gray
+Write-Host "Hybrid runtime registry: $hybridRegistryPath" -ForegroundColor Gray
 Write-Host ''
 
 foreach ($target in $targets) {
@@ -134,6 +140,7 @@ foreach ($target in $targets) {
         -TemplatePath $target.Template `
         -DestinationPath $target.Destination `
         -RepoRoot $repoRoot `
+        -HybridRegistryPath $hybridRegistryPath `
         -ValidateJson:$target.Json `
         -DryRunMode:$DryRun `
         -SkipBackupMode:$SkipBackup
@@ -149,7 +156,11 @@ else {
     Write-Host "   docker build -t mcp-local-adapters:latest -f $repoRoot\MCP-Servers\local\adapters\Dockerfile $repoRoot" -ForegroundColor Gray
     Write-Host "2. Start local SearXNG:" -ForegroundColor Gray
     Write-Host "   docker compose -f $repoRoot\MCP-Servers\local\searxng\docker-compose.yml up -d" -ForegroundColor Gray
-    Write-Host "3. Sync Docker secrets from .env:" -ForegroundColor Gray
+    Write-Host "3. Refresh the empty lazy-load registry:" -ForegroundColor Gray
+    Write-Host "   .\setup_lazy_load.ps1" -ForegroundColor Gray
+    Write-Host "4. Sync Docker secrets from .env:" -ForegroundColor Gray
     Write-Host "   .\set-mcp-secrets.ps1" -ForegroundColor Gray
-    Write-Host "4. Restart Codex and/or Antigravity." -ForegroundColor Gray
+    Write-Host "5. Start the shared Serena HTTP server:" -ForegroundColor Gray
+    Write-Host "   powershell -ExecutionPolicy Bypass -File $repoRoot\MCP-Servers\scripts\start-serena-http.ps1" -ForegroundColor Gray
+    Write-Host "6. Restart Codex and/or Antigravity." -ForegroundColor Gray
 }

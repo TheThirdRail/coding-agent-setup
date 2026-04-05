@@ -7,6 +7,12 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+function Convert-ToForwardSlashPath {
+    param([string]$Path)
+
+    return ($Path -replace '\\', '/')
+}
+
 function Invoke-TimedCommand {
     param([string]$Command)
 
@@ -200,7 +206,7 @@ function Get-StandaloneLogEvidence {
     }
 
     $mcpHits = Select-String -Path $logFiles -Pattern 'mcpServerStatus/list' -CaseSensitive:$false -ErrorAction SilentlyContinue
-    $transportHits = Select-String -Path $logFiles -Pattern 'docker\.exe|registry\.all\.yaml|docker-mcp-catalog\.runtime\.yaml|--additional-catalog|--registry|gateway run|MCP_DOCKER' -CaseSensitive:$false -ErrorAction SilentlyContinue
+    $transportHits = Select-String -Path $logFiles -Pattern 'docker\.exe|registry\.(?:all|hybrid-supplementals)\.yaml|docker-mcp-catalog\.runtime\.yaml|--additional-catalog|--registry|gateway run|MCP_DOCKER' -CaseSensitive:$false -ErrorAction SilentlyContinue
     $spawnHits = Select-String -Path $logFiles -Pattern 'stdio_transport_spawned' -CaseSensitive:$false -ErrorAction SilentlyContinue
     $appServerFailureHits = Select-String -Path $logFiles -Pattern 'Codex app-server is not available|Codex app-server exited unexpectedly' -CaseSensitive:$false -ErrorAction SilentlyContinue
     $lastLines = if ($LatestLogPath -and (Test-Path $LatestLogPath)) { Get-Content -Path $LatestLogPath -Tail 80 } else { @() }
@@ -229,7 +235,7 @@ function Get-StandaloneLogEvidence {
                 text      = $_.Line.Trim()
             }
         })
-        registry_path_seen      = ($transportHits | Where-Object { $_.Line -match 'registry\.all\.yaml' } | Measure-Object).Count -gt 0
+        registry_path_seen      = ($transportHits | Where-Object { $_.Line -match 'registry\.(?:all|hybrid-supplementals)\.yaml' } | Measure-Object).Count -gt 0
         catalog_path_seen       = ($transportHits | Where-Object { $_.Line -match 'docker-mcp-catalog\.runtime\.yaml' } | Measure-Object).Count -gt 0
         last_lines              = @($lastLines)
     }
@@ -250,7 +256,7 @@ function Get-ExtensionLogEvidence {
 
     $spawnHits = Select-String -Path $LogPath -Pattern 'CodexMcpConnection|Spawning codex app-server' -CaseSensitive:$false -ErrorAction SilentlyContinue
     $unsupportedHits = Select-String -Path $LogPath -Pattern 'local-environments is not supported in the extension|open-in-target not supported in extension|chatSessionsProvider' -CaseSensitive:$false -ErrorAction SilentlyContinue
-    $directTransportHits = Select-String -Path $LogPath -Pattern 'docker\.exe|registry\.all\.yaml|docker-mcp-catalog\.runtime\.yaml|--additional-catalog|--registry|gateway run|MCP_DOCKER' -CaseSensitive:$false -ErrorAction SilentlyContinue
+    $directTransportHits = Select-String -Path $LogPath -Pattern 'docker\.exe|registry\.(?:all|hybrid-supplementals)\.yaml|docker-mcp-catalog\.runtime\.yaml|--additional-catalog|--registry|gateway run|MCP_DOCKER' -CaseSensitive:$false -ErrorAction SilentlyContinue
     $lastLines = Get-Content -Path $LogPath -Tail 120
 
     return [pscustomobject]@{
@@ -426,6 +432,8 @@ function Write-MarkdownReport {
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+$runtimeCatalogPath = Convert-ToForwardSlashPath (Join-Path $repoRoot 'MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml')
+$hybridRegistryPath = Convert-ToForwardSlashPath (Join-Path $env:USERPROFILE '.docker\mcp\registry.hybrid-supplementals.yaml')
 $reportsRoot = Join-Path $repoRoot 'MCP-Servers\reports'
 if (-not (Test-Path $reportsRoot)) {
     New-Item -ItemType Directory -Path $reportsRoot -Force | Out-Null
@@ -447,7 +455,10 @@ Write-Host 'Running control baseline...' -ForegroundColor Yellow
 $baselineResults = @(
     (Invoke-TimedCommand -Command 'docker mcp tools count'),
     (Invoke-TimedCommand -Command 'docker mcp tools ls'),
-    (Invoke-TimedCommand -Command "docker mcp tools count --gateway-arg=`"--registry=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\registry.all.yaml`" --gateway-arg=`"--additional-catalog=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml`" --gateway-arg=`"--servers=serena`"")
+    (Invoke-TimedCommand -Command "docker mcp server ls --json"),
+    (Invoke-TimedCommand -Command "docker mcp tools count --gateway-arg=`"--registry=$hybridRegistryPath`" --gateway-arg=`"--additional-catalog=$runtimeCatalogPath`""),
+    (Invoke-TimedCommand -Command "docker mcp tools count --gateway-arg=`"--registry=$hybridRegistryPath`" --gateway-arg=`"--additional-catalog=$runtimeCatalogPath`" --gateway-arg=`"--servers=playwright`""),
+    (Invoke-TimedCommand -Command "docker mcp tools count --gateway-arg=`"--registry=$hybridRegistryPath`" --gateway-arg=`"--additional-catalog=$runtimeCatalogPath`" --gateway-arg=`"--servers=shrimp-task-manager`"")
 )
 
 Write-Host 'Collecting config and log evidence...' -ForegroundColor Yellow

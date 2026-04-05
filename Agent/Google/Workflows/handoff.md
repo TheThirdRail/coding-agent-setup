@@ -11,8 +11,8 @@ description: End-of-session summary for handing off work to yourself tomorrow or
   </when_to_use>
 
   <recommended_mcp>
-    <server>shrimp-task-manager</server>
-    <reason>Save session state and next steps</reason>
+    <server>MCP_DOCKER</server>
+    <reason>Lazy-load `shrimp-task-manager` only when structured session tracking is helpful</reason>
   </recommended_mcp>
 
   <constraints>

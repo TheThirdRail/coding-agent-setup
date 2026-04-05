@@ -10,8 +10,8 @@ description: Test-Driven Development workflow - write tests first, then implemen
   </when_to_use>
 
   <recommended_mcp>
-    <server>playwright</server>
-    <reason>End-to-end browser testing</reason>
+    <server>MCP_DOCKER</server>
+    <reason>Lazy-load `playwright` only when browser or end-to-end testing is actually needed</reason>
   </recommended_mcp>
 
   <concept><![CDATA[

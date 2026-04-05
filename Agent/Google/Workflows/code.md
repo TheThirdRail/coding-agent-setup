@@ -12,10 +12,10 @@ description: Code with Context - Execute implementation with focus on building, 
   </when_to_use>
 
   <recommended_mcp>
-    <server>shrimp-task-manager</server>
+    <server>MCP_DOCKER</server>
     <server>serena</server>
     <server>mem0</server>
-    <reason>Task tracking, codebase context, and user preferences</reason>
+    <reason>Lazy-load task tracking when needed, codebase context, and user preferences</reason>
   </recommended_mcp>
 
   <prerequisites>

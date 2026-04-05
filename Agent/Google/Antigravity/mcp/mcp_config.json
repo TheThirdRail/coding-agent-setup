@@ -1,23 +1,9 @@
 {
   "mcpServers": {
     "serena": {
-      "command": "docker.exe",
+      "serverUrl": "http://127.0.0.1:9121/mcp",
       "startup_timeout_sec": 60,
-      "tool_timeout_sec": 120,
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "-w",
-        "/workspace",
-        "-v",
-        "D:/Coding/Tools/mcp-docker-stack:/workspace",
-        "ghcr.io/oraios/serena:latest",
-        "serena-mcp-server",
-        "--transport",
-        "stdio",
-        "--project-from-cwd"
-      ]
+      "tool_timeout_sec": 120
     },
     "codegraph": {
       "command": "docker.exe",
@@ -61,21 +47,11 @@
       ]
     },
     "fetch": {
-      "command": "npx",
+      "command": "uvx",
       "startup_timeout_sec": 20,
       "tool_timeout_sec": 60,
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-fetch"
-      ]
-    },
-    "playwright": {
-      "command": "npx",
-      "startup_timeout_sec": 30,
-      "tool_timeout_sec": 120,
-      "args": [
-        "-y",
-        "@playwright/mcp"
+        "mcp-server-fetch"
       ]
     },
     "memory": {
@@ -85,15 +61,6 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-memory"
-      ]
-    },
-    "shrimp_task_manager": {
-      "command": "npx",
-      "startup_timeout_sec": 20,
-      "tool_timeout_sec": 60,
-      "args": [
-        "-y",
-        "mcp-shrimp-task-manager"
       ]
     },
     "MCP_DOCKER": {
@@ -107,7 +74,7 @@
         "--transport",
         "stdio",
         "--registry",
-        "D:/Coding/Tools/mcp-docker-stack/MCP-Servers/mcp-docker-stack/registry.supplementals.yaml",
+        "__HYBRID_REGISTRY_PATH__",
         "--additional-catalog",
         "D:/Coding/Tools/mcp-docker-stack/MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml"
       ]

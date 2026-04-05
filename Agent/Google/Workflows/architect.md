@@ -29,10 +29,10 @@ description: Architect Mode - Plan and design a new feature or project from scra
 
   <recommended_mcp>
     <server>sequential-thinking</server>
-    <server>shrimp-task-manager</server>
+    <server>MCP_DOCKER</server>
     <server>mem0</server>
     <server>codegraph</server>
-    <reason>Design reasoning, task planning, preference memory, and code visualization</reason>
+    <reason>Design reasoning, lazy-load task planning when needed, preference memory, and code visualization</reason>
   </recommended_mcp>
 
   <steps>

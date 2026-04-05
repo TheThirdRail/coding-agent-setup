@@ -21,6 +21,31 @@ $globalWorkflowsRoot = Join-Path $globalGeminiRoot "antigravity\global_workflows
 
 $totalRemoved = 0
 
+function Get-InstallableGoogleSkillNames {
+    param([string]$SourcePath)
+
+    if (-not (Test-Path $SourcePath)) {
+        return @()
+    }
+
+    return @(Get-ChildItem -Path $SourcePath -Directory -ErrorAction SilentlyContinue |
+        Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') } |
+        Sort-Object Name |
+        Select-Object -ExpandProperty Name)
+}
+
+function Get-InstallableWorkflowNames {
+    param([string]$SourcePath)
+
+    if (-not (Test-Path $SourcePath)) {
+        return @()
+    }
+
+    return @(Get-ChildItem -Path $SourcePath -Filter '*.md' -File -ErrorAction SilentlyContinue |
+        Sort-Object Name |
+        Select-Object -ExpandProperty Name)
+}
+
 function Remove-DeprecatedItems {
     param(
         [Parameter(Mandatory = $true)]
@@ -93,15 +118,15 @@ else {
 }
 
 if (Test-Path $legacyGlobalRules) {
-    $legacyRuleFiles = Get-ChildItem -Path $legacyGlobalRules -Filter "*.md" -File -ErrorAction SilentlyContinue
-    if ($legacyRuleFiles) {
-        foreach ($legacyFile in $legacyRuleFiles) {
+    $legacyRuleItems = Get-ChildItem -Path $legacyGlobalRules -Force -ErrorAction SilentlyContinue
+    if ($legacyRuleItems) {
+        foreach ($legacyItem in $legacyRuleItems) {
             if ($DryRun) {
-                Write-Host "  [WOULD DELETE] $($legacyFile.FullName) (legacy rules path)" -ForegroundColor Yellow
+                Write-Host "  [WOULD DELETE] $($legacyItem.FullName) (legacy rules path)" -ForegroundColor Yellow
             }
             else {
-                Remove-Item -Path $legacyFile.FullName -Force
-                Write-Host "  [DELETED] $($legacyFile.FullName) (legacy rules path)" -ForegroundColor Red
+                Remove-Item -Path $legacyItem.FullName -Recurse -Force
+                Write-Host "  [DELETED] $($legacyItem.FullName) (legacy rules path)" -ForegroundColor Red
             }
             $totalRemoved++
         }
@@ -115,19 +140,14 @@ else {
 }
 
 Write-Host "Checking Skills..." -ForegroundColor White
-$sourceSkillNames = Get-ChildItem -Path $sourceSkillsRoot -Directory -ErrorAction SilentlyContinue |
-    Where-Object { Test-Path (Join-Path $_.FullName "SKILL.md") } |
-    Select-Object -ExpandProperty Name
-if (-not $sourceSkillNames) { $sourceSkillNames = @() }
+$sourceSkillNames = Get-InstallableGoogleSkillNames -SourcePath $sourceSkillsRoot
 
 $count = Remove-DeprecatedItems -GlobalPath $globalSkillsRoot -SourceNames $sourceSkillNames -ItemType "skills" -IsDirectory
 if ($count -eq 0) { Write-Host "  All skills are current." -ForegroundColor Green }
 $totalRemoved += $count
 
 Write-Host "Checking Workflows..." -ForegroundColor White
-$sourceWorkflowNames = Get-ChildItem -Path $sourceWorkflowsRoot -Filter "*.md" -File -ErrorAction SilentlyContinue |
-    Select-Object -ExpandProperty Name
-if (-not $sourceWorkflowNames) { $sourceWorkflowNames = @() }
+$sourceWorkflowNames = Get-InstallableWorkflowNames -SourcePath $sourceWorkflowsRoot
 
 $count = Remove-DeprecatedItems -GlobalPath $globalWorkflowsRoot -SourceNames $sourceWorkflowNames -ItemType "workflows"
 if ($count -eq 0) { Write-Host "  All workflows are current." -ForegroundColor Green }

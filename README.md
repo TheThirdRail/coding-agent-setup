@@ -1,280 +1,65 @@
-# AI Agent Setup Kit
+# Coding Agent Setup Kit
 
-This repository is a Windows-first setup kit for two local AI clients:
+This repository helps humans set up two AI coding environments on Windows:
 
 1. OpenAI Codex
 2. Google Antigravity
 
-It gives you:
+It includes:
 
-- vendor-specific global instructions
-- reusable skills
-- Antigravity workflows
+- repo-owned instructions for both clients
+- reusable skills and workflows
 - hybrid MCP configuration
-- Docker lazy-load support for supplemental MCP servers
-- local archive tools for code, docs, graph, git, and memory
+- a shared Serena MCP server
+- setup and maintenance scripts
 
-This README is written as a step-by-step operator guide. The install flow now uses the new remove/install wrapper scripts instead of the older piecemeal setup path.
+## Start Here
 
-## What Gets Installed
+If you are a human using this repo, do not hand the root README to the agent as its full setup guide.
 
-### Codex
+Instead:
 
-The Codex wrapper installs:
+1. Tell the agent to read [Agent-README.md](d:/Coding/Tools/mcp-docker-stack/Agent-README.md)
+2. Tell it to follow the checklist that matches what you want to install:
+   - [codex-checklist.md](d:/Coding/Tools/mcp-docker-stack/codex-checklist.md)
+   - [antigravity-checklist.md](d:/Coding/Tools/mcp-docker-stack/antigravity-checklist.md)
+3. If you use both clients, tell it to use both checklists
 
-- `~/.codex/AGENTS.md`
-- `~/.codex/skills/*`
-- `~/.codex/config.toml`
+The agent/operator guide has the full setup detail. The checklist files are the step-by-step execution runbooks.
 
-Optional extra Codex artifacts can still be installed separately:
+## What The Agent Should Do
 
-- `~/.codex/rules/default.rules`
-- `~/.codex/automations/*.automation.md`
+Ask the agent to:
 
-### Antigravity
+- use [Agent-README.md](d:/Coding/Tools/mcp-docker-stack/Agent-README.md) as the detailed repo guide
+- use [codex-checklist.md](d:/Coding/Tools/mcp-docker-stack/codex-checklist.md) for Codex setup
+- use [antigravity-checklist.md](d:/Coding/Tools/mcp-docker-stack/antigravity-checklist.md) for Antigravity setup
+- back up your current settings before replacing anything
 
-The Antigravity wrapper installs:
+## Current Setup Model
 
-- `~/.gemini/GEMINI.md`
-- `~/.gemini/antigravity/skills/*`
-- `~/.gemini/antigravity/global_workflows/*.md`
-- `~/.gemini/antigravity/mcp_config.json`
+The current stack includes:
 
-## Important Behavior
+- repo-owned Codex and Antigravity instructions
+- install/remove wrapper scripts
+- hybrid Docker MCP support
+- an empty lazy-load registry for `MCP_DOCKER`
+- a shared Serena server at `http://127.0.0.1:9121/mcp`
+- local SearXNG support
 
-- The new remove scripts `backup by default`.
-- They move existing files or folders to timestamped `.bak-...` paths.
-- Use `-Purge` only if you want hard deletion instead of backup.
-- The Codex skills cleanup preserves `~/.codex/skills/.system`.
+## Human Notes
 
-## Prerequisites
+- You should have Docker Desktop installed and running.
+- You should have `uv` available because the shared Serena startup uses it.
+- The repo root `.env` should exist before setup scripts run.
+- If Serena is expected to work, the shared Serena server process should be running.
 
-Install these first:
+## Useful Files
 
-1. Git
-2. Docker Desktop
-3. PowerShell
-4. OpenAI Codex and/or Google Antigravity
-
-## One-Time Repo Preparation
-
-Open PowerShell at the repo root and prepare `.env`:
-
-```powershell
-Copy-Item example.env .env
-```
-
-Then open `.env` and fill in what you actually use.
-
-Start with:
-
-- `SEARXNG_URL`
-- `GITHUB_PERSONAL_ACCESS_TOKEN` if you plan to use GitHub MCP tools
-- `FIRECRAWL_API_KEY` only if you plan to use Firecrawl
-- `CONTEXT7_API_KEY` only if you decide to wire authenticated direct Context7 access later
-
-## Shared MCP Prerequisites
-
-Both Codex and Antigravity use the same local adapter image and the same local SearXNG container.
-
-Run these once from the repo root:
-
-```powershell
-docker build -t mcp-local-adapters:latest -f .\MCP-Servers\local\adapters\Dockerfile .
-docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml up -d
-.\MCP-Servers\scripts\set-mcp-secrets.ps1
-```
-
-What this prepares:
-
-- local adapter image for repo-owned MCP adapters
-- self-hosted SearXNG for the `searxng` MCP server
-- Docker secrets for supplemental lazy-load servers
-
-## Codex Setup
-
-### Recommended Reset and Reinstall Flow
-
-Run these from the repo root:
-
-```powershell
-.\Agent\OpenAI\Scripts\remove-global-agents.ps1
-.\Agent\OpenAI\Scripts\remove-global-skills.ps1
-.\Agent\OpenAI\Scripts\remove-global-mcp-config.ps1
-.\Agent\OpenAI\Scripts\install-codex-from-repo.ps1
-```
-
-What this does:
-
-1. Backs up and removes the current global `~/.codex/AGENTS.md`
-2. Backs up and removes installed Codex skills while preserving `.system`
-3. Backs up and removes the current `~/.codex/config.toml`
-4. Reinstalls the repo-owned Codex AGENTS, skills, and MCP config
-
-### Dry Run First
-
-If you want to preview before changing anything:
-
-```powershell
-.\Agent\OpenAI\Scripts\remove-global-agents.ps1 -DryRun
-.\Agent\OpenAI\Scripts\remove-global-skills.ps1 -DryRun
-.\Agent\OpenAI\Scripts\remove-global-mcp-config.ps1 -DryRun
-.\Agent\OpenAI\Scripts\install-codex-from-repo.ps1 -DryRun
-```
-
-### Optional Codex Extras
-
-If you also want the OpenAI rules and automations installed:
-
-```powershell
-.\Agent\OpenAI\Scripts\install-rules.ps1
-```
-
-That additional script installs:
-
-- `~/.codex/rules/default.rules`
-- `~/.codex/automations/*.automation.md`
-
-### Restart and Verify
-
-After install:
-
-1. Restart Codex
-2. Verify these exist:
-
-```powershell
-Test-Path "$HOME\.codex\AGENTS.md"
-Test-Path "$HOME\.codex\config.toml"
-Get-ChildItem "$HOME\.codex\skills" -Directory | Select-Object -ExpandProperty Name
-```
-
-## Antigravity Setup
-
-### Recommended Reset and Reinstall Flow
-
-Run these from the repo root:
-
-```powershell
-.\Agent\Google\Scripts\remove-global-gemini.ps1
-.\Agent\Google\Scripts\remove-global-skills.ps1
-.\Agent\Google\Scripts\remove-global-workflows.ps1
-.\Agent\Google\Scripts\remove-global-mcp-config.ps1
-.\Agent\Google\Scripts\install-antigravity-from-repo.ps1
-```
-
-What this does:
-
-1. Backs up and removes the current global `~/.gemini/GEMINI.md`
-2. Backs up and removes installed Antigravity skills
-3. Backs up and removes installed global workflows
-4. Backs up and removes the current `~/.gemini/antigravity/mcp_config.json`
-5. Reinstalls the repo-owned GEMINI file, skills, workflows, and MCP config
-
-### Dry Run First
-
-If you want to preview before changing anything:
-
-```powershell
-.\Agent\Google\Scripts\remove-global-gemini.ps1 -DryRun
-.\Agent\Google\Scripts\remove-global-skills.ps1 -DryRun
-.\Agent\Google\Scripts\remove-global-workflows.ps1 -DryRun
-.\Agent\Google\Scripts\remove-global-mcp-config.ps1 -DryRun
-.\Agent\Google\Scripts\install-antigravity-from-repo.ps1 -DryRun
-```
-
-### Restart and Verify
-
-After install:
-
-1. Restart Antigravity
-2. Verify these exist:
-
-```powershell
-Test-Path "$HOME\.gemini\GEMINI.md"
-Test-Path "$HOME\.gemini\antigravity\mcp_config.json"
-Get-ChildItem "$HOME\.gemini\antigravity\skills" -Directory | Select-Object -ExpandProperty Name
-Get-ChildItem "$HOME\.gemini\antigravity\global_workflows" -File | Select-Object -ExpandProperty Name
-```
-
-## Recommended Order If You Use Both
-
-From the repo root:
-
-1. Prepare `.env`
-2. Build the local adapter image
-3. Start SearXNG
-4. Run `.\MCP-Servers\scripts\set-mcp-secrets.ps1`
-5. Reset and reinstall Codex
-6. Reset and reinstall Antigravity
-7. Restart both clients
-
-## Root Checklists
-
-If you want a short runbook for an agent to follow, use:
-
-- [codex-checklist.md](./codex-checklist.md)
-- [antigravity-checklist.md](./antigravity-checklist.md)
-
-## Useful Paths
-
-- OpenAI policy source: `Agent/OpenAI/AGENTS.md`
-- Google policy source: `Agent/Google/Rules/GEMINI.md`
-- Codex MCP template: `Agent/OpenAI/Codex/mcp/config.toml`
-- Antigravity MCP template: `Agent/Google/Antigravity/mcp/mcp_config.json`
-- Supplemental registry: `MCP-Servers/mcp-docker-stack/registry.supplementals.yaml`
-- Runtime catalog: `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml`
-
-## Common Problems
-
-### PowerShell says a script cannot run
-
-Use:
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-### MCP commands fail
-
-Check these in order:
-
-1. Docker Desktop is running
-2. `.env` exists at the repo root
-3. `docker build -t mcp-local-adapters:latest -f .\MCP-Servers\local\adapters\Dockerfile .` completed successfully
-4. `docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml up -d` completed successfully
-5. `.\MCP-Servers\scripts\set-mcp-secrets.ps1` completed successfully
-
-### Config changes do not appear in the client
-
-Restart the client after installation.
-
-### Docker MCP keeps starting and stopping short-lived containers
-
-That is usually normal. To diagnose background activity:
-
-```powershell
-.\MCP-Servers\scripts\diagnose-mcp-background.ps1 -ObserveSeconds 30
-```
-
-### Config encoding issues on Windows
-
-If you see BOM or UTF-16 related problems:
-
-```powershell
-.\MCP-Servers\scripts\normalize-mcp-config-encoding.ps1 -Vendor all
-```
-
-## Archive and Local Memory
-
-This repo includes local archive tooling under `Agent-Context/Archives/` for:
-
-- document memory
-- graph snapshots
-- code search
-- git history lookup
-- durable project memory
-
-Do not store credentials or secrets in archive data.
+- Human/operator handoff target: [Agent-README.md](d:/Coding/Tools/mcp-docker-stack/Agent-README.md)
+- Codex setup runbook: [codex-checklist.md](d:/Coding/Tools/mcp-docker-stack/codex-checklist.md)
+- Antigravity setup runbook: [antigravity-checklist.md](d:/Coding/Tools/mcp-docker-stack/antigravity-checklist.md)
+- Secrets reference: [secrets-acquisition-guide.md](d:/Coding/Tools/mcp-docker-stack/secrets-acquisition-guide.md)
 
 ## License
 

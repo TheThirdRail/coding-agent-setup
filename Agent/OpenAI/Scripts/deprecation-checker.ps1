@@ -17,6 +17,31 @@ $sourceRules = Join-Path $projectRoot 'Agent\OpenAI\default.rules'
 $sourceAutomations = Join-Path $projectRoot 'Agent\OpenAI\Automations'
 $sourceAgents = Join-Path $projectRoot 'Agent\OpenAI\AGENTS.md'
 
+function Get-InstallableSkillNames {
+    param([string]$SourcePath)
+
+    if (-not (Test-Path $SourcePath)) {
+        return @()
+    }
+
+    return @(Get-ChildItem -Path $SourcePath -Directory -ErrorAction SilentlyContinue |
+        Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') } |
+        Sort-Object Name |
+        Select-Object -ExpandProperty Name)
+}
+
+function Get-InstallableAutomationNames {
+    param([string]$SourcePath)
+
+    if (-not (Test-Path $SourcePath)) {
+        return @()
+    }
+
+    return @(Get-ChildItem -Path $SourcePath -File -Filter '*.automation.md' -ErrorAction SilentlyContinue |
+        Sort-Object Name |
+        Select-Object -ExpandProperty Name)
+}
+
 function Remove-Deprecated {
     param(
         [string]$GlobalPath,
@@ -118,18 +143,16 @@ if ($Target -in @('agents', 'both')) {
     }
 }
 
-$skillNames = @()
-if (Test-Path $sourceSkills) {
-    $skillNames = Get-ChildItem -Path $sourceSkills -Directory | Select-Object -ExpandProperty Name
-}
+$skillNames = Get-InstallableSkillNames -SourcePath $sourceSkills
 $ruleNames = if (Test-Path $sourceRules) { @('default.rules') } else { @() }
-$automationNames = @()
-if (Test-Path $sourceAutomations) {
-    $automationNames = Get-ChildItem -Path $sourceAutomations -File -Filter '*.automation.md' | Select-Object -ExpandProperty Name
-}
+$automationNames = Get-InstallableAutomationNames -SourcePath $sourceAutomations
 
 $total = 0
 Write-Host '=== OpenAI Deprecation Checker ===' -ForegroundColor Cyan
+Write-Host ''
+Write-Host "Canonical skills: $($skillNames.Count)" -ForegroundColor Gray
+Write-Host "Canonical automations: $($automationNames.Count)" -ForegroundColor Gray
+Write-Host "Canonical rules: $($ruleNames.Count)" -ForegroundColor Gray
 Write-Host ''
 
 foreach ($t in $targets) {

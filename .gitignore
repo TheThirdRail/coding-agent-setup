@@ -10,6 +10,7 @@ Info/
 
 # AI/Agent Generated Folders (local only)
 .agent/
+.serena/
 education/
 research/
 Agent-Context/
@@ -22,6 +23,7 @@ AGENTS.md
 node_modules/
 vendor/
 .venv/
+.cache/
 __pycache__/
 
 # Logs

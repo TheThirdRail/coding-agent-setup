@@ -10,8 +10,8 @@ description: Daily startup routine - sync code, check status, prepare for work
   </when_to_use>
 
   <recommended_mcp>
-    <server>shrimp-task-manager</server>
-    <reason>Sync daily plan and priorities</reason>
+    <server>MCP_DOCKER</server>
+    <reason>Lazy-load `shrimp-task-manager` only if daily task planning needs it</reason>
   </recommended_mcp>
 
   <steps>

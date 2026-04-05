@@ -32,6 +32,7 @@ Workspace-local install targets (via `move-local-*` scripts):
 ```powershell
 docker build -t mcp-local-adapters:latest -f ..\..\..\MCP-Servers\local\adapters\Dockerfile ..\..\..
 docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
+..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1
 ..\..\..\MCP-Servers\scripts\install-mcp-servers.ps1 -Vendor google
 ..\..\..\MCP-Servers\scripts\set-mcp-secrets.ps1
 ```
@@ -39,7 +40,7 @@ docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
 Targets:
 - MCP config: `~\.gemini\antigravity\mcp_config.json`
 - Runtime catalog: `MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml`
-- Registry: `MCP-Servers\mcp-docker-stack\registry.supplementals.yaml`
+- Hybrid runtime registry: `~\.docker\mcp\registry.hybrid-supplementals.yaml`
 
 ## MCP Runtime Cleanup (After Use)
 
