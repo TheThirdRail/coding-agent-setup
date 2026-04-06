@@ -62,7 +62,7 @@ docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
 
 This installs the hybrid MCP layout:
 - direct always-on base servers in `~\.codex\config.toml`
-- an empty per-user lazy-load registry at `~\.docker\mcp\registry.hybrid-supplementals.yaml`
+- a seeded per-user lazy-load registry at `~\.docker\mcp\registry.hybrid-supplementals.yaml`
 - supplemental servers behind `MCP_DOCKER`
 
 ## MCP Runtime Cleanup (After Use)

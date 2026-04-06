@@ -20,26 +20,6 @@ registry:
       - javascript
       - lsp
     source: local-adapter
-  serena:
-    dateAdded: '2025-12-28T00:00:00Z'
-    description: AI-powered code understanding with LSP support for 20+ languages
-    title: Serena
-    type: server
-    image: python:3.11-slim
-    command:
-    - sh
-    - -lc
-    - pip install -q uv >/dev/null 2>&1 && exec uvx --from git+https://github.com/oraios/serena serena start-mcp-server --transport stdio --project-from-cwd --context ide
-    volumes:
-    - D:/Coding:/workspace
-    metadata:
-      category: code-intelligence
-      owner: oraios
-      tags:
-      - ai
-      - code-understanding
-      - lsp
-    source: https://github.com/oraios/serena
   sequential-thinking:
     dateAdded: '2025-12-28T00:00:00Z'
     description: Step-by-step reasoning framework
@@ -74,6 +54,42 @@ registry:
       - tasks
       - local
     source: https://github.com/shrimp-cloud/mcp-shrimp-task-manager
+  playwright:
+    dateAdded: '2025-12-28T00:00:00Z'
+    description: Browser automation and E2E testing
+    title: Playwright
+    type: server
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    command:
+    - npx
+    - -y
+    - '@playwright/mcp'
+    metadata:
+      category: testing
+      owner: microsoft
+      tags:
+      - testing
+      - browser
+      - e2e
+    source: https://github.com/microsoft/playwright
+  puppeteer:
+    dateAdded: '2026-04-05T00:00:00Z'
+    description: Browser automation and scripted web interaction with Puppeteer
+    title: Puppeteer
+    type: server
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    command:
+    - npx
+    - -y
+    - '@modelcontextprotocol/server-puppeteer'
+    metadata:
+      category: testing
+      owner: modelcontextprotocol
+      tags:
+      - testing
+      - browser
+      - automation
+    source: https://github.com/modelcontextprotocol/servers
   todoist:
     dateAdded: '2025-12-28T00:00:00Z'
     description: Todoist task management integration
@@ -303,6 +319,26 @@ registry:
     source: local-adapter
     volumes:
     - D:/Coding:/workspace
+  firecrawl:
+    dateAdded: '2025-12-29T00:00:00Z'
+    description: AI-powered web scraping that converts websites to clean Markdown/JSON
+    title: Firecrawl
+    type: server
+    image: node:20-slim
+    command:
+    - npx
+    - -y
+    - firecrawl-mcp
+    secrets:
+    - name: firecrawl.key
+      env: FIRECRAWL_API_KEY
+    metadata:
+      category: research
+      tags:
+      - scraping
+      - web
+      - ai
+    source: https://github.com/mendableai/firecrawl-mcp-server
   pubmed:
     dateAdded: '2025-12-29T00:00:00Z'
     description: Search and retrieve medical/life sciences papers from PubMed
@@ -538,6 +574,42 @@ registry:
     source: local-adapter
     volumes:
     - D:/Coding:/workspace
+  gitmcp:
+    dateAdded: '2025-12-30T00:00:00Z'
+    description: Remote GitHub repository docs and code context via GitMCP
+    title: GitMCP
+    type: server
+    image: node:20-slim
+    command:
+    - npx
+    - -y
+    - mcp-remote
+    - https://gitmcp.io/docs
+    metadata:
+      category: development
+      tags:
+      - github
+      - remote
+      - context
+    source: https://github.com/idosal/git-mcp
+  github-official:
+    dateAdded: '2025-12-30T00:00:00Z'
+    description: Official GitHub MCP server with full API access
+    title: GitHub Official
+    type: server
+    image: ghcr.io/github/github-mcp-server:latest
+    command:
+    - stdio
+    secrets:
+    - name: github.token
+      env: GITHUB_PERSONAL_ACCESS_TOKEN
+    metadata:
+      category: development
+      tags:
+      - github
+      - api
+      - official
+    source: https://github.com/github/github-mcp-server
   claude-faf-mcp:
     dateAdded: '2025-12-30T00:00:00Z'
     description: Persistent project context with 33+ tools - maintains Project DNA

@@ -14,22 +14,8 @@ registry:
     ref: ''
   octocode:
     ref: ''
-  github-official:
-    ref: ''
-
-  # Web and paper research
-  arxiv:
-    ref: ''
-  firecrawl:
-    ref: ''
 
   # Browser and frontend supplementals
-  playwright:
-    ref: ''
-  puppeteer:
-    ref: ''
-  shrimp-task-manager:
-    ref: ''
   react:
     ref: ''
   vue:
@@ -47,8 +33,4 @@ registry:
   mcp-security-audit:
     ref: ''
   ragdocs:
-    ref: ''
-
-  # Container and platform supplementals
-  docker-mcp:
     ref: ''

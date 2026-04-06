@@ -60,9 +60,9 @@ Important:
 - this script only writes Docker-managed secrets needed by the current hybrid stack
 - direct-client values such as `SEARXNG_URL` and optional `CONTEXT7_API_KEY` are not written into Docker secrets
 
-## 3) Refresh the Empty Hybrid Lazy-Load Registry
+## 3) Refresh the Seeded Hybrid Lazy-Load Registry
 
-This resets the runtime registry used by `MCP_DOCKER` back to an empty Dynamic MCP control surface.
+This refreshes the runtime registry used by `MCP_DOCKER` from the repo-owned supplemental seed list.
 
 ```powershell
 .\setup_lazy_load.ps1
@@ -93,7 +93,7 @@ docker mcp gateway run --transport stdio `
   --additional-catalog "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml"
 ```
 
-At startup this should expose only the Dynamic MCP management tools.
+At startup this should expose the Dynamic MCP management tools plus the seeded supplemental tool set.
 
 ## 6) Spot-check a Single Supplemental Server
 

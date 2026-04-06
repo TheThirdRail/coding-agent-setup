@@ -96,7 +96,7 @@ What this prepares:
 - `uv` for direct `fetch` usage and the shared Serena launcher
 - local adapter image for repo-owned MCP adapters
 - self-hosted SearXNG for the `searxng` MCP server
-- empty per-user lazy-load registry for `MCP_DOCKER`
+- seeded per-user lazy-load registries for `MCP_DOCKER`
 - Docker secrets for supplemental lazy-load servers
 - one shared local Serena MCP endpoint at `http://127.0.0.1:9121/mcp`
 
@@ -233,9 +233,11 @@ If you want a short runbook for an agent to follow, use:
 - Google policy source: `Agent/Google/Rules/GEMINI.md`
 - Codex MCP template: `Agent/OpenAI/Codex/mcp/config.toml`
 - Antigravity MCP template: `Agent/Google/Antigravity/mcp/mcp_config.json`
-- Supplemental registry seed: `MCP-Servers/mcp-docker-stack/registry.supplementals.yaml`
+- Codex supplemental registry seed: `MCP-Servers/mcp-docker-stack/registry.supplementals.yaml`
+- Antigravity supplemental registry seed: `MCP-Servers/mcp-docker-stack/registry.supplementals.antigravity.yaml`
 - Runtime catalog: `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml`
-- Hybrid runtime registry: `~/.docker/mcp/registry.hybrid-supplementals.yaml`
+- Codex runtime registry: `~/.docker/mcp/registry.hybrid-supplementals.yaml`
+- Antigravity runtime registry: `~/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml`
 - Shared Serena launcher: `MCP-Servers/scripts/start-serena-http.ps1`
 
 ## Maintenance

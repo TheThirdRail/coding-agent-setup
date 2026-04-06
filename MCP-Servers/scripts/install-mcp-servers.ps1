@@ -24,6 +24,16 @@ function New-BackupPath {
     return "$Path.bak-$timestamp"
 }
 
+function Write-TextFileUtf8NoBom {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
+
 function Get-TemplateContent {
     param(
         [string]$TemplatePath,
@@ -85,43 +95,48 @@ function Install-TemplateFile {
         Write-Host "Backed up existing $Label config: $backupPath" -ForegroundColor DarkYellow
     }
 
-    Set-Content -Path $DestinationPath -Value $content -Encoding utf8
+    Write-TextFileUtf8NoBom -Path $DestinationPath -Content $content
     Write-Host "Installed $Label config: $DestinationPath" -ForegroundColor Green
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-$hybridRegistryPath = Join-Path $env:USERPROFILE '.docker\mcp\registry.hybrid-supplementals.yaml'
+$codexHybridRegistryPath = Join-Path $env:USERPROFILE '.docker\mcp\registry.hybrid-supplementals.yaml'
+$antigravityHybridRegistryPath = Join-Path $env:USERPROFILE '.docker\mcp\registry.hybrid-supplementals-antigravity.yaml'
 $targets = @()
 
 switch ($Vendor) {
     'openai' {
         $targets += @{
-            Label       = 'OpenAI Codex'
-            Template    = (Join-Path $repoRoot 'Agent\OpenAI\Codex\mcp\config.toml')
-            Destination = (Join-Path $env:USERPROFILE '.codex\config.toml')
-            Json        = $false
+            Label              = 'OpenAI Codex'
+            Template           = (Join-Path $repoRoot 'Agent\OpenAI\Codex\mcp\config.toml')
+            Destination        = (Join-Path $env:USERPROFILE '.codex\config.toml')
+            Json               = $false
+            HybridRegistryPath = $codexHybridRegistryPath
         }
     }
     'google' {
         $targets += @{
-            Label       = 'Google Antigravity'
-            Template    = (Join-Path $repoRoot 'Agent\Google\Antigravity\mcp\mcp_config.json')
-            Destination = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json')
-            Json        = $true
+            Label              = 'Google Antigravity'
+            Template           = (Join-Path $repoRoot 'Agent\Google\Antigravity\mcp\mcp_config.json')
+            Destination        = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json')
+            Json               = $true
+            HybridRegistryPath = $antigravityHybridRegistryPath
         }
     }
     'all' {
         $targets += @{
-            Label       = 'OpenAI Codex'
-            Template    = (Join-Path $repoRoot 'Agent\OpenAI\Codex\mcp\config.toml')
-            Destination = (Join-Path $env:USERPROFILE '.codex\config.toml')
-            Json        = $false
+            Label              = 'OpenAI Codex'
+            Template           = (Join-Path $repoRoot 'Agent\OpenAI\Codex\mcp\config.toml')
+            Destination        = (Join-Path $env:USERPROFILE '.codex\config.toml')
+            Json               = $false
+            HybridRegistryPath = $codexHybridRegistryPath
         }
         $targets += @{
-            Label       = 'Google Antigravity'
-            Template    = (Join-Path $repoRoot 'Agent\Google\Antigravity\mcp\mcp_config.json')
-            Destination = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json')
-            Json        = $true
+            Label              = 'Google Antigravity'
+            Template           = (Join-Path $repoRoot 'Agent\Google\Antigravity\mcp\mcp_config.json')
+            Destination        = (Join-Path $env:USERPROFILE '.gemini\antigravity\mcp_config.json')
+            Json               = $true
+            HybridRegistryPath = $antigravityHybridRegistryPath
         }
     }
 }
@@ -130,8 +145,9 @@ Write-Host '=== Hybrid MCP Config Installer ===' -ForegroundColor Cyan
 Write-Host "Repo root: $repoRoot" -ForegroundColor Gray
 Write-Host 'This installs the repo-owned hybrid templates:' -ForegroundColor Gray
 Write-Host '- direct always-on MCP servers in each client config' -ForegroundColor Gray
-Write-Host '- one MCP_DOCKER gateway wired to the per-user lazy-load registry' -ForegroundColor Gray
-Write-Host "Hybrid runtime registry: $hybridRegistryPath" -ForegroundColor Gray
+Write-Host '- one MCP_DOCKER gateway per client wired to its per-user lazy-load registry' -ForegroundColor Gray
+Write-Host "Codex runtime registry: $codexHybridRegistryPath" -ForegroundColor Gray
+Write-Host "Antigravity runtime registry: $antigravityHybridRegistryPath" -ForegroundColor Gray
 Write-Host ''
 
 foreach ($target in $targets) {
@@ -140,7 +156,7 @@ foreach ($target in $targets) {
         -TemplatePath $target.Template `
         -DestinationPath $target.Destination `
         -RepoRoot $repoRoot `
-        -HybridRegistryPath $hybridRegistryPath `
+        -HybridRegistryPath $target.HybridRegistryPath `
         -ValidateJson:$target.Json `
         -DryRunMode:$DryRun `
         -SkipBackupMode:$SkipBackup
@@ -156,7 +172,7 @@ else {
     Write-Host "   docker build -t mcp-local-adapters:latest -f $repoRoot\MCP-Servers\local\adapters\Dockerfile $repoRoot" -ForegroundColor Gray
     Write-Host "2. Start local SearXNG:" -ForegroundColor Gray
     Write-Host "   docker compose -f $repoRoot\MCP-Servers\local\searxng\docker-compose.yml up -d" -ForegroundColor Gray
-    Write-Host "3. Refresh the empty lazy-load registry:" -ForegroundColor Gray
+    Write-Host "3. Refresh the seeded lazy-load registry:" -ForegroundColor Gray
     Write-Host "   .\setup_lazy_load.ps1" -ForegroundColor Gray
     Write-Host "4. Sync Docker secrets from .env:" -ForegroundColor Gray
     Write-Host "   .\set-mcp-secrets.ps1" -ForegroundColor Gray

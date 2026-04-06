@@ -295,7 +295,7 @@ function Get-StandaloneClassification {
         config_source         = 'external config present; package-local MCP config not evidenced'
         app_server_path       = 'Store app packaged codex.exe app-server'
         docker_spawn_observed = $false
-        gateway_result_observed = 'control-only'
+        gateway_result_observed = 'seeded lazy-load registry'
         failure_stage         = ''
         likely_root_cause     = ''
         confidence            = 'medium'

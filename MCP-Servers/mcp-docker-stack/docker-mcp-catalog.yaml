@@ -137,31 +137,6 @@ registry:
 
   # NOTE: pylance, rust-analyzer, clangd removed - NPM packages don't exist
 
-  serena:
-    dateAdded: "2025-12-28T00:00:00Z"
-    description: AI-powered code understanding with LSP support for 20+ languages
-    title: Serena
-    type: server
-    image: python:3.11-slim
-    command:
-      - sh
-      - -lc
-      - pip install -q uv >/dev/null 2>&1 && exec uvx --from git+https://github.com/oraios/serena serena start-mcp-server --transport stdio --project-from-cwd --context ide
-    volumes:
-      - "D:/Coding:/workspace"
-    env:
-      - name: SERENA_DOCKER
-        value: "1"
-    metadata:
-      category: code-intelligence
-      owner: oraios
-      tags:
-        - ai
-        - code-understanding
-        - lsp
-    source: https://github.com/oraios/serena
-
-
   context7:
     dateAdded: "2025-12-28T00:00:00Z"
     description: Advanced context management for codebases
@@ -527,6 +502,25 @@ registry:
         - e2e
     source: https://github.com/microsoft/playwright
 
+  puppeteer:
+    dateAdded: "2026-04-05T00:00:00Z"
+    description: Browser automation and scripted web interaction with Puppeteer
+    title: Puppeteer
+    type: server
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    command:
+      - npx
+      - -y
+      - "@modelcontextprotocol/server-puppeteer"
+    metadata:
+      category: testing
+      owner: modelcontextprotocol
+      tags:
+        - testing
+        - browser
+        - automation
+    source: https://github.com/modelcontextprotocol/servers
+
   # ============================================
   # ORCHESTRATION
   # ============================================
@@ -815,29 +809,28 @@ registry:
 
   gitmcp:
     dateAdded: "2025-12-30T00:00:00Z"
-    description: Convert any GitHub repo to markdown for LLM context
+    description: Remote GitHub repository docs and code context via GitMCP
     title: GitMCP
     type: server
     image: node:20-slim
     command:
       - npx
       - -y
-      - gitmcp
+      - mcp-remote
+      - https://gitmcp.io/docs
     metadata:
       category: development
-      tags: [github, markdown, context]
-    source: https://github.com/nicholasGonzales/gitmcp
+      tags: [github, remote, context]
+    source: https://github.com/idosal/git-mcp
 
   github-official:
     dateAdded: "2025-12-30T00:00:00Z"
     description: Official GitHub MCP server with full API access
     title: GitHub Official
     type: server
-    image: node:20-slim
+    image: ghcr.io/github/github-mcp-server:latest
     command:
-      - npx
-      - -y
-      - "@github/mcp-server"
+      - stdio
     secrets:
       - name: github.token
         env: GITHUB_PERSONAL_ACCESS_TOKEN

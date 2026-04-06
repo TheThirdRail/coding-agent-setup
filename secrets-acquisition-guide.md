@@ -145,7 +145,7 @@ Once `.env` is ready, the agent should load Docker-managed secrets with:
 
 Important:
 
-- `setup_lazy_load.ps1` refreshes the empty per-user registry used by `MCP_DOCKER`
+- `setup_lazy_load.ps1` refreshes the seeded per-user registry used by `MCP_DOCKER`
 - this script only loads the values it is designed to sync
 - direct-client-only values may still live only in `.env` or in client config
 

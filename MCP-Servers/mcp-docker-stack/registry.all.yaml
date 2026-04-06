@@ -5,8 +5,6 @@ registry:
     ref: ''
   lsmcp:
     ref: ''
-  serena:
-    ref: ''
   context7:
     ref: ''
   desktop-commander:
@@ -32,6 +30,8 @@ registry:
   snyk:
     ref: ''
   playwright:
+    ref: ''
+  puppeteer:
     ref: ''
   firecrawl:
     ref: ''

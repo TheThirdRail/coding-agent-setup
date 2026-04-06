@@ -202,9 +202,9 @@ The agent should refresh the per-user Docker MCP registry used by `MCP_DOCKER`.
 
 This should create or refresh:
 
-- `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals.yaml`
+- `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
 
-The expected startup behavior after this step is a control-only Dynamic MCP surface, not the full supplemental tool set.
+The expected startup behavior after this step is the Dynamic MCP management surface plus the seeded supplemental server set.
 
 ## Step 11: Sync Docker Secrets from `.env`
 
@@ -267,7 +267,7 @@ Success means:
 - skills are installed
 - workflows are installed
 - `mcp_config.json` no longer contains direct `playwright` or `shrimp_task_manager` entries
-- `MCP_DOCKER` points at `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals.yaml`
+- `MCP_DOCKER` points at `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
 - the `serena` entry points at `http://127.0.0.1:9121/mcp`
 
 ## Step 16: Ask Whether to Restore Any Old Settings

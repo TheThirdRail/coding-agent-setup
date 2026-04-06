@@ -206,7 +206,7 @@ This should create or refresh:
 
 - `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals.yaml`
 
-The expected startup behavior after this step is a control-only Dynamic MCP surface, not the full supplemental tool set.
+The expected startup behavior after this step is the Dynamic MCP management surface plus the seeded supplemental server set.
 
 ## Step 11: Sync Docker Secrets from `.env`
 

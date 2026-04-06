@@ -43,7 +43,7 @@ The current stack includes:
 - repo-owned Codex and Antigravity instructions
 - install/remove wrapper scripts
 - hybrid Docker MCP support
-- an empty lazy-load registry for `MCP_DOCKER`
+- separate seeded lazy-load registries for Codex and Antigravity
 - a shared Serena server at `http://127.0.0.1:9121/mcp`
 - local SearXNG support
 

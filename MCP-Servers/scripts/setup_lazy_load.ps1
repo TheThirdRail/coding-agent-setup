@@ -2,6 +2,7 @@
 param(
     [string]$RegistryPath = '',
     [string]$CatalogPath = '',
+    [string]$SeedRegistryPath = '',
     [switch]$DryRun,
     [switch]$SkipSmokeTest
 )
@@ -23,6 +24,13 @@ function Convert-ToForwardSlashPath {
     return ($Path -replace '\\', '/')
 }
 
+function Get-RegistryServerNames {
+    param([string]$Path)
+
+    $matches = Get-Content -Path $Path | Select-String -Pattern '^\s{2}([A-Za-z0-9._-]+):\s*$'
+    return @($matches | ForEach-Object { $_.Matches[0].Groups[1].Value })
+}
+
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     Write-Error 'Docker CLI not found on PATH.'
     exit 1
@@ -38,25 +46,44 @@ if ([string]::IsNullOrWhiteSpace($CatalogPath)) {
     $CatalogPath = Join-Path $repoRoot 'MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml'
 }
 
+if ([string]::IsNullOrWhiteSpace($SeedRegistryPath)) {
+    $SeedRegistryPath = Join-Path $repoRoot 'MCP-Servers\mcp-docker-stack\registry.supplementals.yaml'
+}
+
 if (-not (Test-Path $CatalogPath)) {
     Write-Error "Runtime catalog not found: $CatalogPath"
     exit 1
 }
 
-$registryContent = "registry:`n"
+if (-not (Test-Path $SeedRegistryPath)) {
+    Write-Error "Supplemental registry seed not found: $SeedRegistryPath"
+    exit 1
+}
+
+$registryContent = Get-Content -Path $SeedRegistryPath -Raw
+$seedServerNames = Get-RegistryServerNames -Path $SeedRegistryPath
+$catalogText = Get-Content -Path $CatalogPath -Raw
+$missingCatalogServers = @($seedServerNames | Where-Object { $catalogText -notmatch "(?m)^  $([regex]::Escape($_)):\s*$" })
+
+if ($missingCatalogServers.Count -gt 0) {
+    Write-Error "Supplemental registry references missing runtime catalog entries: $($missingCatalogServers -join ', ')"
+    exit 1
+}
 
 Write-Host '=== Hybrid Lazy-Load Setup ===' -ForegroundColor Cyan
 Write-Host "Registry path: $RegistryPath" -ForegroundColor Gray
 Write-Host "Runtime catalog: $CatalogPath" -ForegroundColor Gray
+Write-Host "Seed registry: $SeedRegistryPath" -ForegroundColor Gray
+Write-Host "Seeded supplemental servers: $($seedServerNames.Count)" -ForegroundColor Gray
 Write-Host ''
 
 if ($DryRun) {
-    Write-Host "[DRY RUN] Would refresh the hybrid lazy-load registry at $RegistryPath" -ForegroundColor Yellow
+    Write-Host "[DRY RUN] Would refresh the hybrid lazy-load registry at $RegistryPath from the repo seed registry" -ForegroundColor Yellow
 }
 else {
     Ensure-Directory -Path $RegistryPath
     Set-Content -Path $RegistryPath -Value $registryContent -Encoding utf8
-    Write-Host "Hybrid lazy-load registry refreshed: $RegistryPath" -ForegroundColor Green
+    Write-Host "Hybrid lazy-load registry refreshed from seed: $RegistryPath" -ForegroundColor Green
 }
 
 if (-not $SkipSmokeTest) {
@@ -68,25 +95,33 @@ if (-not $SkipSmokeTest) {
 
     $registryArg = "--gateway-arg=--registry=$(Convert-ToForwardSlashPath -Path $registryPathForSmokeTest)"
     $catalogArg = "--gateway-arg=--additional-catalog=$(Convert-ToForwardSlashPath -Path $CatalogPath)"
-    $countOutput = & docker mcp tools count $registryArg $catalogArg 2>&1
-    $listOutput = & docker mcp tools ls $registryArg $catalogArg 2>&1
+    $spotCheckServers = @('playwright', 'filescopemcp')
+    $spotCheckResults = @()
 
-    $countText = (@($countOutput) -join "`n")
-    $listText = (@($listOutput) -join "`n")
-    $expectedTools = @('code-mode', 'mcp-add', 'mcp-config-set', 'mcp-exec', 'mcp-find', 'mcp-remove')
-    $missingTools = @($expectedTools | Where-Object { $listText -notmatch [regex]::Escape($_) })
+    foreach ($serverName in $spotCheckServers) {
+        $serverArg = "--gateway-arg=--servers=$serverName"
+        $countOutput = & docker mcp tools count $registryArg $catalogArg $serverArg 2>&1
+        $countText = (@($countOutput) -join "`n")
+        $toolCount = -1
 
-    $toolCount = -1
-    if ($countText -match '(\d+)\s+tools') {
-        $toolCount = [int]$Matches[1]
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Hybrid lazy-load smoke test failed while checking '$serverName'. Output: $countText"
+            exit 1
+        }
+
+        if ($countText -match '(\d+)\s+tools') {
+            $toolCount = [int]$Matches[1]
+        }
+
+        if ($toolCount -le 0) {
+            Write-Error "Hybrid lazy-load smoke test failed. Expected '$serverName' to expose tools, but count was $toolCount."
+            exit 1
+        }
+
+        $spotCheckResults += "${serverName}=$toolCount"
     }
 
-    if ($toolCount -ne 6 -or $missingTools.Count -gt 0) {
-        Write-Error "Hybrid lazy-load smoke test failed. Expected 6 management tools only. Count=$toolCount Missing=$($missingTools -join ', ')"
-        exit 1
-    }
-
-    Write-Host 'Hybrid lazy-load smoke test passed: control-only MCP_DOCKER surface confirmed.' -ForegroundColor Green
+    Write-Host "Hybrid lazy-load smoke test passed: seeded registry validated and spot-check servers available ($($spotCheckResults -join ', '))." -ForegroundColor Green
 }
 else {
     Write-Host 'Skipping smoke test.' -ForegroundColor Yellow

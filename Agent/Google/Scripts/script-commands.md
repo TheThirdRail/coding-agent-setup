@@ -40,7 +40,7 @@ docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
 Targets:
 - MCP config: `~\.gemini\antigravity\mcp_config.json`
 - Runtime catalog: `MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml`
-- Hybrid runtime registry: `~\.docker\mcp\registry.hybrid-supplementals.yaml`
+- Hybrid runtime registry: `~\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
 
 ## MCP Runtime Cleanup (After Use)
 
