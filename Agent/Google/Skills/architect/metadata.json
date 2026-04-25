@@ -1,0 +1,21 @@
+{
+  "name": "architect",
+  "version": "3.0.0",
+  "description": "Plan projects, architecture, APIs, frontend/backend boundaries, database design, and setup decisions.",
+  "category": "architecture",
+  "keywords": [
+    "plan",
+    "architecture",
+    "api",
+    "frontend",
+    "backend",
+    "database",
+    "setup",
+    "design"
+  ],
+  "related_skills": [
+    "research-docs",
+    "code",
+    "quality-repair"
+  ]
+}

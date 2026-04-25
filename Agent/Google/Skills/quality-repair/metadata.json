@@ -1,0 +1,21 @@
+{
+  "name": "quality-repair",
+  "version": "3.0.0",
+  "description": "Diagnose, fix, review, secure, optimize, and harden code or delivery pipelines.",
+  "category": "development",
+  "keywords": [
+    "debug",
+    "fix",
+    "review",
+    "security",
+    "performance",
+    "ci",
+    "dependency",
+    "quality"
+  ],
+  "related_skills": [
+    "code",
+    "archive-manager",
+    "research-docs"
+  ]
+}

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Database Optimizer"
-  short_description: "Help with Database Optimizer tasks"
-  default_prompt: "Use $database-optimizer to deep focus on database schema review, index optimization, and query analysis. Identifies N+1 queries, missing indexes, and schema anti-patterns."

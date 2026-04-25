@@ -1,4 +1,0 @@
-interface:
-  display_name: "Test Developer"
-  short_description: "Test Developer workflow guidance"
-  default_prompt: "Use $test-developer to run the test-developer workflow for this repository."

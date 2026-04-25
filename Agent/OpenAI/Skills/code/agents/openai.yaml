@@ -1,4 +1,4 @@
 interface:
   display_name: "Code"
-  short_description: "Help with Code tasks"
-  default_prompt: "Use $code to run the code workflow for this repository."
+  short_description: "Implement approved plans, refactor, test, prepare commits or PRs, and handle deployment execution."
+  default_prompt: "Use $code to route this request to the correct on-demand lane."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Documentation Generator"
-  short_description: "Help with Documentation Generator tasks"
-  default_prompt: "Use $documentation-generator to generate maintainable project documentation from source code, architecture, and runtime behavior."

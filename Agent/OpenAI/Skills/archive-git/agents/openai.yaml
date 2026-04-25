@@ -1,4 +1,0 @@
-interface:
-  display_name: "Archive Git"
-  short_description: "Help with Archive Git tasks"
-  default_prompt: "Use $archive-git to query repository history for code evolution, ownership, and change context."

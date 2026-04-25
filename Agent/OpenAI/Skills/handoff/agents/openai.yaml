@@ -1,4 +1,0 @@
-interface:
-  display_name: "Handoff"
-  short_description: "Handoff workflow guidance"
-  default_prompt: "Use $handoff to run the handoff workflow for this repository."

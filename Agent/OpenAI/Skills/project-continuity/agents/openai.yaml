@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Continuity"
+  short_description: "Handle onboarding, daily startup, handoff, and explicit teaching/documentation support."
+  default_prompt: "Use $project-continuity to route this request to the correct on-demand lane."

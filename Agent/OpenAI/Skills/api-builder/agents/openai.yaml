@@ -1,4 +1,0 @@
-interface:
-  display_name: "API Builder"
-  short_description: "Help with API Builder tasks"
-  default_prompt: "Use $api-builder to design and build RESTful and GraphQL APIs with proper structure, validation, authentication, and documentation. Generates OpenAPI specs, endpoint handlers, and middleware."

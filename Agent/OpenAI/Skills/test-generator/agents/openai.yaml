@@ -1,4 +1,0 @@
-interface:
-  display_name: "Test Generator"
-  short_description: "Help with Test Generator tasks"
-  default_prompt: "Use $test-generator to generate unit tests following TDD principles. Creates comprehensive test suites with happy path, edge cases, and error scenarios."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Archive Memory"
-  short_description: "Help with Archive Memory tasks"
-  default_prompt: "Use $archive-memory to persist structured project context in a local SQLite memory store."

@@ -1,0 +1,19 @@
+{
+  "name": "research-docs",
+  "version": "3.0.0",
+  "description": "Perform validated research, choose lookup tools, and generate accurate project documentation.",
+  "category": "research",
+  "keywords": [
+    "research",
+    "docs",
+    "documentation",
+    "sources",
+    "tools",
+    "reference",
+    "write"
+  ],
+  "related_skills": [
+    "archive-manager",
+    "architect"
+  ]
+}

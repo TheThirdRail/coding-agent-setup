@@ -1,0 +1,4 @@
+interface:
+  display_name: "MCP Ops"
+  short_description: "Operate MCP servers, Docker-backed MCP tools, and Serena availability checks."
+  default_prompt: "Use $mcp-ops to route this request to the correct on-demand lane."

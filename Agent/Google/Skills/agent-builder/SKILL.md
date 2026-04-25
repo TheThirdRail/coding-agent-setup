@@ -1,110 +1,79 @@
 ---
 name: agent-builder
 description: |
-  Meta-skill for extending Antigravity's capabilities. Acts as a router
-  to help users build Skills, Workflows, Rules, or MCP Tools.
-  Use when the user wants to "add something" to the agent or "teach" it new tricks
-  but hasn't specified exactly which component type to create.
+  Create or maintain agent capabilities, skills, workflows, rules, automations, and custom MCP tools.
+  Use when building, updating, validating, packaging, or installing agent skills, workflows, rules, automations, plugins, or custom MCP tools.
 ---
 
-<skill name="agent-builder" version="2.0.0">
+<skill name="agent-builder" version="3.0.0">
   <metadata>
-    <keywords>build, create, extend, skill, workflow, rule, tool, mcp</keywords>
+    <keywords>
+      <keyword>agent</keyword>
+      <keyword>skill</keyword>
+      <keyword>workflow</keyword>
+      <keyword>rule</keyword>
+      <keyword>automation</keyword>
+      <keyword>mcp</keyword>
+      <keyword>tool</keyword>
+      <keyword>builder</keyword>
+    </keywords>
   </metadata>
 
-  <goal>Guide the user to the correct builder skill for extending Antigravity's capabilities.</goal>
+  <goal>Create or maintain agent capabilities, skills, workflows, rules, automations, and custom MCP tools.</goal>
 
   <core_principles>
-    <principle name="Route Before Building">
-      <rule>Ask minimal clarifying questions, then route to one primary builder skill.</rule>
-      <rule>Avoid mixing build tracks unless the user explicitly requests composition.</rule>
+    <principle name="Progressive Disclosure">
+      <rule>Keep this skill as a compact router and load detailed lane references only on demand.</rule>
     </principle>
-
-    <principle name="Prefer Existing Capability">
-      <rule>Use mcp-manager to discover existing capabilities before routing to mcp-builder.</rule>
-      <rule>Treat custom MCP construction as a last resort.</rule>
+    <principle name="Intent Routing">
+      <rule>Choose the narrowest matching route before reading references or using scripts.</rule>
     </principle>
-
-    <principle name="Keep Handoffs Explicit">
-      <rule>State which builder skill is selected and why.</rule>
-      <rule>Keep handoff criteria concrete so the target builder can execute immediately.</rule>
+    <principle name="Compatibility Preservation">
+      <rule>Use consolidated lane references to preserve former skill and workflow behavior without reinstalling alias skills.</rule>
     </principle>
   </core_principles>
-
-  <decision_tree>
-    <node id="start" question="What kind of capability do you want to add?">
-      <branch answer="Reusable knowledge/instructions" target="skill-builder">
-        <description>Best for: "How-to" guides, procedural knowledge, specialized tech stacks</description>
-      </branch>
-      
-      <branch answer="Step-by-step process" target="workflow-builder">
-        <description>Best for: Checklists, multi-step procedures, standard operating procedures</description>
-      </branch>
-      
-      <branch answer="Behavioral constraint" target="rule-builder">
-        <description>Best for: "Always do X", "Never do Y", style guides, safety rails</description>
-      </branch>
-      
-      <branch answer="New functional ability" target="mcp-tool-decision">
-        <description>Best for: Executing code, API calls, system operations</description>
-      </branch>
-    </node>
-
-    <node id="mcp-tool-decision" question="Does the functionality already exist in an MCP server?">
-      <branch answer="Yes / Maybe" target="mcp-manager">
-        <action>Use mcp-manager to Find/Add existing servers</action>
-      </branch>
-      
-      <branch answer="Yes, but I want to combine tools" target="mcp-manager">
-        <action>Use mcp-manager code-mode feature</action>
-      </branch>
-      
-      <branch answer="No, I need to build it from scratch" target="mcp-builder">
-        <action>Create a custom MCP tool</action>
-      </branch>
-    </node>
-  </decision_tree>
+  <routing>
+    <route intent="Choose extension type" reference="references/agent-builder.md">Read when deciding between skill, workflow, rule, automation, plugin, or MCP tool.</route>
+    <route intent="Skill creation and validation" reference="references/skill-builder.md">Read when creating, modernizing, packaging, or installing skills.</route>
+    <route intent="Workflow creation" reference="references/workflow-builder.md">Read when defining reusable operational workflows.</route>
+    <route intent="Rules and guardrails" reference="references/rule-builder.md">Read when creating or updating reusable behavior rules.</route>
+    <route intent="Codex Starlark rules" reference="references/openai-rule-builder.md">Read when editing Codex-compatible default.rules policy.</route>
+    <route intent="Automation templates" reference="references/automation-builder.md">Read when creating recurring Codex automation templates.</route>
+    <route intent="Custom MCP tool build" reference="references/mcp-builder.md">Read when no existing MCP server provides the needed capability.</route>
+  </routing>
 
   <workflow>
-    <step number="1" name="Identify Need">
-      <instruction>Ask clarifying questions to determine the nature of the capability.</instruction>
-      <example>"Are you trying to teach me a process (Workflow), a concept (Skill), or give me a new tool (MCP)?"</example>
+    <step number="1" name="Classify Intent">
+      <instruction>Choose the narrowest matching route from this skill.</instruction>
     </step>
-
-    <step number="2" name="Route to Builder">
-      <instruction>Invoke the appropriate sub-skill based on determination.</instruction>
-      
-      <case condition="Skill">
-        <action>Execute skill-builder</action>
-      </case>
-      
-      <case condition="Workflow">
-        <action>Execute workflow-builder</action>
-      </case>
-      
-      <case condition="Rule">
-        <action>Execute rule-builder</action>
-      </case>
-      
-      <case condition="MCP Tool">
-        <action>Execute mcp-builder</action>
-      </case>
+    <step number="2" name="Load One Lane">
+      <instruction>Read only the selected reference file before executing specialized steps.</instruction>
+    </step>
+    <step number="3" name="Use Resources On Demand">
+      <instruction>Load scripts, assets, or extra references only when the selected lane requires them.</instruction>
+    </step>
+    <step number="4" name="Report Route">
+      <instruction>State the lane used when it affects auditability, handoff, or recovery.</instruction>
     </step>
   </workflow>
 
   <best_practices>
-    <do>Route to one builder skill when the request maps cleanly</do>
-    <do>Use mcp-manager before mcp-builder for capability discovery</do>
-    <do>Reframe vague requests into concrete output goals</do>
-    <dont>Start implementing before the capability type is identified</dont>
-    <dont>Assume custom tooling is needed without checking existing options</dont>
+    <do>Read the selected lane reference before specialized work.</do>
+    <do>Use bundled scripts, assets, or extra references only when the selected lane requires them.</do>
+    <do>State the selected route when it affects auditability, handoff, or recovery.</do>
+    <dont>Load multiple lane references unless the user request genuinely crosses responsibilities.</dont>
   </best_practices>
-
+  <consolidated_skills>
+    <former_skill>agent-builder</former_skill>
+    <former_skill>skill-builder</former_skill>
+    <former_skill>workflow-builder</former_skill>
+    <former_skill>rule-builder</former_skill>
+    <former_skill>openai-rule-builder</former_skill>
+    <former_skill>automation-builder</former_skill>
+    <former_skill>mcp-builder</former_skill>
+  </consolidated_skills>
   <related_skills>
-    <skill>skill-builder</skill>
-    <skill>workflow-builder</skill>
-    <skill>rule-builder</skill>
-    <skill>mcp-builder</skill>
-    <skill>mcp-manager</skill>
+    <skill>mcp-ops</skill>
+    <skill>research-docs</skill>
   </related_skills>
 </skill>

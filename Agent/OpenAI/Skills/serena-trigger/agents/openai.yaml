@@ -1,4 +1,0 @@
-interface:
-  display_name: "Serena Trigger"
-  short_description: "Check native Serena stdio setup"
-  default_prompt: "Use $serena-trigger to verify the client-native Serena stdio setup and guide project activation if needed."

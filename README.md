@@ -8,7 +8,7 @@ This repository helps humans set up two AI coding environments on Windows:
 It includes:
 
 - repo-owned instructions for both clients
-- reusable skills and workflows
+- consolidated router skills and workflows
 - hybrid MCP configuration
 - one native Serena MCP server per client
 - setup and maintenance scripts
@@ -42,6 +42,7 @@ The current stack includes:
 
 - repo-owned Codex and Antigravity instructions
 - install/remove wrapper scripts
+- eight installable router skills per client, with detailed lanes loaded on demand
 - hybrid Docker MCP support
 - separate native-only Dynamic MCP runtime registries for Codex and Antigravity
 - native Serena stdio setup for Codex and Antigravity

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Docs"
+  short_description: "Perform validated research, choose lookup tools, and generate accurate project documentation."
+  default_prompt: "Use $research-docs to route this request to the correct on-demand lane."

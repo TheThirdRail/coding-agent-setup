@@ -8,12 +8,14 @@ This repository is a Windows-first setup kit for two local AI clients:
 It gives you:
 
 - vendor-specific global instructions
-- reusable skills
+- consolidated router skills
 - Antigravity workflows
 - hybrid MCP configuration
 - Docker lazy-load support for supplemental MCP servers
 - one native Serena MCP server per client, using stdio mode
 - local archive tools for code, docs, graph, git, and memory
+
+The active skill catalog is intentionally small: Codex and Antigravity each install eight router skills, while detailed legacy skill bodies live under each router's `references/` folder and archived originals live under `deprecated-Skills/`.
 
 This file is the detailed operator guide for agents and power users. If you are a human end user, start with [README.md](d:/Coding/Tools/mcp-docker-stack/README.md).
 

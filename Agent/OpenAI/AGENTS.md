@@ -74,6 +74,8 @@ This is the canonical OpenAI policy file for this repository.
         <constraint>Translate config, script, environment, and error changes into plain language unless the user asks for low-level detail.</constraint>
         <constraint>When presenting options, lead with the recommended choice, why it is preferred, the main tradeoff, and what the user needs to do.</constraint>
         <constraint>Summarize the impact before risky config, migration, automation, or environment changes.</constraint>
+        <constraint>For blockers, explicitly include status, blocker, and next action.</constraint>
+        <constraint>For long-running work, provide concise progress updates that name what changed and what is next.</constraint>
         <constraint>Switch to dedicated tutor mode only when the user explicitly asks for extra understanding support.</constraint>
       </constraints>
     </module>
@@ -155,28 +157,28 @@ This is the canonical OpenAI policy file for this repository.
   <skill_routing>
     <route trigger="Idea/Brainstorming" skill="architect" />
     <route trigger="Planning/Design" skill="architect" />
-    <route trigger="Debugging/Issues" skill="analyze" />
-    <route trigger="Surgical Debugging" skill="fix-issue" mode="surgical" />
+    <route trigger="Debugging/Issues" skill="quality-repair" />
+    <route trigger="Surgical Debugging" skill="quality-repair" mode="surgical" />
     <route trigger="Implementation" skill="code" />
-    <route trigger="Researching" skill="research" />
-    <route trigger="Learning/Docs" skill="tutor" />
-    <route trigger="Project Setup" skill="project-setup" />
-    <route trigger="Refactoring" skill="refactor" />
-    <route trigger="Pull Request" skill="pr" />
-    <route trigger="Testing/TDD" skill="test-developer" />
-    <route trigger="Security Audit" skill="security-audit" />
-    <route trigger="Fix Issue" skill="fix-issue" />
-    <route trigger="Handoff" skill="handoff" />
-    <route trigger="Morning Routine" skill="morning" />
-    <route trigger="New Codebase" skill="onboard" />
-    <route trigger="Dependency Check" skill="dependency-check" />
-    <route trigger="Deployment" skill="deploy" />
-    <route trigger="Performance Optimization" skill="performance-tune" />
-    <route trigger="Code Review" skill="review" />
+    <route trigger="Researching" skill="research-docs" />
+    <route trigger="Learning/Docs" skill="project-continuity" />
+    <route trigger="Project Setup" skill="architect" />
+    <route trigger="Refactoring" skill="code" />
+    <route trigger="Pull Request" skill="code" />
+    <route trigger="Testing/TDD" skill="code" />
+    <route trigger="Security Audit" skill="quality-repair" />
+    <route trigger="Fix Issue" skill="quality-repair" />
+    <route trigger="Handoff" skill="project-continuity" />
+    <route trigger="Morning Routine" skill="project-continuity" />
+    <route trigger="New Codebase" skill="project-continuity" />
+    <route trigger="Dependency Check" skill="quality-repair" />
+    <route trigger="Deployment" skill="code" />
+    <route trigger="Performance Optimization" skill="quality-repair" />
+    <route trigger="Code Review" skill="quality-repair" />
   </skill_routing>
 
   <routing_constraints>
-    <constraint>Trigger `tutor` only when the user explicitly asks for learning, documentation, or explanation support.</constraint>
+    <constraint>Route teaching/explanation requests to `project-continuity` only when the user explicitly asks for learning, documentation, or explanation support.</constraint>
     <constraint>During implementation/debug/review flows, keep explanations concise and define unfamiliar terms inline instead of auto-switching workflows.</constraint>
     <constraint>Do not turn a clear default into an open-ended decision tree unless the tradeoff materially changes outcomes.</constraint>
   </routing_constraints>

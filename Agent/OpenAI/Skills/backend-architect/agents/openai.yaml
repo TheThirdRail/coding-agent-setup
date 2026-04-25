@@ -1,4 +1,0 @@
-interface:
-  display_name: "Backend Architect"
-  short_description: "Help with Backend Architect tasks"
-  default_prompt: "Use $backend-architect to design and build robust, scalable, and secure backend systems following language-agnostic best practices. Focuses on API design, database modeling, security (OWASP), and operational excellence."

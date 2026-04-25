@@ -1,7 +1,7 @@
 version: 1
 mappings:
   - workflow: analyze
-    skill: analyze
+    skill: quality-repair
     automation: false
   - workflow: architect
     skill: architect
@@ -10,47 +10,47 @@ mappings:
     skill: code
     automation: false
   - workflow: dependency-check
-    skill: dependency-check
+    skill: quality-repair
     automation: true
   - workflow: deploy
-    skill: deploy
+    skill: code
     automation: optional
   - workflow: fix-issue
-    skill: fix-issue
+    skill: quality-repair
     automation: optional
   - workflow: handoff
-    skill: handoff
+    skill: project-continuity
     automation: true
   - workflow: morning
-    skill: morning
+    skill: project-continuity
     automation: true
   - workflow: onboard
-    skill: onboard
+    skill: project-continuity
     automation: false
   - workflow: performance-tune
-    skill: performance-tune
+    skill: quality-repair
     automation: optional
   - workflow: pr
-    skill: pr
+    skill: code
     automation: optional
   - workflow: project-setup
-    skill: project-setup
+    skill: architect
     automation: false
   - workflow: refactor
-    skill: refactor
+    skill: code
     automation: false
   - workflow: research
-    skill: research
+    skill: research-docs
     automation: optional
   - workflow: review
-    skill: review
+    skill: quality-repair
     automation: optional
   - workflow: security-audit
-    skill: security-audit
+    skill: quality-repair
     automation: true
   - workflow: test-developer
-    skill: test-developer
+    skill: code
     automation: false
   - workflow: tutor
-    skill: tutor
+    skill: project-continuity
     automation: false

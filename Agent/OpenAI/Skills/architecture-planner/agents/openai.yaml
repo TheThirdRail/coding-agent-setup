@@ -1,4 +1,0 @@
-interface:
-  display_name: "Architecture Planner"
-  short_description: "Help with Architecture Planner tasks"
-  default_prompt: "Use $architecture-planner to design and document software architecture with diagrams and specifications. Generates Mermaid diagrams for system design, data flow, and component relationships."

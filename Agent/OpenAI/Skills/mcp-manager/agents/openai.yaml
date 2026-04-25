@@ -1,4 +1,0 @@
-interface:
-  display_name: "MCP Manager"
-  short_description: "Help with MCP Manager tasks"
-  default_prompt: "Use $mcp-manager to orchestrate MCP servers: load, unload, and optimize context usage. For container troubleshooting (logs, health), use docker-ops instead."

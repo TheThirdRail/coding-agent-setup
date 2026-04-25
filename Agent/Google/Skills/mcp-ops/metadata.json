@@ -1,0 +1,19 @@
+{
+  "name": "mcp-ops",
+  "version": "3.0.0",
+  "description": "Operate MCP servers, Docker-backed MCP tools, and Serena availability checks.",
+  "category": "devops",
+  "keywords": [
+    "mcp",
+    "docker",
+    "serena",
+    "tools",
+    "containers",
+    "runtime",
+    "ops"
+  ],
+  "related_skills": [
+    "archive-manager",
+    "agent-builder"
+  ]
+}

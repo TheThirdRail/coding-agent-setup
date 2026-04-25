@@ -1,4 +1,4 @@
 interface:
   display_name: "Architect"
-  short_description: "Architect workflow guidance"
-  default_prompt: "Use $architect to run the architect workflow for this repository."
+  short_description: "Plan projects, architecture, APIs, frontend/backend boundaries, database design, and setup decisions."
+  default_prompt: "Use $architect to route this request to the correct on-demand lane."

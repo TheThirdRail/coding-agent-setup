@@ -88,7 +88,9 @@ elseif (Test-Path $workflowDir) {
     }
 }
 
-$skillNames = Get-ChildItem $skillsDir -Directory | Select-Object -ExpandProperty Name
+$skillNames = Get-ChildItem $skillsDir -Directory |
+    Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') } |
+    Select-Object -ExpandProperty Name
 $refFiles = @()
 if (Test-Path $workflowDir) {
     $refFiles += Get-ChildItem $workflowDir -File -Filter '*.md'

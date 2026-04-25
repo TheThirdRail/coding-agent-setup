@@ -1,4 +1,0 @@
-interface:
-  display_name: "Frontend Architect"
-  short_description: "Help with Frontend Architect tasks"
-  default_prompt: "Use $frontend-architect to design scalable, accessible, and responsive frontend systems with clear component boundaries and state strategy."

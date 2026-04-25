@@ -1,4 +1,0 @@
-interface:
-  display_name: "Archive Graph"
-  short_description: "Help with Archive Graph tasks"
-  default_prompt: "Use $archive-graph to build and query a local structural code graph using Tree-sitter and SQLite."

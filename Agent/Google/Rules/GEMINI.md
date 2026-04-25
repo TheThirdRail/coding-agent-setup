@@ -74,6 +74,8 @@ This is the canonical Antigravity policy file for this repository.
         <constraint>Translate config, script, environment, and error changes into plain language unless the user asks for low-level detail.</constraint>
         <constraint>When presenting options, lead with the recommended choice, why it is preferred, the main tradeoff, and what the user needs to do.</constraint>
         <constraint>Summarize the impact before risky config, migration, automation, or environment changes.</constraint>
+        <constraint>For blockers, explicitly include status, blocker, and next action.</constraint>
+        <constraint>For long-running work, provide concise progress updates that name what changed and what is next.</constraint>
         <constraint>Switch to dedicated tutor mode only when the user explicitly asks for extra understanding support.</constraint>
       </constraints>
     </module>
@@ -152,40 +154,37 @@ This is the canonical Antigravity policy file for this repository.
     </constraints>
   </dependency_environment_policy>
 
-  <workflow_routing>
-    <route trigger="Idea/Brainstorming" workflow="architect.md" />
-    <route trigger="Planning/Design" workflow="architect.md" />
-    <route trigger="Debugging/Issues" workflow="analyze.md" />
-    <route trigger="Surgical Debugging" workflow="fix-issue.md" mode="surgical" />
-    <route trigger="Implementation" workflow="code.md" />
-    <route trigger="Researching" workflow="research.md" />
-    <route trigger="Learning/Docs" workflow="tutor.md" />
-    <route trigger="Project Setup" workflow="project-setup.md" />
-    <route trigger="Refactoring" workflow="refactor.md" />
-    <route trigger="Pull Request" workflow="pr.md" />
-    <route trigger="Testing/TDD" workflow="test-developer.md" />
-    <route trigger="Security Audit" workflow="security-audit.md" />
-    <route trigger="Fix Issue" workflow="fix-issue.md" />
-    <route trigger="Handoff" workflow="handoff.md" />
-    <route trigger="Morning Routine" workflow="morning.md" />
-    <route trigger="New Codebase" workflow="onboard.md" />
-    <route trigger="Dependency Check" workflow="dependency-check.md" />
-    <route trigger="Deployment" workflow="deploy.md" />
-    <route trigger="Performance Optimization" workflow="performance-tune.md" />
-    <route trigger="Code Review" workflow="review.md" />
-  </workflow_routing>
+  <skill_routing>
+    <route trigger="Idea/Brainstorming" skill="architect" />
+    <route trigger="Planning/Design" skill="architect" />
+    <route trigger="Debugging/Issues" skill="quality-repair" />
+    <route trigger="Surgical Debugging" skill="quality-repair" mode="surgical" />
+    <route trigger="Implementation" skill="code" />
+    <route trigger="Researching" skill="research-docs" />
+    <route trigger="Learning/Docs" skill="project-continuity" />
+    <route trigger="Project Setup" skill="architect" />
+    <route trigger="Refactoring" skill="code" />
+    <route trigger="Pull Request" skill="code" />
+    <route trigger="Testing/TDD" skill="code" />
+    <route trigger="Security Audit" skill="quality-repair" />
+    <route trigger="Fix Issue" skill="quality-repair" />
+    <route trigger="Handoff" skill="project-continuity" />
+    <route trigger="Morning Routine" skill="project-continuity" />
+    <route trigger="New Codebase" skill="project-continuity" />
+    <route trigger="Dependency Check" skill="quality-repair" />
+    <route trigger="Deployment" skill="code" />
+    <route trigger="Performance Optimization" skill="quality-repair" />
+    <route trigger="Code Review" skill="quality-repair" />
+  </skill_routing>
 
   <routing_constraints>
-    <constraint>Trigger `tutor.md` only when the user explicitly asks for learning, documentation, or explanation support.</constraint>
+    <constraint>Route teaching/explanation requests to `project-continuity` only when the user explicitly asks for learning, documentation, or explanation support.</constraint>
     <constraint>During implementation/debug/review flows, keep explanations concise and define unfamiliar terms inline instead of auto-switching workflows.</constraint>
     <constraint>Do not turn a clear default into an open-ended decision tree unless the tradeoff materially changes outcomes.</constraint>
   </routing_constraints>
 
   <workflow_templates>
-    <workflow id="wf-morning" template="Agent/Google/Workflows/morning.md" schedule_hint="daily" />
-    <workflow id="wf-security-audit" template="Agent/Google/Workflows/security-audit.md" schedule_hint="weekly_or_monthly" />
-    <workflow id="wf-dependency-check" template="Agent/Google/Workflows/dependency-check.md" schedule_hint="weekly_or_monthly" />
-    <workflow id="wf-handoff-reminder" template="Agent/Google/Workflows/handoff.md" schedule_hint="event_based" />
+    <workflow id="task-router" template="Agent/Google/Workflows/task-router.md" schedule_hint="manual" />
   </workflow_templates>
 
   <references>

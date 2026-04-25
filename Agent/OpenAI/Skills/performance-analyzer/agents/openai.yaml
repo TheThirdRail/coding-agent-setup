@@ -1,4 +1,0 @@
-interface:
-  display_name: "Performance Analyzer"
-  short_description: "Help with Performance Analyzer tasks"
-  default_prompt: "Use $performance-analyzer to profile, benchmark, and optimize application performance using measurable baselines and incremental changes."

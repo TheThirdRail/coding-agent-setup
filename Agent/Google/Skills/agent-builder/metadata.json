@@ -1,23 +1,20 @@
 {
   "name": "agent-builder",
-  "version": "2.0.0",
-  "description": "Meta-skill for extending Antigravity's capabilities. Acts as a router to help users build Skills, Workflows, Rules, or MCP Tools. Use when the user wants to \"add something\" to the agent or \"teach\"...",
+  "version": "3.0.0",
+  "description": "Create or maintain agent capabilities, skills, workflows, rules, automations, and custom MCP tools.",
   "category": "productivity",
   "keywords": [
-    "build",
-    "create",
-    "extend",
+    "agent",
     "skill",
     "workflow",
     "rule",
+    "automation",
+    "mcp",
     "tool",
-    "mcp"
+    "builder"
   ],
   "related_skills": [
-    "mcp-builder",
-    "mcp-manager",
-    "rule-builder",
-    "skill-builder",
-    "workflow-builder"
+    "mcp-ops",
+    "research-docs"
   ]
 }

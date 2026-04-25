@@ -1,4 +1,4 @@
 interface:
   display_name: "Archive Manager"
-  short_description: "Help with Archive Manager tasks"
-  default_prompt: "Use $archive-manager to route archive tasks to the correct archive skill (code, docs, git, graph, or memory)."
+  short_description: "Route code, docs, git, graph, and memory archive retrieval or indexing through one on-demand context skill."
+  default_prompt: "Use $archive-manager to route this request to the correct on-demand lane."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Onboard"
-  short_description: "Onboard workflow guidance"
-  default_prompt: "Use $onboard to run the onboard workflow for this repository."

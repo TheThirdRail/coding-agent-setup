@@ -1,7 +1,7 @@
 # Automation Template: wf-security-audit
 
 schedule: weekly monday 08:00 local
-skill: security-audit
+skill: quality-repair
 
 Prompt template:
-Run `security-audit` for this repository and produce a prioritized risk report with remediation actions.
+Use `quality-repair` for the security audit lane and produce a prioritized risk report with remediation actions.

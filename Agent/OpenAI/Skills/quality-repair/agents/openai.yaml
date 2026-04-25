@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quality Repair"
+  short_description: "Diagnose, fix, review, secure, optimize, and harden code or delivery pipelines."
+  default_prompt: "Use $quality-repair to route this request to the correct on-demand lane."

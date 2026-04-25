@@ -1,4 +1,0 @@
-interface:
-  display_name: "Analyze"
-  short_description: "Analyze workflow guidance"
-  default_prompt: "Use $analyze to run the analyze workflow for this repository."

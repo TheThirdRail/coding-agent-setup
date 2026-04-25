@@ -20,7 +20,9 @@ if (-not (Test-Path $sourceSkills)) {
     exit 1
 }
 
-$skills = Get-ChildItem -Path $sourceSkills -Directory | Sort-Object Name
+$skills = Get-ChildItem -Path $sourceSkills -Directory |
+    Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') } |
+    Sort-Object Name
 if ($skills.Count -eq 0) {
     Write-Host "ERROR: No skills found under $sourceSkills" -ForegroundColor Red
     exit 1

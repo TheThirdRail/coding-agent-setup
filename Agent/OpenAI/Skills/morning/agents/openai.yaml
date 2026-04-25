@@ -1,4 +1,0 @@
-interface:
-  display_name: "Morning"
-  short_description: "Morning workflow guidance"
-  default_prompt: "Use $morning to run the morning workflow for this repository."

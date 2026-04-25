@@ -1,21 +1,20 @@
 {
   "name": "archive-manager",
-  "version": "2.0.0",
-  "description": "Route archive tasks to the correct archive skill (code, docs, git, graph, or memory). Use when the user wants to preserve, search, or inspect project context but has not selected a specific archive...",
+  "version": "3.0.0",
+  "description": "Route code, docs, git, graph, and memory archive retrieval or indexing through one on-demand context skill.",
   "category": "productivity",
   "keywords": [
     "archive",
-    "router",
     "context",
-    "history",
     "memory",
-    "indexing"
+    "history",
+    "index",
+    "retrieval",
+    "docs",
+    "graph"
   ],
   "related_skills": [
-    "archive-code",
-    "archive-docs",
-    "archive-git",
-    "archive-graph",
-    "archive-memory"
+    "research-docs",
+    "mcp-ops"
   ]
 }

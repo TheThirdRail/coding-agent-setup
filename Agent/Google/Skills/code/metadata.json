@@ -1,0 +1,21 @@
+{
+  "name": "code",
+  "version": "3.0.0",
+  "description": "Implement approved plans, refactor, test, prepare commits or PRs, and handle deployment execution.",
+  "category": "development",
+  "keywords": [
+    "code",
+    "implement",
+    "refactor",
+    "test",
+    "commit",
+    "pr",
+    "deploy",
+    "release"
+  ],
+  "related_skills": [
+    "quality-repair",
+    "archive-manager",
+    "research-docs"
+  ]
+}

@@ -1,97 +1,77 @@
 ---
 name: archive-manager
 description: |
-  Route archive tasks to the correct archive skill (code, docs, git, graph, or
-  memory). Use when the user wants to preserve, search, or inspect project
-  context but has not selected a specific archive mechanism.
+  Route code, docs, git, graph, and memory archive retrieval or indexing through one on-demand context skill.
+  Use when preserving, searching, indexing, or retrieving project context, history, docs, code structure, graph data, or durable memory.
 ---
 
-<skill name="archive-manager" version="2.0.0">
+<skill name="archive-manager" version="3.0.0">
   <metadata>
-    <keywords>archive, router, context, history, memory, indexing</keywords>
+    <keywords>
+      <keyword>archive</keyword>
+      <keyword>context</keyword>
+      <keyword>memory</keyword>
+      <keyword>history</keyword>
+      <keyword>index</keyword>
+      <keyword>retrieval</keyword>
+      <keyword>docs</keyword>
+      <keyword>graph</keyword>
+    </keywords>
   </metadata>
 
-  <goal>Select and dispatch the correct archive capability based on the requested context operation.</goal>
+  <goal>Route code, docs, git, graph, and memory archive retrieval or indexing through one on-demand context skill.</goal>
 
   <core_principles>
-    <principle name="Intent-Based Routing">
-      <rule>Route based on the data type and retrieval intent, not tool familiarity.</rule>
-      <rule>Choose one primary archive path first, then compose with others only when needed.</rule>
+    <principle name="Progressive Disclosure">
+      <rule>Keep this skill as a compact router and load detailed lane references only on demand.</rule>
     </principle>
-
-    <principle name="Storage Awareness">
-      <rule>Keep archive outputs project-scoped unless explicitly requested otherwise.</rule>
-      <rule>Prefer deterministic paths under Agent-Context/Archives.</rule>
+    <principle name="Intent Routing">
+      <rule>Choose the narrowest matching route before reading references or using scripts.</rule>
     </principle>
-
-    <principle name="Traceable Hand-Offs">
-      <rule>State which archive skill is selected and what artifact will be produced.</rule>
-    </principle>
-
-    <principle name="Prefer Best-Fit MCP First">
-      <rule>When an archive skill has a clear MCP equivalent, use the MCP path first and keep the local archive implementation as the fallback.</rule>
-      <rule>Current preferred mappings are Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory.</rule>
-      <rule>When routing to archive-code, use the client-native Serena stdio server if it is already available; otherwise fall back to archive-code's ripgrep path and do not start shared Serena HTTP.</rule>
-    </principle>
-
-    <principle name="Archive Lifecycle Enforcement">
-      <rule>After code/docs/config changes, require archive updates before declaring task completion.</rule>
-      <rule>Prefer archive-first retrieval when archive freshness is adequate; fall back to direct file reads only when needed.</rule>
+    <principle name="Compatibility Preservation">
+      <rule>Use consolidated lane references to preserve former skill and workflow behavior without reinstalling alias skills.</rule>
     </principle>
   </core_principles>
+  <routing>
+    <route intent="Code symbols and text search" reference="references/archive-code.md">Read when finding definitions, references, or text patterns.</route>
+    <route intent="Document semantic memory" reference="references/archive-docs.md">Read when storing or searching long-form docs and research.</route>
+    <route intent="Git history and change tracing" reference="references/archive-git.md">Read when asking when or why repository behavior changed.</route>
+    <route intent="Structural code graph" reference="references/archive-graph.md">Read when relationships among files, functions, or classes matter.</route>
+    <route intent="Durable project memory" reference="references/archive-memory.md">Read when recording or retrieving decisions and durable notes.</route>
+    <route intent="Archive routing policy" reference="references/archive-manager.md">Read when the correct archive lane is unclear or multiple lanes may compose.</route>
+  </routing>
 
   <workflow>
-    <step number="0" name="Identify Archive Event">
-      <instruction>Classify the request into one of the canonical events: setup, planning, research, handoff, or release.</instruction>
-      <instruction>For implementation/refactor/fix activity, treat completion-time indexing as part of the release event.</instruction>
+    <step number="1" name="Classify Intent">
+      <instruction>Choose the narrowest matching route from this skill.</instruction>
     </step>
-
-    <step number="1" name="Classify Archive Need">
-      <question>Need symbol index/navigation? Route to archive-code.</question>
-      <question>Need semantic document retrieval? Route to archive-docs.</question>
-      <question>Need repository evolution/history? Route to archive-git.</question>
-      <question>Need structural code graph? Route to archive-graph.</question>
-      <question>Need durable decision/context store? Route to archive-memory.</question>
-      <instruction>Prefer Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory when those servers are available.</instruction>
-      <instruction>If the route is archive-code, prefer native Serena when available; if Serena is unavailable or not project-activated, use ripgrep and report the client restart or project activation needed.</instruction>
-      <question>Is this retrieval-only, post-change indexing, or both?</question>
+    <step number="2" name="Load One Lane">
+      <instruction>Read only the selected reference file before executing specialized steps.</instruction>
     </step>
-
-    <step number="2" name="Dispatch to Specialized Skill">
-      <decision_tree>
-        <branch condition="Code symbol navigation">archive-code</branch>
-        <branch condition="Document embedding and semantic search">archive-docs</branch>
-        <branch condition="Git history or commit tracing">archive-git</branch>
-        <branch condition="Structural node/edge code graph">archive-graph</branch>
-        <branch condition="Persistent key/value memory context">archive-memory</branch>
-      </decision_tree>
+    <step number="3" name="Use Resources On Demand">
+      <instruction>Load scripts, assets, or extra references only when the selected lane requires them.</instruction>
     </step>
-
-    <step number="3" name="Record Archive Contract">
-      <instruction>Capture chosen skill, project path, output path, retrieval command, and freshness status.</instruction>
-      <instruction>Record whether the request used the preferred MCP path or the local archive fallback.</instruction>
-    </step>
-
-    <step number="4" name="Enforce Archive Read/Write Policy">
-      <instruction>If code/docs/config changed, execute required archive writes before completion.</instruction>
-      <instruction>For context gathering, use fresh archives first; if stale/missing, read source files then refresh archives.</instruction>
+    <step number="4" name="Report Route">
+      <instruction>State the lane used when it affects auditability, handoff, or recovery.</instruction>
     </step>
   </workflow>
 
   <best_practices>
-    <do>Use archive-code and archive-graph together for deep structural analysis</do>
-    <do>Prefer Serena, RAGDocs, CodeGraph, and Memory MCP for their matching archive lanes before falling back to local scripts</do>
-    <do>Use archive-memory for decisions and archive-docs for long-form references</do>
-    <do>Pair archive-git with other archives when validating historical context</do>
-    <dont>Store the same payload redundantly in every archive store</dont>
-    <dont>Route to multiple archive skills before clarifying retrieval intent</dont>
+    <do>Read the selected lane reference before specialized work.</do>
+    <do>Use bundled scripts, assets, or extra references only when the selected lane requires them.</do>
+    <do>State the selected route when it affects auditability, handoff, or recovery.</do>
+    <dont>Load multiple lane references unless the user request genuinely crosses responsibilities.</dont>
   </best_practices>
-
+  <consolidated_skills>
+    <former_skill>archive-manager</former_skill>
+    <former_skill>archive-code</former_skill>
+    <former_skill>archive-docs</former_skill>
+    <former_skill>archive-git</former_skill>
+    <former_skill>archive-graph</former_skill>
+    <former_skill>archive-memory</former_skill>
+  </consolidated_skills>
   <related_skills>
-    <skill>archive-code</skill>
-    <skill>archive-docs</skill>
-    <skill>archive-git</skill>
-    <skill>archive-graph</skill>
-    <skill>archive-memory</skill>
+    <skill>research-docs</skill>
+    <skill>mcp-ops</skill>
   </related_skills>
 </skill>

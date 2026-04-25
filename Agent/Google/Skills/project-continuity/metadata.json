@@ -1,0 +1,19 @@
+{
+  "name": "project-continuity",
+  "version": "3.0.0",
+  "description": "Handle onboarding, daily startup, handoff, and explicit teaching/documentation support.",
+  "category": "productivity",
+  "keywords": [
+    "onboard",
+    "handoff",
+    "morning",
+    "tutor",
+    "learn",
+    "continuity",
+    "session"
+  ],
+  "related_skills": [
+    "archive-manager",
+    "research-docs"
+  ]
+}
