@@ -80,7 +80,7 @@ Attributes: name="Prefer Best-Fit MCP First"
 
 - `rule`: Current preferred mappings are Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory.
 
-- `rule`: When routing to archive-code, ensure the shared Serena HTTP server is aligned to the current project before expecting Serena-backed navigation to work.
+- `rule`: When routing to archive-code, use the client-native Serena stdio server if it is already available; otherwise fall back to archive-code's ripgrep path and do not start shared Serena HTTP.
 
 ### Principle (`principle`)
 Attributes: name="Archive Lifecycle Enforcement"
@@ -113,7 +113,7 @@ Attributes: number="1", name="Classify Archive Need"
 
 - `instruction`: Prefer Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory when those servers are available.
 
-- `instruction`: If the route is archive-code, let archive-code run its Serena project-alignment step before using Serena-backed tools.
+- `instruction`: If the route is archive-code, prefer native Serena when available; if Serena is unavailable or not project-activated, use ripgrep and report the client restart or project activation needed.
 
 - `question`: Is this retrieval-only, post-change indexing, or both?
 

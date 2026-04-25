@@ -31,7 +31,7 @@ description: |
     <principle name="Prefer Best-Fit MCP First">
       <rule>When an archive skill has a clear MCP equivalent, use the MCP path first and keep the local archive implementation as the fallback.</rule>
       <rule>Current preferred mappings are Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory.</rule>
-      <rule>When routing to archive-code, ensure the shared Serena HTTP server is aligned to the current project before expecting Serena-backed navigation to work.</rule>
+      <rule>When routing to archive-code, use the client-native Serena stdio server if it is already available; otherwise fall back to archive-code's ripgrep path and do not start shared Serena HTTP.</rule>
     </principle>
 
     <principle name="Archive Lifecycle Enforcement">
@@ -53,7 +53,7 @@ description: |
       <question>Need structural code graph? Route to archive-graph.</question>
       <question>Need durable decision/context store? Route to archive-memory.</question>
       <instruction>Prefer Serena for archive-code, RAGDocs for archive-docs, CodeGraph for archive-graph, and Memory MCP for archive-memory when those servers are available.</instruction>
-      <instruction>If the route is archive-code, let archive-code run its Serena project-alignment step before using Serena-backed tools.</instruction>
+      <instruction>If the route is archive-code, prefer native Serena when available; if Serena is unavailable or not project-activated, use ripgrep and report the client restart or project activation needed.</instruction>
       <question>Is this retrieval-only, post-change indexing, or both?</question>
     </step>
 

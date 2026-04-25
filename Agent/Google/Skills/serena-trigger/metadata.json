@@ -1,7 +1,7 @@
 {
   "name": "serena-trigger",
   "version": "1.0.0",
-  "description": "Point the shared Serena HTTP server at the current project, or initialize it there if it is not already running. Use when switching projects or before Serena-backed archive/code navigation.",
+  "description": "Check the client-native Serena stdio setup and guide project activation when Serena-backed archive/code navigation is unavailable.",
   "category": "research",
   "keywords": [
     "serena",

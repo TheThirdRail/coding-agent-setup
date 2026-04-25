@@ -6,19 +6,17 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$skillRoot = Split-Path -Parent $PSScriptRoot
-$sharedScript = Join-Path $skillRoot '..\archive-code\scripts\ensure-shared-serena-project.ps1'
-$resolvedSharedScript = (Resolve-Path $sharedScript -ErrorAction Stop).Path
+$resolvedProjectPath = (Resolve-Path $ProjectPath -ErrorAction Stop).Path
 
-$args = @(
-    '-ExecutionPolicy', 'Bypass',
-    '-File', $resolvedSharedScript,
-    '-ProjectPath', $ProjectPath
-)
+Write-Host 'Serena now runs as a native stdio MCP server per client.' -ForegroundColor Cyan
+Write-Host "Project path: $resolvedProjectPath" -ForegroundColor Gray
+Write-Host ''
+Write-Host 'Codex config should start Serena with:' -ForegroundColor Cyan
+Write-Host '  uvx -p 3.13 --from git+https://github.com/oraios/serena serena start-mcp-server --project-from-cwd --context codex' -ForegroundColor Gray
+Write-Host ''
+Write-Host 'Antigravity config should start Serena with:' -ForegroundColor Cyan
+Write-Host '  uvx -p 3.13 --from git+https://github.com/oraios/serena serena start-mcp-server --context antigravity' -ForegroundColor Gray
+Write-Host ''
+Write-Host 'Restart the client after config changes. In Antigravity, activate the project from Serena tools if needed.' -ForegroundColor Yellow
 
-if ($ForceRestart) {
-    $args += '-ForceRestart'
-}
-
-& powershell @args
-exit $LASTEXITCODE
+exit 0
