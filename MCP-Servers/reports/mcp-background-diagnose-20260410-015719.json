@@ -1,0 +1,266 @@
+﻿{
+    "generated_at_utc":  "2026-04-10T05:57:19.0660630Z",
+    "observe_seconds":  10,
+    "skip_event_watch":  false,
+    "docker_ready":  true,
+    "docker_note":  "29.3.1",
+    "gateway_config_count":  1,
+    "config_results":  [
+                           {
+                               "client":  "OpenAI Codex",
+                               "path":  "C:\\Users\\jerem\\.codex\\config.toml",
+                               "exists":  true,
+                               "encoding":  "utf8-or-ascii",
+                               "has_utf8_bom":  false,
+                               "gateway_enabled":  true,
+                               "parse_error":  ""
+                           },
+                           {
+                               "client":  "Anthropic Claude",
+                               "path":  "C:\\Users\\jerem\\.claude.json",
+                               "exists":  true,
+                               "encoding":  "utf8-or-ascii",
+                               "has_utf8_bom":  false,
+                               "gateway_enabled":  false,
+                               "parse_error":  "A parameter cannot be found that matches parameter name \u0027Depth\u0027."
+                           },
+                           {
+                               "client":  "Google Antigravity",
+                               "path":  "C:\\Users\\jerem\\.gemini\\antigravity\\mcp_config.json",
+                               "exists":  true,
+                               "encoding":  "utf8-or-ascii",
+                               "has_utf8_bom":  false,
+                               "gateway_enabled":  false,
+                               "parse_error":  "A parameter cannot be found that matches parameter name \u0027Depth\u0027."
+                           }
+                       ],
+    "process_count":  22,
+    "duplicate_host_groups":  3,
+    "process_results":  [
+                            {
+                                "pid":  49656,
+                                "parent_pid":  48364,
+                                "name":  "Antigravity.exe",
+                                "role":  "antigravity-ui",
+                                "signature":  "Antigravity.exe|antigravity-ui",
+                                "start_time":  "\/Date(1775695080050)\/",
+                                "age_minutes":  1759.2,
+                                "command_preview":  "\"C:\\Users\\jerem\\AppData\\Local\\Programs\\Antigravity\\Antigravity.exe\" --type=renderer --user-data-dir=\"C:\\Users\\jerem\\AppData\\Roaming\\Antigravity\" --standard-schemes=vscode-webvie..."
+                            },
+                            {
+                                "pid":  42848,
+                                "parent_pid":  48364,
+                                "name":  "Antigravity.exe",
+                                "role":  "antigravity-ui",
+                                "signature":  "Antigravity.exe|antigravity-ui",
+                                "start_time":  "\/Date(1775793565994)\/",
+                                "age_minutes":  117.7,
+                                "command_preview":  "\"C:\\Users\\jerem\\AppData\\Local\\Programs\\Antigravity\\Antigravity.exe\" --type=renderer --user-data-dir=\"C:\\Users\\jerem\\AppData\\Roaming\\Antigravity\" --standard-schemes=vscode-webvie..."
+                            },
+                            {
+                                "pid":  27660,
+                                "parent_pid":  48364,
+                                "name":  "Antigravity.exe",
+                                "role":  "antigravity-ui",
+                                "signature":  "Antigravity.exe|antigravity-ui",
+                                "start_time":  "\/Date(1775793584641)\/",
+                                "age_minutes":  117.4,
+                                "command_preview":  "\"C:\\Users\\jerem\\AppData\\Local\\Programs\\Antigravity\\Antigravity.exe\" --type=renderer --user-data-dir=\"C:\\Users\\jerem\\AppData\\Roaming\\Antigravity\" --standard-schemes=vscode-webvie..."
+                            },
+                            {
+                                "pid":  28372,
+                                "parent_pid":  48364,
+                                "name":  "Antigravity.exe",
+                                "role":  "antigravity-ui",
+                                "signature":  "Antigravity.exe|antigravity-ui",
+                                "start_time":  "\/Date(1775793672154)\/",
+                                "age_minutes":  116,
+                                "command_preview":  "\"C:\\Users\\jerem\\AppData\\Local\\Programs\\Antigravity\\Antigravity.exe\" --type=renderer --user-data-dir=\"C:\\Users\\jerem\\AppData\\Roaming\\Antigravity\" --standard-schemes=vscode-webvie..."
+                            },
+                            {
+                                "pid":  15208,
+                                "parent_pid":  53928,
+                                "name":  "codex.exe",
+                                "role":  "app-server",
+                                "signature":  "codex.exe|app-server",
+                                "start_time":  "\/Date(1775793604431)\/",
+                                "age_minutes":  117.1,
+                                "command_preview":  "c:\\Users\\jerem\\.antigravity\\extensions\\openai.chatgpt-26.5406.31014-win32-x64\\bin\\windows-x86_64\\codex.exe app-server --analytics-default-enabled"
+                            },
+                            {
+                                "pid":  3288,
+                                "parent_pid":  14328,
+                                "name":  "ChatGPT.exe",
+                                "role":  "chatgpt-ui",
+                                "signature":  "ChatGPT.exe|chatgpt-ui",
+                                "start_time":  "\/Date(1775792145889)\/",
+                                "age_minutes":  141.4,
+                                "command_preview":  "\"C:\\Program Files\\WindowsApps\\OpenAI.ChatGPT-Desktop_1.2026.43.0_x64__2p2nqsd0c76g0\\app\\ChatGPT.exe\" "
+                            },
+                            {
+                                "pid":  56448,
+                                "parent_pid":  3288,
+                                "name":  "ChatGPT.exe",
+                                "role":  "chatgpt-ui",
+                                "signature":  "ChatGPT.exe|chatgpt-ui",
+                                "start_time":  "\/Date(1775792146254)\/",
+                                "age_minutes":  141.4,
+                                "command_preview":  "\"C:\\Program Files\\WindowsApps\\OpenAI.ChatGPT-Desktop_1.2026.43.0_x64__2p2nqsd0c76g0\\app\\ChatGPT.exe\" --type=crashpad-handler --user-data-dir=C:\\Users\\jerem\\AppData\\Local\\Package..."
+                            },
+                            {
+                                "pid":  18756,
+                                "parent_pid":  3288,
+                                "name":  "ChatGPT.exe",
+                                "role":  "chatgpt-ui",
+                                "signature":  "ChatGPT.exe|chatgpt-ui",
+                                "start_time":  "\/Date(1775792146340)\/",
+                                "age_minutes":  141.4,
+                                "command_preview":  "\"C:\\Program Files\\WindowsApps\\OpenAI.ChatGPT-Desktop_1.2026.43.0_x64__2p2nqsd0c76g0\\app\\ChatGPT.exe\" --type=gpu-process --user-data-dir=\"C:\\Users\\jerem\\AppData\\Local\\Packages\\Op..."
+                            },
+                            {
+                                "pid":  54768,
+                                "parent_pid":  3288,
+                                "name":  "ChatGPT.exe",
+                                "role":  "chatgpt-ui",
+                                "signature":  "ChatGPT.exe|chatgpt-ui",
+                                "start_time":  "\/Date(1775792146350)\/",
+                                "age_minutes":  141.4,
+                                "command_preview":  "\"C:\\Program Files\\WindowsApps\\OpenAI.ChatGPT-Desktop_1.2026.43.0_x64__2p2nqsd0c76g0\\app\\ChatGPT.exe\" --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US ..."
+                            },
+                            {
+                                "pid":  59464,
+                                "parent_pid":  3288,
+                                "name":  "ChatGPT.exe",
+                                "role":  "chatgpt-ui",
+                                "signature":  "ChatGPT.exe|chatgpt-ui",
+                                "start_time":  "\/Date(1775792147107)\/",
+                                "age_minutes":  141.4,
+                                "command_preview":  "\"C:\\Program Files\\WindowsApps\\OpenAI.ChatGPT-Desktop_1.2026.43.0_x64__2p2nqsd0c76g0\\app\\ChatGPT.exe\" --type=renderer --user-data-dir=\"C:\\Users\\jerem\\AppData\\Local\\Packages\\OpenA..."
+                            },
+                            {
+                                "pid":  4164,
+                                "parent_pid":  31212,
+                                "name":  "docker.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker.exe|mcp-related",
+                                "start_time":  "\/Date(1775695081253)\/",
+                                "age_minutes":  1759.1,
+                                "command_preview":  "docker.exe mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml --additional-catalog D:/Coding/Tools/mcp-docker..."
+                            },
+                            {
+                                "pid":  27004,
+                                "parent_pid":  55592,
+                                "name":  "docker.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker.exe|mcp-related",
+                                "start_time":  "\/Date(1775793604973)\/",
+                                "age_minutes":  117.1,
+                                "command_preview":  "docker.exe mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml --additional-catalog D:/Coding/Tools/mcp-docker..."
+                            },
+                            {
+                                "pid":  56480,
+                                "parent_pid":  15208,
+                                "name":  "docker.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker.exe|mcp-related",
+                                "start_time":  "\/Date(1775793630364)\/",
+                                "age_minutes":  116.6,
+                                "command_preview":  "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals.yaml --additional..."
+                            },
+                            {
+                                "pid":  61728,
+                                "parent_pid":  15208,
+                                "name":  "docker.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker.exe|mcp-related",
+                                "start_time":  "\/Date(1775794229941)\/",
+                                "age_minutes":  106.7,
+                                "command_preview":  "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals.yaml --additional..."
+                            },
+                            {
+                                "pid":  28192,
+                                "parent_pid":  4164,
+                                "name":  "docker-mcp.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker-mcp.exe|mcp-related",
+                                "start_time":  "\/Date(1775695081302)\/",
+                                "age_minutes":  1759.1,
+                                "command_preview":  "\"C:\\Program Files\\Docker\\cli-plugins\\docker-mcp.exe\" mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml --add..."
+                            },
+                            {
+                                "pid":  50648,
+                                "parent_pid":  27004,
+                                "name":  "docker-mcp.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker-mcp.exe|mcp-related",
+                                "start_time":  "\/Date(1775793605044)\/",
+                                "age_minutes":  117.1,
+                                "command_preview":  "\"C:\\Program Files\\Docker\\cli-plugins\\docker-mcp.exe\" mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml --add..."
+                            },
+                            {
+                                "pid":  47044,
+                                "parent_pid":  56480,
+                                "name":  "docker-mcp.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker-mcp.exe|mcp-related",
+                                "start_time":  "\/Date(1775793630448)\/",
+                                "age_minutes":  116.6,
+                                "command_preview":  "\"C:\\Program Files\\Docker\\cli-plugins\\docker-mcp.exe\" mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals.yaml --additional-cata..."
+                            },
+                            {
+                                "pid":  57736,
+                                "parent_pid":  61728,
+                                "name":  "docker-mcp.exe",
+                                "role":  "mcp-related",
+                                "signature":  "docker-mcp.exe|mcp-related",
+                                "start_time":  "\/Date(1775794230013)\/",
+                                "age_minutes":  106.7,
+                                "command_preview":  "\"C:\\Program Files\\Docker\\cli-plugins\\docker-mcp.exe\" mcp gateway run --transport stdio --registry C:/Users/jerem/.docker/mcp/registry.hybrid-supplementals.yaml --additional-cata..."
+                            },
+                            {
+                                "pid":  40948,
+                                "parent_pid":  32020,
+                                "name":  "gateway.proxy.vivremotion.exe",
+                                "role":  "mcp-related",
+                                "signature":  "gateway.proxy.vivremotion.exe|mcp-related",
+                                "start_time":  "\/Date(1775686083839)\/",
+                                "age_minutes":  1909.1,
+                                "command_preview":  "C:\\Users\\jerem\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.vivremotion.focusscreenmask.sdPlugin\\gateway.proxy.vivremotion.exe  -port 28196 -pluginUUID 04879827300c54c7e680fae8..."
+                            },
+                            {
+                                "pid":  41236,
+                                "parent_pid":  32020,
+                                "name":  "gateway.proxy.vivremotion.exe",
+                                "role":  "mcp-related",
+                                "signature":  "gateway.proxy.vivremotion.exe|mcp-related",
+                                "start_time":  "\/Date(1775686083853)\/",
+                                "age_minutes":  1909.1,
+                                "command_preview":  "C:\\Users\\jerem\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.vivremotion.screencolors.sdPlugin\\gateway.proxy.vivremotion.exe  -port 28196 -pluginUUID 341521bc8261bdd3afbca98dbe7..."
+                            },
+                            {
+                                "pid":  40184,
+                                "parent_pid":  32020,
+                                "name":  "gateway.proxy.vivremotion.exe",
+                                "role":  "mcp-related",
+                                "signature":  "gateway.proxy.vivremotion.exe|mcp-related",
+                                "start_time":  "\/Date(1775686083860)\/",
+                                "age_minutes":  1909.1,
+                                "command_preview":  "C:\\Users\\jerem\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.vivremotion.screendive.sdPlugin\\gateway.proxy.vivremotion.exe  -port 28196 -pluginUUID 68abb8d4f7d5f7ec13c0b2fd51f57..."
+                            },
+                            {
+                                "pid":  41464,
+                                "parent_pid":  32020,
+                                "name":  "gateway.proxy.vivremotion.exe",
+                                "role":  "mcp-related",
+                                "signature":  "gateway.proxy.vivremotion.exe|mcp-related",
+                                "start_time":  "\/Date(1775686083864)\/",
+                                "age_minutes":  1909.1,
+                                "command_preview":  "C:\\Users\\jerem\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.vivremotion.matrixdisplay.sdPlugin\\gateway.proxy.vivremotion.exe  -port 28196 -pluginUUID c304ae0167301073004fbb257f..."
+                            }
+                        ],
+    "interesting_event_count":  0,
+    "event_error":  "",
+    "event_results":  [
+
+                      ]
+}

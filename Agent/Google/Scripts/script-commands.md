@@ -32,7 +32,7 @@ Workspace-local install targets (via `move-local-*` scripts):
 ```powershell
 docker build -t mcp-local-adapters:latest -f ..\..\..\MCP-Servers\local\adapters\Dockerfile ..\..\..
 docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
-..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1
+..\..\..\MCP-Servers\scripts\setup_lazy_load.ps1 -Vendor google
 ..\..\..\MCP-Servers\scripts\install-mcp-servers.ps1 -Vendor google
 ..\..\..\MCP-Servers\scripts\set-mcp-secrets.ps1
 ```
@@ -40,20 +40,22 @@ docker compose -f ..\..\..\MCP-Servers\local\searxng\docker-compose.yml up -d
 Targets:
 - MCP config: `~\.gemini\antigravity\mcp_config.json`
 - Runtime catalog: `MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml`
-- Hybrid runtime registry: `~\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
+- Native-only Dynamic MCP runtime registry: `~\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
+
+At startup Antigravity should have native Serena plus `MCP_DOCKER`; `MCP_DOCKER` should expose only Docker gateway management tools. Use `mcp-find`/`mcp-add` for temporary supplemental servers, then `mcp-remove` when the task is complete.
 
 ## MCP Runtime Cleanup (After Use)
 
 Terminate stale MCP runtime processes after MCP-heavy sessions:
 
 ```powershell
-Get-Process -Name "docker-mcp" -ErrorAction SilentlyContinue | Stop-Process -Force
+..\..\..\MCP-Servers\scripts\cleanup-stale-mcp-runtime.ps1
 ```
 
 Optional verification:
 
 ```powershell
-Get-Process -Name "docker-mcp" -ErrorAction SilentlyContinue
+..\..\..\MCP-Servers\scripts\check-agent-host-processes.ps1 -StaleMinutes 30 -IncludeCommandLine
 ```
 
 ## Dry Run

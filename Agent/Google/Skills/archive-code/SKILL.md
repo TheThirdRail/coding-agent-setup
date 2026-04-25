@@ -20,8 +20,10 @@ description: |
     </principle>
 
     <principle name="Prefer Serena Before Raw Grep">
+      <rule>Serena is started by each client as a native stdio MCP server; do not start or retarget a shared HTTP Serena process.</rule>
       <rule>If Serena MCP is available, use it first for symbol-aware definitions, references, and code navigation.</rule>
       <rule>Fall back to ripgrep when Serena is unavailable or when exact text matching is more important than symbol awareness.</rule>
+      <rule>If Serena is unavailable or not activated for the current project, use ripgrep for the current turn and tell the user to restart the client or activate the project in Serena.</rule>
     </principle>
 
     <principle name="Definition vs Reference">

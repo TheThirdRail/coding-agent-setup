@@ -77,9 +77,13 @@ Attributes: name="Project-Scoped Persistence"
 ### Principle (`principle`)
 Attributes: name="Prefer CodeGraph MCP For Fast Snapshots"
 
+- `rule`: CodeGraph is a Docker lazy-load server. Add it through `MCP_DOCKER` only when needed, then remove it with `mcp-remove` after use.
+
 - `rule`: Use CodeGraph MCP first when you need a quick structural snapshot or impact-analysis overview.
 
 - `rule`: Fall back to the local build and query scripts when you need a repeatable project-local graph database and supported query modes.
+
+- `rule`: If CodeGraph is not loaded or cannot see the intended project root, use the local archive-graph scripts for the current turn.
 
 ## Workflow (`workflow`)
 

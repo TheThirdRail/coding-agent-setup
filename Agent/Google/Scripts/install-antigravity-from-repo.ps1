@@ -21,6 +21,6 @@ Write-Host ''
 Write-Host ''
 & $installWorkflows -DryRun:$DryRun
 Write-Host ''
-& $setupLazyLoad -DryRun:$DryRun
+& $setupLazyLoad -Vendor google -DryRun:$DryRun
 Write-Host ''
 & $installMcp -Vendor google -DryRun:$DryRun

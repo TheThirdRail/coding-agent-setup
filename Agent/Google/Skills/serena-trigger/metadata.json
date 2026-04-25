@@ -1,0 +1,17 @@
+{
+  "name": "serena-trigger",
+  "version": "1.0.0",
+  "description": "Point the shared Serena HTTP server at the current project, or initialize it there if it is not already running. Use when switching projects or before Serena-backed archive/code navigation.",
+  "category": "research",
+  "keywords": [
+    "serena",
+    "mcp",
+    "project-switch",
+    "shared-context",
+    "archive-code"
+  ],
+  "related_skills": [
+    "archive-code",
+    "archive-manager"
+  ]
+}

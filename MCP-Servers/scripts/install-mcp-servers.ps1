@@ -144,8 +144,8 @@ switch ($Vendor) {
 Write-Host '=== Hybrid MCP Config Installer ===' -ForegroundColor Cyan
 Write-Host "Repo root: $repoRoot" -ForegroundColor Gray
 Write-Host 'This installs the repo-owned hybrid templates:' -ForegroundColor Gray
-Write-Host '- direct always-on MCP servers in each client config' -ForegroundColor Gray
-Write-Host '- one MCP_DOCKER gateway per client wired to its per-user lazy-load registry' -ForegroundColor Gray
+Write-Host '- native Serena plus MCP_DOCKER in each client config' -ForegroundColor Gray
+Write-Host '- one MCP_DOCKER gateway per client wired to its per-user native-only Dynamic MCP registry' -ForegroundColor Gray
 Write-Host "Codex runtime registry: $codexHybridRegistryPath" -ForegroundColor Gray
 Write-Host "Antigravity runtime registry: $antigravityHybridRegistryPath" -ForegroundColor Gray
 Write-Host ''
@@ -172,11 +172,9 @@ else {
     Write-Host "   docker build -t mcp-local-adapters:latest -f $repoRoot\MCP-Servers\local\adapters\Dockerfile $repoRoot" -ForegroundColor Gray
     Write-Host "2. Start local SearXNG:" -ForegroundColor Gray
     Write-Host "   docker compose -f $repoRoot\MCP-Servers\local\searxng\docker-compose.yml up -d" -ForegroundColor Gray
-    Write-Host "3. Refresh the seeded lazy-load registry:" -ForegroundColor Gray
-    Write-Host "   .\setup_lazy_load.ps1" -ForegroundColor Gray
+    Write-Host "3. Initialize the native-only Dynamic MCP runtime registries:" -ForegroundColor Gray
+    Write-Host "   .\setup_lazy_load.ps1 -Vendor all" -ForegroundColor Gray
     Write-Host "4. Sync Docker secrets from .env:" -ForegroundColor Gray
     Write-Host "   .\set-mcp-secrets.ps1" -ForegroundColor Gray
-    Write-Host "5. Start the shared Serena HTTP server:" -ForegroundColor Gray
-    Write-Host "   powershell -ExecutionPolicy Bypass -File $repoRoot\MCP-Servers\scripts\start-serena-http.ps1" -ForegroundColor Gray
-    Write-Host "6. Restart Codex and/or Antigravity." -ForegroundColor Gray
+    Write-Host "5. Restart Codex and/or Antigravity so each client starts its own Serena stdio server." -ForegroundColor Gray
 }

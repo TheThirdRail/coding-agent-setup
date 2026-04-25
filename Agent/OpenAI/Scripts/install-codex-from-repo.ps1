@@ -18,6 +18,6 @@ Write-Host ''
 Write-Host ''
 & $installSkills -Target codex -DryRun:$DryRun
 Write-Host ''
-& $setupLazyLoad -DryRun:$DryRun
+& $setupLazyLoad -Vendor openai -DryRun:$DryRun
 Write-Host ''
 & $installMcp -Vendor openai -DryRun:$DryRun

@@ -12,7 +12,7 @@ It gives you:
 - Antigravity workflows
 - hybrid MCP configuration
 - Docker lazy-load support for supplemental MCP servers
-- a shared Serena MCP server in `streamable-http` mode
+- one native Serena MCP server per client, using stdio mode
 - local archive tools for code, docs, graph, git, and memory
 
 This file is the detailed operator guide for agents and power users. If you are a human end user, start with [README.md](d:/Coding/Tools/mcp-docker-stack/README.md).
@@ -47,7 +47,7 @@ The Antigravity wrapper installs:
 - They move existing files or folders to timestamped `.bak-*` paths.
 - Use `-Purge` only if you want hard deletion instead of backup.
 - The Codex skills cleanup preserves `~/.codex/skills/.system`.
-- Codex and Antigravity now share one Serena server at `http://127.0.0.1:9121/mcp`.
+- Codex and Antigravity each start Serena as a native stdio MCP server using their documented client contexts.
 
 ## Prerequisites
 
@@ -78,7 +78,7 @@ Start with:
 
 ## Shared MCP Prerequisites
 
-Both Codex and Antigravity use the same local adapter image, the same local SearXNG container, and the same shared Serena HTTP server.
+Both Codex and Antigravity use the same local adapter image, the same local SearXNG container, and separate native Serena stdio servers.
 
 Run these once from the repo root:
 
@@ -88,17 +88,16 @@ docker build -t mcp-local-adapters:latest -f .\MCP-Servers\local\adapters\Docker
 docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml up -d
 .\MCP-Servers\scripts\setup_lazy_load.ps1
 .\MCP-Servers\scripts\set-mcp-secrets.ps1
-powershell -ExecutionPolicy Bypass -File .\MCP-Servers\scripts\start-serena-http.ps1
 ```
 
 What this prepares:
 
-- `uv` for direct `fetch` usage and the shared Serena launcher
+- `uv` for native Serena startup through `uvx`
 - local adapter image for repo-owned MCP adapters
 - self-hosted SearXNG for the `searxng` MCP server
-- seeded per-user lazy-load registries for `MCP_DOCKER`
+- native-only Dynamic MCP runtime registries for `MCP_DOCKER`
 - Docker secrets for supplemental lazy-load servers
-- one shared local Serena MCP endpoint at `http://127.0.0.1:9121/mcp`
+- native Serena stdio config for each client
 
 ## Codex Setup
 
@@ -215,10 +214,9 @@ From the repo root:
 4. Start SearXNG
 5. Run `.\MCP-Servers\scripts\setup_lazy_load.ps1`
 6. Run `.\MCP-Servers\scripts\set-mcp-secrets.ps1`
-7. Start `powershell -ExecutionPolicy Bypass -File .\MCP-Servers\scripts\start-serena-http.ps1`
-8. Reset and reinstall Codex
-9. Reset and reinstall Antigravity
-10. Restart both clients
+7. Reset and reinstall Codex
+8. Reset and reinstall Antigravity
+9. Restart both clients so each starts its own Serena stdio process
 
 ## Root Checklists
 
@@ -236,9 +234,9 @@ If you want a short runbook for an agent to follow, use:
 - Codex supplemental registry seed: `MCP-Servers/mcp-docker-stack/registry.supplementals.yaml`
 - Antigravity supplemental registry seed: `MCP-Servers/mcp-docker-stack/registry.supplementals.antigravity.yaml`
 - Runtime catalog: `MCP-Servers/mcp-docker-stack/docker-mcp-catalog.runtime.yaml`
-- Codex runtime registry: `~/.docker/mcp/registry.hybrid-supplementals.yaml`
-- Antigravity runtime registry: `~/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml`
-- Shared Serena launcher: `MCP-Servers/scripts/start-serena-http.ps1`
+- Codex native-only runtime registry: `~/.docker/mcp/registry.hybrid-supplementals.yaml`
+- Antigravity native-only runtime registry: `~/.docker/mcp/registry.hybrid-supplementals-antigravity.yaml`
+- Optional deprecated shared Serena launcher: `MCP-Servers/scripts/start-serena-http.ps1`
 
 ## Maintenance
 
@@ -271,7 +269,7 @@ Check these in order:
 5. `docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml up -d` completed successfully
 6. `.\MCP-Servers\scripts\setup_lazy_load.ps1` completed successfully
 7. `.\MCP-Servers\scripts\set-mcp-secrets.ps1` completed successfully
-8. `powershell -ExecutionPolicy Bypass -File .\MCP-Servers\scripts\start-serena-http.ps1` is still running if you expect Serena to be available
+8. Restart the client if Serena did not start after config changes
 
 ### Config changes do not appear in the client
 

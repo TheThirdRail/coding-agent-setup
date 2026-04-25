@@ -10,7 +10,7 @@ It includes:
 - repo-owned instructions for both clients
 - reusable skills and workflows
 - hybrid MCP configuration
-- a shared Serena MCP server
+- one native Serena MCP server per client
 - setup and maintenance scripts
 
 ## Start Here
@@ -43,16 +43,16 @@ The current stack includes:
 - repo-owned Codex and Antigravity instructions
 - install/remove wrapper scripts
 - hybrid Docker MCP support
-- separate seeded lazy-load registries for Codex and Antigravity
-- a shared Serena server at `http://127.0.0.1:9121/mcp`
+- separate native-only Dynamic MCP runtime registries for Codex and Antigravity
+- native Serena stdio setup for Codex and Antigravity
 - local SearXNG support
 
 ## Human Notes
 
 - You should have Docker Desktop installed and running.
-- You should have `uv` available because the shared Serena startup uses it.
+- You should have `uv` available because the native Serena setup uses `uvx`.
 - The repo root `.env` should exist before setup scripts run.
-- If Serena is expected to work, the shared Serena server process should be running.
+- Serena is started by each client through its native MCP config; no shared Serena HTTP process is required.
 
 ## Useful Files
 

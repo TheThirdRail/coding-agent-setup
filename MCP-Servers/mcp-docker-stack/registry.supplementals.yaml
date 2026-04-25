@@ -1,5 +1,7 @@
 registry:
   # Code intelligence and codebase orientation
+  codegraph:
+    ref: ''
   filescopemcp:
     ref: ''
   mindpilot:
@@ -8,6 +10,8 @@ registry:
     ref: ''
 
   # Docs, packages, and GitHub research
+  context7:
+    ref: ''
   registry:
     ref: ''
   gitmcp:
@@ -18,6 +22,10 @@ registry:
     ref: ''
 
   # Web and paper research
+  fetch:
+    ref: ''
+  searxng:
+    ref: ''
   arxiv:
     ref: ''
   firecrawl:
@@ -40,6 +48,8 @@ registry:
     ref: ''
 
   # Security and archive supplementals
+  memory:
+    ref: ''
   semgrep:
     ref: ''
   gitleaks:

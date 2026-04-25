@@ -4,70 +4,26 @@
 # One-time local prerequisites:
 # 0. Install uv if it is not already available:
 #    powershell -ExecutionPolicy Bypass -c "irm https://astral.sh/uv/install.ps1 | iex"
-# 1. Build the local adapter image:
+# 1. Build the local adapter image for Docker lazy-load servers:
 #    docker build -t mcp-local-adapters:latest -f D:/Coding/Tools/mcp-docker-stack/MCP-Servers/local/adapters/Dockerfile D:/Coding/Tools/mcp-docker-stack
-# 2. Start SearXNG:
+# 2. Start SearXNG if you plan to lazy-load searxng:
 #    docker compose -f D:/Coding/Tools/mcp-docker-stack/MCP-Servers/local/searxng/docker-compose.yml up -d
-# 3. Start the shared Serena HTTP server:
-#    powershell -ExecutionPolicy Bypass -File D:/Coding/Tools/mcp-docker-stack/MCP-Servers/scripts/start-serena-http.ps1
 
 [mcp_servers.serena]
-url = "http://127.0.0.1:9121/mcp"
-startup_timeout_sec = 60
-tool_timeout_sec = 120
-
-[mcp_servers.codegraph]
-command = "docker.exe"
-args = [
-  "run",
-  "--rm",
-  "-i",
-  "-w",
-  "/workspace",
-  "-v",
-  "D:/Coding/Tools/mcp-docker-stack:/workspace",
-  "mcp-local-adapters:latest",
-  "--mode",
-  "codegraph",
-]
-startup_timeout_sec = 30
-tool_timeout_sec = 120
-
-[mcp_servers.context7]
-url = "https://mcp.context7.com/mcp"
-startup_timeout_sec = 30
-tool_timeout_sec = 60
-
-[mcp_servers.searxng]
-command = "docker.exe"
-args = [
-  "run",
-  "--rm",
-  "-i",
-  "-w",
-  "/workspace",
-  "-e",
-  "SEARXNG_URL=http://host.docker.internal:8080",
-  "-v",
-  "D:/Coding/Tools/mcp-docker-stack:/workspace",
-  "mcp-local-adapters:latest",
-  "--mode",
-  "searxng",
-]
-startup_timeout_sec = 30
-tool_timeout_sec = 90
-
-[mcp_servers.fetch]
 command = "uvx"
-args = ["mcp-server-fetch"]
-startup_timeout_sec = 20
-tool_timeout_sec = 60
-
-[mcp_servers.memory]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-memory"]
-startup_timeout_sec = 20
-tool_timeout_sec = 60
+args = [
+  "-p",
+  "3.13",
+  "--from",
+  "git+https://github.com/oraios/serena",
+  "serena",
+  "start-mcp-server",
+  "--project-from-cwd",
+  "--context",
+  "codex",
+]
+startup_timeout_sec = 25
+tool_timeout_sec = 120
 
 [mcp_servers.MCP_DOCKER]
 command = "docker.exe"

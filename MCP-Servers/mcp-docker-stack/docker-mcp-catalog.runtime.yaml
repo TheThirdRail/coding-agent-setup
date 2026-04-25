@@ -1,4 +1,57 @@
 registry:
+  context7:
+    dateAdded: '2025-12-28T00:00:00Z'
+    description: Advanced context management for codebases
+    title: Context7
+    type: server
+    image: node:20-slim
+    command:
+    - npx
+    - -y
+    - '@upstash/context7-mcp'
+    metadata:
+      category: code-intelligence
+      owner: upstash
+      tags:
+      - context
+      - codebase
+    source: https://github.com/upstash/context7
+  memory:
+    dateAdded: '2025-12-28T00:00:00Z'
+    description: Persistent memory across sessions
+    title: Memory
+    type: server
+    image: node:20-slim
+    command:
+    - npx
+    - -y
+    - '@modelcontextprotocol/server-memory'
+    volumes:
+    - mcp-memory-data:/data
+    metadata:
+      category: memory
+      owner: modelcontextprotocol
+      tags:
+      - memory
+      - persistence
+    source: https://github.com/modelcontextprotocol/servers
+  fetch:
+    dateAdded: '2025-12-30T00:00:00Z'
+    description: Fetches a URL and extracts its contents as markdown
+    title: Fetch
+    type: server
+    image: python:3.11-slim
+    command:
+    - sh
+    - -lc
+    - pip install -q uv >/dev/null 2>&1 && exec uvx mcp-server-fetch
+    metadata:
+      category: utility
+      tags:
+      - web
+      - fetch
+      - scraping
+    source: https://github.com/modelcontextprotocol/servers
   lsmcp:
     dateAdded: '2025-12-28T00:00:00Z'
     description: TypeScript/JavaScript language server with framework awareness

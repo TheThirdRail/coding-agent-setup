@@ -19,21 +19,17 @@ docker build -t mcp-local-adapters:latest -f ..\local\adapters\Dockerfile ..\..
 docker compose -f ..\local\searxng\docker-compose.yml up -d
 ```
 
-6. Start the shared Serena HTTP server in a separate PowerShell window when you want Antigravity and Codex to share one Serena instance:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1
-```
+6. Serena is started by each client through its native MCP config; no shared Serena HTTP server is required.
 
 ## 1) Install Hybrid Client Configs
 
 This installs the repo-owned hybrid config templates:
 - direct always-on MCP servers in each client config
-- one `MCP_DOCKER` entry pointing at the per-user lazy-load registry
-- one shared local `serena` MCP URL at `http://127.0.0.1:9121/mcp`
+- one `MCP_DOCKER` entry pointing at the per-user native-only Dynamic MCP registry
+- one native Serena stdio entry per client
 
 ```powershell
-.\setup_lazy_load.ps1
+.\setup_lazy_load.ps1 -Vendor all
 .\install-mcp-servers.ps1 -Vendor openai
 .\install-mcp-servers.ps1 -Vendor google
 .\install-mcp-servers.ps1 -Vendor all
@@ -60,30 +56,42 @@ Important:
 - this script only writes Docker-managed secrets needed by the current hybrid stack
 - direct-client values such as `SEARXNG_URL` and optional `CONTEXT7_API_KEY` are not written into Docker secrets
 
-## 3) Refresh the Seeded Hybrid Lazy-Load Registry
+## 3) Initialize Native-Only Dynamic MCP Runtime Registries
 
-This refreshes the runtime registry used by `MCP_DOCKER` from the repo-owned supplemental seed list.
+This initializes the runtime registries used by `MCP_DOCKER` as empty session state files. Startup exposes only Docker gateway native management tools; supplemental servers remain discoverable through the repo-owned catalog and are loaded with `mcp-find`/`mcp-add`.
 
 ```powershell
 .\setup_lazy_load.ps1
+.\setup_lazy_load.ps1 -Vendor openai
+.\setup_lazy_load.ps1 -Vendor google
 .\setup_lazy_load.ps1 -DryRun
 ```
 
-Target:
+Targets:
 - `~\.docker\mcp\registry.hybrid-supplementals.yaml`
+- `~\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
 
-## 4) Start the Shared Serena HTTP Server
+## 4) Serena Native Client Setup
 
-This runs Serena once in `streamable-http` mode with `ide` context so both Antigravity and Codex can connect to the same MCP server instance.
+Serena is configured directly in each client. Codex starts Serena with `--project-from-cwd --context codex`; Antigravity starts Serena with `--context antigravity` and may need project activation from Serena after startup.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1
-powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1 -Port 9122
-powershell -ExecutionPolicy Bypass -File .\start-serena-http.ps1 -ProjectPath "D:\Coding\SomeOtherRepo"
+uvx -p 3.13 --from git+https://github.com/oraios/serena serena start-mcp-server --help
 ```
 
-Default endpoint:
-- `http://127.0.0.1:9121/mcp`
+The old `start-serena-http.ps1` script is retained only for manual experiments with Serena HTTP transport.
+
+## 4b) CodeGraph Is Lazy-Loaded Through Docker MCP
+
+CodeGraph is no longer a direct MCP entry. Load it only when needed:
+
+```powershell
+docker mcp tools count `
+  --gateway-arg="--additional-catalog=D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml" `
+  --gateway-arg="--servers=codegraph"
+```
+
+In clients, use `mcp-find`/`mcp-add` to add `codegraph`, then `mcp-remove` when finished.
 
 ## 5) Manual Gateway Run (for debugging)
 
@@ -93,7 +101,7 @@ docker mcp gateway run --transport stdio `
   --additional-catalog "D:\Coding\Tools\mcp-docker-stack\MCP-Servers\mcp-docker-stack\docker-mcp-catalog.runtime.yaml"
 ```
 
-At startup this should expose the Dynamic MCP management tools plus the seeded supplemental tool set.
+At startup this should expose only the Docker gateway native Dynamic MCP management tools.
 
 ## 6) Spot-check a Single Supplemental Server
 

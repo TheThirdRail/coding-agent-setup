@@ -1,0 +1,4 @@
+interface:
+  display_name: "Serena Trigger"
+  short_description: "Point shared Serena at the current project"
+  default_prompt: "Use $serena-trigger to align the shared Serena HTTP server to the current project before Serena-backed work."

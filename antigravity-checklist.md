@@ -20,7 +20,7 @@ Install the repo-owned Antigravity stack so that:
 - Antigravity uses this repo's skills
 - Antigravity uses this repo's workflows
 - Docker is running for the lazy-load MCP gateway and local services
-- the shared Serena server is available at `http://127.0.0.1:9121/mcp`
+- Serena is configured as Antigravity's native stdio MCP server
 - the end user's old Antigravity settings are preserved under `old-settings`
 
 ## Step 1: Instruct the End User to Install Docker Desktop and `uv`
@@ -47,7 +47,7 @@ docker info
 
 The agent should not continue until Docker Desktop is installed and running.
 
-The agent should also ensure `uv` is installed because the current setup uses `uvx` for direct MCP tools and the shared Serena launcher.
+The agent should also ensure `uv` is installed because the current setup uses `uvx` for native Serena startup.
 
 Install command:
 
@@ -192,19 +192,19 @@ docker compose -f .\MCP-Servers\local\searxng\docker-compose.yml ps
 Invoke-WebRequest -Uri http://127.0.0.1:8080 -UseBasicParsing
 ```
 
-## Step 10: Initialize the Empty Lazy-Load Registry
+## Step 10: Initialize the Native-Only Dynamic MCP Registry
 
-The agent should refresh the per-user Docker MCP registry used by `MCP_DOCKER`.
+The agent should initialize the per-user Docker MCP registry used by `MCP_DOCKER` as empty session state.
 
 ```powershell
-.\MCP-Servers\scripts\setup_lazy_load.ps1
+.\MCP-Servers\scripts\setup_lazy_load.ps1 -Vendor google
 ```
 
 This should create or refresh:
 
 - `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
 
-The expected startup behavior after this step is the Dynamic MCP management surface plus the seeded supplemental server set.
+The expected startup behavior after this step is only the Docker gateway native Dynamic MCP management surface. Supplemental servers should be loaded with `mcp-find`/`mcp-add` and removed with `mcp-remove` when the task is complete.
 
 ## Step 11: Sync Docker Secrets from `.env`
 
@@ -214,21 +214,20 @@ The agent should load the MCP-related secrets from `.env`.
 .\MCP-Servers\scripts\set-mcp-secrets.ps1
 ```
 
-## Step 12: Start the Shared Serena HTTP Server
+## Step 12: Confirm Serena Native MCP Setup
 
-The agent should start the shared Serena server before asking the end user to use Antigravity.
+The agent should confirm Antigravity will start Serena directly through the MCP config.
 
-Command:
+Expected `serena` config shape:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\MCP-Servers\scripts\start-serena-http.ps1
+```json
+"serena": {
+  "command": "uvx",
+  "args": ["-p", "3.13", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "antigravity"]
+}
 ```
 
-Expected endpoint:
-
-- `http://127.0.0.1:9121/mcp`
-
-This process should stay running while Codex and Antigravity are using Serena.
+No shared Serena HTTP server should be started. After startup, activate the current project from Serena if Antigravity does not pass the project automatically.
 
 ## Step 13: Install the Repo-Owned Antigravity Setup
 
@@ -266,9 +265,9 @@ Success means:
 - `mcp_config.json` exists
 - skills are installed
 - workflows are installed
-- `mcp_config.json` no longer contains direct `playwright` or `shrimp_task_manager` entries
+- `mcp_config.json` contains only `serena` and `MCP_DOCKER` MCP server entries
 - `MCP_DOCKER` points at `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
-- the `serena` entry points at `http://127.0.0.1:9121/mcp`
+- the `serena` entry uses `uvx ... serena start-mcp-server --context antigravity`
 
 ## Step 16: Ask Whether to Restore Any Old Settings
 
@@ -333,8 +332,9 @@ If something fails, the agent should run:
 If Serena is unavailable, the agent should also check:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\MCP-Servers\scripts\start-serena-http.ps1
-try { Invoke-WebRequest -Uri http://127.0.0.1:9121/mcp -UseBasicParsing -TimeoutSec 5 } catch { $_.Exception.Message }
+Get-Command uvx
+uvx -p 3.13 --from git+https://github.com/oraios/serena serena start-mcp-server --help
+Select-String -Path "$HOME\.gemini\antigravity\mcp_config.json" -Pattern "serena|antigravity"
 ```
 
 If Docker-related services fail, the agent should also check:

@@ -59,9 +59,11 @@ Attributes: name="Pure Lazy-Load Default"
 
 - `rule`: Default state: Zero enabled servers
 
+- `rule`: At startup, `MCP_DOCKER` should expose only Docker gateway native tools (`mcp-find`, `mcp-add`, `mcp-config-set`, `mcp-remove`, `mcp-exec`, `code-mode`)
+
 - `rule`: Load on demand: Use mcp-find to discover, mcp-add to load
 
-- `rule`: Clean up: Use mcp-remove when task is complete
+- `rule`: Clean up: Use mcp-remove for every server added during the task when the task is complete
 
 ### Principle (`principle`)
 Attributes: name="Tool Budget"
@@ -111,6 +113,8 @@ Attributes: number="6", name="Cleanup"
 
 - `action`: mcp-remove(name: "github")
 
+- `command`: powershell -ExecutionPolicy Bypass -File .\scripts\cleanup-runtime.ps1 -StaleMinutes 30
+
 - `decision_tree`:
 ```text
 Need capability?
@@ -129,7 +133,7 @@ Multiple operations needed?
     YES → Use code-mode to combine
     NO  → Use mcp-exec directly
     ↓
-Task complete? → mcp-remove server
+Task complete? → mcp-remove every server loaded for this task
 ```
 
 ## Server Categories (`server_categories`)
@@ -182,7 +186,9 @@ Context savings: ~750 tokens per operation
 
 - `do`: Prefer code-mode for multi-step operations
 
-- `do`: Unload servers immediately after task completion
+- `do`: Unload every task-loaded server immediately after task completion
+
+- `do`: After MCP-heavy sessions, run `.\scripts\cleanup-runtime.ps1 -StaleMinutes 30` to remove stale duplicate MCP gateway/runtime processes
 
 - `do`: Use Antigravity's built-in features when available
 
