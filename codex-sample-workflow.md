@@ -32,27 +32,27 @@ Some local development commands are allowed directly. Example:
 
 ### 3) Workflow Routing Rules
 
-Source: `Agent/OpenAI/AGENTS.md` and `Agent/OpenAI/Skills/wf-*`
+Source: `Agent/OpenAI/AGENTS.md` and `Agent/OpenAI/Skills/*`
 
 Codex maps common intents to orchestration skills. Examples:
 
-- planning -> `wf-architect`
-- implementation -> `wf-code`
-- debugging -> `wf-analyze`
-- security scan -> `wf-security-audit`
-- pull request prep -> `wf-pr`
+- planning -> `architect`
+- implementation -> `code`
+- debugging -> `quality-repair`
+- security scan -> `quality-repair`
+- pull request prep -> `code`
 
 ### 4) Archive and Context Rules
 
-Source: OpenAI archive skills under `Agent/OpenAI/Skills/archive-*`
+Source: OpenAI archive skills under `Agent/OpenAI/Skills/archive-manager`
 
 Use archive tools when you need durable project memory:
 
-- `archive-memory` for decisions and notes
-- `archive-docs` for semantic document search
-- `archive-graph` for code structure
-- `archive-git` for historical changes
-- `archive-code` for fast code search
+- `archive-manager` for decisions and notes
+- `archive-manager` for semantic document search
+- `archive-manager` for code structure
+- `archive-manager` for historical changes
+- `archive-manager` for fast code search
 
 Archive data lives under `Agent-Context/` and should stay local-only.
 
@@ -79,7 +79,7 @@ What happens:
 What to type:
 
 ```text
-Use wf-architect. I want to add a beginner onboarding screen that explains setup in plain language.
+Use architect. I want to add a beginner onboarding screen that explains setup in plain language.
 ```
 
 Expected output:
@@ -93,7 +93,7 @@ Expected output:
 What to type:
 
 ```text
-Use wf-code to implement the approved checklist for the onboarding screen.
+Use code to implement the approved checklist for the onboarding screen.
 ```
 
 Expected output:
@@ -107,7 +107,7 @@ Expected output:
 What to type:
 
 ```text
-Use wf-review on the files changed for onboarding and list prioritized findings.
+Use quality-repair to review the files changed for onboarding and list prioritized findings.
 ```
 
 Expected output:
@@ -120,13 +120,13 @@ Expected output:
 What to type:
 
 ```text
-Use wf-analyze for this bug: setup script says source folder not found.
+Use quality-repair to analyze this bug: setup script says source folder not found.
 ```
 
 Then:
 
 ```text
-Use wf-fix-issue in surgical mode and patch only the minimum required files.
+Use quality-repair to fix this issue in surgical mode and patch only the minimum required files.
 ```
 
 What happens:
@@ -141,13 +141,13 @@ What happens:
 What to type:
 
 ```text
-Use wf-security-audit and include dependency audit results.
+Use quality-repair for a security audit and include dependency audit results.
 ```
 
 Then:
 
 ```text
-Use wf-dependency-check and rank updates by risk and impact.
+Use quality-repair for a dependency check and rank updates by risk and impact.
 ```
 
 What happens:
@@ -160,7 +160,7 @@ What happens:
 What to type:
 
 ```text
-Use archive-memory and save this decision in category decisions, key readme-tone: README should stay beginner-friendly with copy/paste commands.
+Use archive-manager and save this decision in category decisions, key readme-tone: README should stay beginner-friendly with copy/paste commands.
 ```
 
 What happens:
@@ -211,19 +211,19 @@ Templates live in `Agent/OpenAI/Automations/`.
 
 ## Suggested Weekly Routine
 
-1. Monday: run `wf-security-audit`.
-2. Midweek: run `wf-review` on active feature branch.
-3. Friday: run `wf-dependency-check`.
-4. Daily closeout: run `wf-handoff`.
+1. Monday: run `quality-repair` for security audit.
+2. Midweek: run `quality-repair` on active feature branch.
+3. Friday: run `quality-repair` for dependency check.
+4. Daily closeout: run `project-continuity` for handoff.
 
 ## Quick Prompt Library
 
 Use these directly:
 
 ```text
-Use wf-architect to plan this idea and return a checklist.
-Use wf-code to implement checklist items 1 through 3.
-Use wf-review and prioritize findings by severity.
-Use wf-security-audit and include actionable fixes.
+Use architect to plan this idea and return a checklist.
+Use code to implement checklist items 1 through 3.
+Use quality-repair to review and prioritize findings by severity.
+Use quality-repair for a security audit and include actionable fixes.
 Use archive-manager to pull relevant historical context before coding.
 ```
