@@ -28,9 +28,9 @@
 
 ## Active Artifacts
 
-- Canonical AGENTS policy: `Agent/OpenAI/AGENTS.md`
+- Lean canonical AGENTS policy: `Agent/OpenAI/AGENTS.md`
 - Repo runtime AGENTS mirror: `AGENTS.md`
-- Consolidated XML rules artifact: `Agent/OpenAI/default.rules`
+- Consolidated command rules artifact: `Agent/OpenAI/default.rules`
 - Skills root: `Agent/OpenAI/Skills`
 - Skill archive: `Agent/OpenAI/deprecated-Skills`
 - Workflow archive: `Agent/OpenAI/deprecated-Workflows`

@@ -4,9 +4,9 @@ Quick reference for `Agent/OpenAI/Scripts`.
 
 ## Core Runtime Model
 
-- Canonical instructions source: `Agent/OpenAI/AGENTS.md`
+- Lean canonical instructions source: `Agent/OpenAI/AGENTS.md`
 - Repo runtime instructions mirror: `AGENTS.md`
-- Consolidated rules source: `Agent/OpenAI/default.rules`
+- Consolidated command rules source: `Agent/OpenAI/default.rules`
 - Automation templates source: `Agent/OpenAI/Automations/*.automation.md`
 - Installed Codex targets:
   - `~/.codex/AGENTS.md`

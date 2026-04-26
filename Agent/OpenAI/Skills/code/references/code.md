@@ -106,7 +106,7 @@ Attributes: number="4", name="Minimize Discussion"
 ### Step (`step`)
 Attributes: number="5", name="Update Progress"
 
-- `instruction`: Mark completed tasks in checklist.md Update memory/codegraph with new functions Run archive-manager to sync archive-code/archive-docs/archive-graph/archive-memory for changed artifacts Note any deferred items
+- `instruction`: Mark completed tasks in checklist.md. For substantial or durable code/docs/config changes, run archive-manager to sync relevant archive-code/archive-docs/archive-graph/archive-memory artifacts. Note any deferred items.
 
 ## Best Practices (`best_practices`)
 
@@ -130,3 +130,12 @@ Attributes: number="5", name="Update Progress"
 
 - `skill`: archive-manager
 ```
+
+## Modular Guidance
+
+- Add or update tests for meaningful behavior changes when a test framework exists.
+- For bugs, reproduce the failure before fixing when practical.
+- For refactors, preserve behavior and verify affected paths before and after when practical.
+- Run the narrowest relevant check available and report failed or skipped checks honestly.
+- Update usage/setup docs when behavior, commands, environment variables, or setup flow changes.
+- Keep implementation notes concise and avoid duplicating global policy here.

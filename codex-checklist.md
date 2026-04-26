@@ -15,7 +15,7 @@ This checklist is written in the order the work should happen:
 
 Install the repo-owned Codex stack so that:
 
-- Codex uses this repo's `AGENTS.md`
+- Codex uses `Agent/OpenAI/AGENTS.md` as `~/.codex/AGENTS.md`
 - Codex uses this repo's MCP config
 - Codex uses this repo's skills
 - Codex uses this repo's rules and automations

@@ -15,7 +15,7 @@ This checklist is written in the order the work should happen:
 
 Install the repo-owned Antigravity stack so that:
 
-- Antigravity uses this repo's `GEMINI.md`
+- Antigravity uses `Agent/Google/GEMINI.md` as `~/.gemini/GEMINI.md`
 - Antigravity uses this repo's MCP config
 - Antigravity uses this repo's skills
 - Antigravity uses this repo's workflows

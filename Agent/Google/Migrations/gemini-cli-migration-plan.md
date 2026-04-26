@@ -13,8 +13,8 @@ Map Antigravity Google artifacts to official Gemini CLI primitives for a future 
 ## Mapping Table
 | Antigravity artifact | Gemini CLI target | Notes |
 |---|---|---|
-| `Rules/GEMINI.md` global modules | Root `GEMINI.md` + `@imports` | Keep top-level identity and always-on constraints in root file. |
-| Non-global rule wrappers in `Rules/*.md` | Imported policy sections (`@rules/*.md`) | Maintain compatibility wrappers during transition; imported files hold expanded details if needed. |
+| `Agent/Google/GEMINI.md` global instructions | Root `GEMINI.md` + optional `@imports` | Keep durable always-on behavior in the root file. |
+| Specialized rule docs in `Rules/*.md` | Imported policy sections (`@rules/*.md`) | Keep expanded domain guidance out of the always-on root file unless imports are explicitly adopted. |
 | `Workflows/*.md` command recipes | `.gemini/commands/*.toml` | Each workflow becomes a command with argument schema and prompt body. |
 | `Skills/*/SKILL.md` reusable capabilities | Extension components | Package capability docs/prompts/tools inside extension structure. |
 | Skill-driven tool checks | Extension-provided MCP/tool config | Keep tool routing in extension docs plus command-level prompting. |
@@ -30,7 +30,7 @@ Map Antigravity Google artifacts to official Gemini CLI primitives for a future 
    - Port each Antigravity skill into extension docs/prompts grouped by capability domain.
    - Add MCP/tool config and dependency notes for each capability requiring external tools.
 3. Modularize context imports:
-   - Keep root `GEMINI.md` concise and import supporting policy files using `@file.md`.
+   - Keep root `GEMINI.md` concise and import supporting policy files using `@file.md` only when a future Gemini CLI cutover needs explicit imports.
    - Separate always-on policy modules from procedural command references.
 4. Bridge compatibility:
    - Keep current `Rules/*.md` wrappers pointing to canonical Antigravity modules during parallel-run.

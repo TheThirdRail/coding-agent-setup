@@ -38,7 +38,7 @@ Optional extra Codex artifacts can still be installed separately:
 
 The Antigravity wrapper installs:
 
-- `~/.gemini/GEMINI.md`
+- `~/.gemini/GEMINI.md` from `Agent/Google/GEMINI.md`
 - `~/.gemini/antigravity/skills/*`
 - `~/.gemini/antigravity/global_workflows/*.md`
 - `~/.gemini/antigravity/mcp_config.json`
@@ -50,6 +50,19 @@ The Antigravity wrapper installs:
 - Use `-Purge` only if you want hard deletion instead of backup.
 - The Codex skills cleanup preserves `~/.codex/skills/.system`.
 - Codex and Antigravity each start Serena as a native stdio MCP server using their documented client contexts.
+
+## Instruction Placement Map
+
+- Lean always-on behavior: `Agent/OpenAI/AGENTS.md` and `Agent/Google/GEMINI.md`.
+- Codex command allow/prompt policy: `Agent/OpenAI/default.rules`.
+- Google specialized rule docs: `Agent/Google/Rules/*.md`.
+- Task-specific procedures: vendor `Skills/*/SKILL.md` and each skill's `references/` folder.
+- Saved repeatable Antigravity procedures: `Agent/Google/Workflows/*.md`; index: `Agent/Google/workflows.md`.
+- Recurring Codex prompt templates: `Agent/OpenAI/Automations/*.automation.md`.
+- Tool wiring and MCP server details: vendor MCP config files and `MCP-Servers/` docs/scripts.
+- Full architecture map: `docs/instruction-architecture.md`.
+
+This repo does not currently install Codex hooks or Antigravity product settings such as terminal auto-execution, review policy, JavaScript execution, allowlists, denylists, browser allowlists, or workspace trust. Manage those in the clients unless this repo later adds supported settings installers.
 
 ## Prerequisites
 
@@ -229,8 +242,9 @@ If you want a short runbook for an agent to follow, use:
 
 ## Useful Paths
 
-- OpenAI policy source: `Agent/OpenAI/AGENTS.md`
-- Google policy source: `Agent/Google/Rules/GEMINI.md`
+- OpenAI lean policy source: `Agent/OpenAI/AGENTS.md`
+- Google lean policy source: `Agent/Google/GEMINI.md`
+- Google specialized rules index: `Agent/Google/Rules/GEMINI.md`
 - Codex MCP template: `Agent/OpenAI/Codex/mcp/config.toml`
 - Antigravity MCP template: `Agent/Google/Antigravity/mcp/mcp_config.json`
 - Codex supplemental registry seed: `MCP-Servers/mcp-docker-stack/registry.supplementals.yaml`

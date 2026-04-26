@@ -45,15 +45,17 @@ description: |
     </principle>
 
     <principle name="Archive Lifecycle Enforcement">
-      <rule>After code/docs/config changes, require archive updates before declaring task completion.</rule>
+      <rule>For substantial setup, planning, research, handoff, release, architecture, or long-running project work, update project continuity or archive notes when an active archive system exists.</rule>
+      <rule>For meaningful code/docs/config changes, index changed artifacts when the archive mechanism exists and the change will matter to future agents or humans.</rule>
+      <rule>Do not force archive updates for trivial edits, typo fixes, small comment changes, or narrow mechanical changes with no lasting context value.</rule>
       <rule>Prefer archive-first retrieval when archive freshness is adequate; fall back to direct file reads only when needed.</rule>
     </principle>
   </core_principles>
 
   <workflow>
     <step number="0" name="Identify Archive Event">
-      <instruction>Classify the request into one of the canonical events: setup, planning, research, handoff, or release.</instruction>
-      <instruction>For implementation/refactor/fix activity, treat completion-time indexing as part of the release event.</instruction>
+      <instruction>Classify substantial requests into one of the canonical events: setup, planning, research, handoff, release, architecture, or long-running project work.</instruction>
+      <instruction>For meaningful implementation/refactor/fix activity, treat completion-time indexing as part of the release event. Skip archive writes for trivial edits with no durable context value.</instruction>
     </step>
 
     <step number="1" name="Classify Archive Need">
@@ -83,7 +85,7 @@ description: |
     </step>
 
     <step number="4" name="Enforce Archive Read/Write Policy">
-      <instruction>If code/docs/config changed, execute required archive writes before completion.</instruction>
+      <instruction>If substantial code/docs/config changed, execute relevant archive writes before completion.</instruction>
       <instruction>For context gathering, use fresh archives first; if stale/missing, read source files then refresh archives.</instruction>
     </step>
   </workflow>

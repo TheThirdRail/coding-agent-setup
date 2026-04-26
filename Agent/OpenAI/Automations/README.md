@@ -2,6 +2,8 @@
 
 These are template prompts and schedules for Codex automations.
 
+Automation references live here instead of in the lean always-on `Agent/OpenAI/AGENTS.md`.
+
 Manual import flow:
 1. Open Codex app automations.
 2. Create a new automation.

@@ -18,9 +18,12 @@ Quick reference for `Agent/Google/Scripts`.
 ```
 
 Targets:
-- Rules: `~\.gemini\GEMINI.md`
+- Global instructions: `Agent\Google\GEMINI.md` -> `~\.gemini\GEMINI.md`
+- Specialized rule docs: `Agent\Google\Rules\*.md`
 - Skills: `~\.gemini\antigravity\skills`
 - Workflows: `~\.gemini\antigravity\global_workflows`
+
+The specialized rule docs are repository artifacts. The current installer keeps the installed always-on layer lean and copies only `Agent\Google\GEMINI.md` to the global Gemini context file.
 
 Workspace-local install targets (via `move-local-*` scripts):
 - Rules: `.agent\rules`

@@ -170,3 +170,9 @@ Attributes: number="5", name="Finalize and Verify"
 
 - `workflow`: /handoff
 ```
+
+## Operational Documentation Updates
+
+- Update README, setup, or runbook docs when behavior, commands, environment variables, install paths, or setup flow changes.
+- Document only what future users or agents need to operate or maintain the project.
+- Keep implementation details concise and remove placeholders before completion.

@@ -85,7 +85,7 @@ description: Code with Context - Execute implementation with focus on building, 
     <step number="7" name="Update Progress">
       <action>Mark completed tasks in checklist.md</action>
       <action>Update memory/codegraph with new functions</action>
-      <action>Run archive-manager to refresh archive-code/archive-docs/archive-graph/archive-memory for changed artifacts</action>
+      <action>For substantial or durable code/docs/config changes, run archive-manager to refresh relevant archive-code/archive-docs/archive-graph/archive-memory artifacts</action>
       <action>Note any deferred items</action>
     </step>
   </steps>
@@ -112,3 +112,12 @@ description: Code with Context - Execute implementation with focus on building, 
   </related_workflows>
 </workflow>
 ```
+
+## Modular Guidance
+
+- Add or update tests for meaningful behavior changes when a test framework exists.
+- For bugs, reproduce the failure before fixing when practical.
+- For refactors, preserve behavior and verify affected paths before and after when practical.
+- Run the narrowest relevant check available and report failed or skipped checks honestly.
+- Update usage/setup docs when behavior, commands, environment variables, or setup flow changes.
+- Keep implementation notes concise and avoid duplicating global policy here.

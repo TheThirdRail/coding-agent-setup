@@ -9,7 +9,7 @@ Write-Host "=== Deprecation Checker (google) ===" -ForegroundColor Cyan
 Write-Host ""
 
 $googleRoot = (Resolve-Path (Join-Path $PSScriptRoot "..") -ErrorAction Stop).Path
-$sourceRulesRoot = Join-Path $googleRoot "Rules"
+$sourceGeminiPath = Join-Path $googleRoot "GEMINI.md"
 $sourceSkillsRoot = Join-Path $googleRoot "Skills"
 $sourceWorkflowsRoot = Join-Path $googleRoot "Workflows"
 
@@ -99,22 +99,21 @@ function Remove-DeprecatedItems {
     return $removed
 }
 
-Write-Host "Checking Rules..." -ForegroundColor White
-$sourceGeminiPath = Join-Path $sourceRulesRoot "GEMINI.md"
+Write-Host "Checking Global GEMINI..." -ForegroundColor White
 if (-not (Test-Path $sourceGeminiPath)) {
     if (Test-Path $globalRuleFile) {
         if ($DryRun) {
-            Write-Host "  [WOULD DELETE] $globalRuleFile (source GEMINI.md missing)" -ForegroundColor Yellow
+            Write-Host "  [WOULD DELETE] $globalRuleFile (source Agent\Google\GEMINI.md missing)" -ForegroundColor Yellow
         }
         else {
             Remove-Item -Path $globalRuleFile -Force
-            Write-Host "  [DELETED] $globalRuleFile (source GEMINI.md missing)" -ForegroundColor Red
+            Write-Host "  [DELETED] $globalRuleFile (source Agent\Google\GEMINI.md missing)" -ForegroundColor Red
         }
         $totalRemoved++
     }
 }
 else {
-    Write-Host "  Global rule managed at: $globalRuleFile" -ForegroundColor DarkGray
+    Write-Host "  Global GEMINI managed at: $globalRuleFile" -ForegroundColor DarkGray
 }
 
 if (Test-Path $legacyGlobalRules) {

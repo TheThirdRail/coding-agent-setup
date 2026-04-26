@@ -5,13 +5,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$sourcePath = Join-Path $PSScriptRoot '..\Rules\GEMINI.md'
+$sourcePath = Join-Path $PSScriptRoot '..\GEMINI.md'
 $sourcePath = (Resolve-Path $sourcePath -ErrorAction Stop).Path
 
 $globalGeminiRoot = Join-Path $HOME '.gemini'
 $destinationPath = Join-Path $globalGeminiRoot 'GEMINI.md'
 
-Write-Host 'Installing Google Antigravity global rules file' -ForegroundColor Cyan
+Write-Host 'Installing Google Antigravity global instruction file' -ForegroundColor Cyan
 Write-Host "  Source: $sourcePath" -ForegroundColor Gray
 Write-Host "  Destination: $destinationPath" -ForegroundColor Gray
 
