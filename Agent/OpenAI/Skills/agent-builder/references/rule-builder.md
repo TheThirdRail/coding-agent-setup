@@ -199,7 +199,8 @@ Attributes: condition="Global Rule (Apply to ALL projects)"
 ##### Branch (`branch`)
 Attributes: condition="Workspace Rule (Apply to THIS project only)"
 
-- `action`: Run: scripts/move-local-rule.ps1 -Name "rule-name.md" -Vendor "mine|anthropic|openai|google"
+- `action`: Run: scripts/move-local-rule.ps1 -Name "rule-name.md" -Vendor "anthropic|openai"
+- `note`: Do not use workspace-local Antigravity backup folders; Antigravity reads them as active context.
 
 ## Resource Folders (`resource_folders`)
 

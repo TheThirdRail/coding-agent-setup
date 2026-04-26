@@ -112,7 +112,7 @@ Attributes: number="2", name="Choose Location"
 #### Platform (`platform`)
 Attributes: name="Antigravity"
 
-- `workspace`: .agent/workflows/
+- `workspace`: Workspace-local Antigravity workflow installs are disabled; use global workflows only.
 
 - `global`: ~/.gemini/antigravity/global_workflows/
 
@@ -235,7 +235,8 @@ Attributes: condition="Global Workflow (Apply to ALL projects)"
 ##### Branch (`branch`)
 Attributes: condition="Workspace Workflow (Apply to THIS project only)"
 
-- `action`: Run: scripts/move-local-workflow.ps1 -Name "workflow-name.md" -Vendor "mine|anthropic|openai|google"
+- `action`: Run: scripts/move-local-workflow.ps1 -Name "workflow-name.md" -Vendor "anthropic|openai"
+- `note`: Do not use workspace-local Antigravity backup folders; Antigravity reads them as active context.
 
 ## Patterns (`patterns`)
 

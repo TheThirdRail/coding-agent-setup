@@ -54,7 +54,7 @@ description: |
 
     <step number="2" name="Choose Location">
       <platform name="Antigravity">
-        <workspace>.agent/workflows/</workspace>
+        <workspace>Workspace-local Antigravity workflow installs are disabled; use global workflows only.</workspace>
         <global>~/.gemini/antigravity/global_workflows/</global>
       </platform>
       <naming>kebab-case, match slash command: arch.md → /arch</naming>
@@ -127,7 +127,8 @@ description: Brief description of what this workflow does
           <action>Run: scripts/move-global-workflow.ps1 -Name "workflow-name.md" -Vendor "anthropic|openai|google"</action>
         </branch>
         <branch condition="Workspace Workflow (Apply to THIS project only)">
-          <action>Run: scripts/move-local-workflow.ps1 -Name "workflow-name.md" -Vendor "mine|anthropic|openai|google"</action>
+          <action>Run: scripts/move-local-workflow.ps1 -Name "workflow-name.md" -Vendor "anthropic|openai"</action>
+          <note>Do not use workspace-local Antigravity backup folders; Antigravity reads them as active context.</note>
         </branch>
       </decision_tree>
     </step>

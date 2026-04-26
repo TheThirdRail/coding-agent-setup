@@ -40,7 +40,10 @@ if (-not (Test-Path -Path $SourcePath -PathType Leaf)) {
 $ProjectRoot = (Resolve-Path $ProjectRoot -ErrorAction Stop).Path
 
 switch ($Vendor) {
-    'mine' { $RelativeLocalPath = '.agent\automations' }
+    'mine' {
+        Write-Error "Workspace-local .agent installs are disabled because Antigravity reads that location as active context."
+        exit 1
+    }
     'anthropic' { $RelativeLocalPath = '.claude\automations' }
     'openai' {
         if ($UseLegacyCodexPath) {
@@ -50,7 +53,10 @@ switch ($Vendor) {
             $RelativeLocalPath = '.agents\automations'
         }
     }
-    'google' { $RelativeLocalPath = '.gemini\automations' }
+    'google' {
+        Write-Error "Workspace-local Antigravity installs are disabled. Use Agent\Google\Scripts\install-antigravity-from-repo.ps1 for the supported global install."
+        exit 1
+    }
 }
 
 $LocalPath = Join-Path $ProjectRoot $RelativeLocalPath

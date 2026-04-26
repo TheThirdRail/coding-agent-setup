@@ -107,7 +107,8 @@ glob: "*.ts"  # only if activation is glob
           <action>Run: scripts/move-global-rule.ps1 -Name "rule-name.md" -Vendor "anthropic|openai|google"</action>
         </branch>
         <branch condition="Workspace Rule (Apply to THIS project only)">
-          <action>Run: scripts/move-local-rule.ps1 -Name "rule-name.md" -Vendor "mine|anthropic|openai|google"</action>
+          <action>Run: scripts/move-local-rule.ps1 -Name "rule-name.md" -Vendor "anthropic|openai"</action>
+          <note>Do not use workspace-local Antigravity backup folders; Antigravity reads them as active context.</note>
         </branch>
       </decision_tree>
     </step>

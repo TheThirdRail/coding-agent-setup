@@ -47,7 +47,7 @@ Create or modernize a skill so another Codex instance can discover it from front
 
 ### 3. Initialize the folder
 
-- Run `scripts/init_skill.ps1 -Name "skill-name" -Path ".agent/skills"`.
+- Run `scripts/init_skill.ps1 -Name "skill-name" -Path "skill-name"` to scaffold outside an active agent-context folder.
 - Pass `-Resources "scripts,references,assets"` only for folders the skill actually needs.
 - Pass repeated `-Interface key=value` values when you already know the UI metadata.
 
@@ -83,11 +83,11 @@ Create or modernize a skill so another Codex instance can discover it from front
 ## Commands
 
 ```powershell
-scripts/init_skill.ps1 -Name "skill-name" -Path ".agent/skills"
-python scripts/generate_openai_yaml.py .agent/skills/skill-name
-python scripts/quick_validate.py .agent/skills/skill-name
-scripts/validate-links.ps1 -SkillsRoot .agent/skills
-scripts/package_skill.ps1 -Path .agent/skills/skill-name -OutputDir .\dist
+scripts/init_skill.ps1 -Name "skill-name" -Path "skill-name"
+python scripts/generate_openai_yaml.py skill-name
+python scripts/quick_validate.py skill-name
+scripts/validate-links.ps1 -SkillsRoot .
+scripts/package_skill.ps1 -Path skill-name -OutputDir .\dist
 ```
 
 ## Best Practices

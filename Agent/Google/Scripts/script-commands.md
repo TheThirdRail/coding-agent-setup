@@ -25,10 +25,7 @@ Targets:
 
 The specialized rule docs are repository artifacts. The current installer keeps the installed always-on layer lean and copies only `Agent\Google\GEMINI.md` to the global Gemini context file.
 
-Workspace-local install targets (via `move-local-*` scripts):
-- Rules: `.agent\rules`
-- Skills: `.agent\skills`
-- Workflows: `.agent\workflows`
+Workspace-local Antigravity installs are intentionally disabled because Antigravity reads local agent context locations as active instructions. Use the global installer above instead of creating a project backup under local agent folders.
 
 ## MCP Setup
 

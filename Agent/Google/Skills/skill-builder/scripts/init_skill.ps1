@@ -14,7 +14,7 @@
     Defaults to current directory.
 
 .EXAMPLE
-    .\init_skill.ps1 -Name "pdf-editor" -Path ".agent/skills"
+    .\init_skill.ps1 -Name "pdf-editor" -Path ".\staging\skills"
 #>
 
 # TODO_SCAN_ALLOW: This file intentionally contains TODO placeholders in generated templates.

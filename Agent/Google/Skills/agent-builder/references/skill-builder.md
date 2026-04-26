@@ -122,7 +122,7 @@ description: |
 
     <step number="3" name="Initialize Skill Structure">
       <instruction>Run the init script to scaffold the skill</instruction>
-      <command>scripts/init_skill.ps1 -Name "skill-name" -Path ".agent/skills"</command>
+      <command>scripts/init_skill.ps1 -Name "skill-name" -Path "skill-name"</command>
       <generates>
         <item>skill-name/SKILL.md — template with frontmatter</item>
         <item>skill-name/scripts/ — example script</item>
@@ -207,7 +207,8 @@ description: |
           <action>Run: scripts/move-global-skill.ps1 -Name "skill-name" -Vendor "anthropic|openai|google"</action>
         </branch>
         <branch condition="Workspace Skill (Apply to THIS project only)">
-          <action>Run: scripts/move-local-skill.ps1 -Name "skill-name" -Vendor "mine|anthropic|openai|google"</action>
+          <action>Run: scripts/move-local-skill.ps1 -Name "skill-name" -Vendor "anthropic|openai"</action>
+          <note>Do not use workspace-local Antigravity backup folders; Antigravity reads them as active context.</note>
         </branch>
       </decision_tree>
     </step>
@@ -231,7 +232,7 @@ description: |
   </validation_gates>
 
   <platform_compatibility>
-    <platform name="Antigravity" location=".agent/skills/"/>
+    <platform name="Antigravity" location="~/.gemini/antigravity/skills/"/>
     <platform name="Claude Code" location=".claude/skills/"/>
     <platform name="GitHub Copilot" location=".github/skills/"/>
     <platform name="Cursor" location=".cursor/skills/"/>
@@ -244,10 +245,8 @@ description: |
       <vendor name="Google" location="~/.gemini/antigravity/skills/"/>
     </global>
     <local>
-      <vendor name="Mine" location=".agent/skills/"/>
       <vendor name="Anthropic" location=".claude/skills/"/>
       <vendor name="OpenAI" location=".agents/skills/" legacy_location=".codex/skills/"/>
-      <vendor name="Google" location=".agent/skills/"/>
     </local>
   </installation_paths>
 

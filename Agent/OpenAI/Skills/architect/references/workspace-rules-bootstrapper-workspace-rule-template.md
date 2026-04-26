@@ -1,6 +1,6 @@
 # Workspace Rule Template
 
-Use this template when generating `.agent/rules/project-rules.md`.
+Use this template when generating `Agent-Context/Rules/project-rules.md`.
 
 ```md
 ---

@@ -98,7 +98,7 @@ temp/
 
     <step number="4" name="Generate Workspace Rules">
       <skill ref="workspace-rules-bootstrapper">Use to generate project-scoped rules from stack inputs</skill>
-      <instruction>Collect stack profile from /architect outputs and invoke the skill to emit `.agent/rules/project-rules.md`.</instruction>
+      <instruction>Collect stack profile from /architect outputs and invoke the skill to emit `Agent-Context/Rules/project-rules.md`.</instruction>
       <instruction>Ensure generated rules include dependency isolation, quality gates, runtime safety, and documentation update baselines.</instruction>
       <instruction>Require deterministic output contract fields: `stack_profile`, `baseline_modules`, and `char_count`.</instruction>
       <action>Validate output structure and enforce the 12,000 character limit.</action>

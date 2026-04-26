@@ -101,7 +101,7 @@ Attributes: number="3", name="Create Project Structure"
 ### Step (`step`)
 Attributes: number="4", name="Generate Workspace Rules"
 
-- `instruction`: Use to create project-specific rules Create `.agent/rules/project-rules.md` using the rule-builder format --- name: project-rules description: | Workspace-specific rules for this project. Includes stack conventions and testing requiremen...
+- `instruction`: Use to create project-specific rules Create `Agent-Context/Rules/project-rules.md` using the rule-builder format --- name: project-rules description: | Workspace-specific rules for this project. Includes stack conventions and testing requiremen...
 
 ### Step (`step`)
 Attributes: number="5", name="Initialize Git"

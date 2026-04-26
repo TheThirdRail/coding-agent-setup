@@ -126,7 +126,8 @@ Attributes: condition="Global Automation (apply across projects)"
 ##### Branch (`branch`)
 Attributes: condition="Workspace Automation (apply to current project)"
 
-- `action`: Run: scripts/move-local-automation.ps1 -Name "automation-name.automation.md" -Vendor "mine|openai|anthropic|google"
+- `action`: Run: scripts/move-local-automation.ps1 -Name "automation-name.automation.md" -Vendor "openai|anthropic"
+- `note`: Do not use workspace-local Antigravity backup folders; Antigravity reads them as active context.
 
 ## Resource Folders (`resource_folders`)
 

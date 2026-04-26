@@ -18,6 +18,7 @@ This directory preserves specialized rule guidance that was moved out of the glo
 - Source global: `Agent/Google/GEMINI.md`
 - Installed global: `~/.gemini/GEMINI.md`
 - Specialized rules: `Agent/Google/Rules/*.md`
+- Workspace-local Antigravity backup installs are disabled because local agent context folders are read as active instructions.
 
 Do not put long routing tables, workflow procedures, automation schedules, or detailed MCP server descriptions in the global file. Keep those in skills, workflows, MCP docs, or the focused rule files listed above.
 

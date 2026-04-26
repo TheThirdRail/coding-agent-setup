@@ -20,3 +20,4 @@ Rules of thumb:
 - Keep documentation out of installable workflow folders unless the installer explicitly filters it out.
 - Use MCP tools when they materially improve accuracy, recency, execution quality, context efficiency, or verification; prefer the smallest sufficient capability.
 - This repo does not currently install Codex hooks or Antigravity product settings/allowlists. Document those limitations instead of inventing unsupported config.
+- Do not use workspace-local Antigravity backup folders for install output; Antigravity treats local agent context locations as active instructions.

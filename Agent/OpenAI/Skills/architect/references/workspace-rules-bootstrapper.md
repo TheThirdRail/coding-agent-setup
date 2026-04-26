@@ -50,7 +50,7 @@ description: |
       <instruction>Append stack-specific constraints from selected profile.</instruction>
     </step>
     <step number="4" name="Generate Workspace Rule File">
-      <instruction>Emit `.agent/rules/project-rules.md` using the template structure.</instruction>
+      <instruction>Emit `Agent-Context/Rules/project-rules.md` using the template structure.</instruction>
       <instruction>Include generation metadata fields: `stack_profile`, `baseline_modules`, and `char_count`.</instruction>
     </step>
     <step number="5" name="Validate Output">
@@ -59,7 +59,7 @@ description: |
   </workflow>
 
   <output_contract>
-    <output file=".agent/rules/project-rules.md">Workspace rule file with baseline + stack-specific policy.</output>
+    <output file="Agent-Context/Rules/project-rules.md">Workspace rule file with baseline + stack-specific policy.</output>
     <field>stack_profile</field>
     <field>baseline_modules</field>
     <field>char_count</field>
