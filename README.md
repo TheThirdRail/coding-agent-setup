@@ -42,7 +42,7 @@ The current stack includes:
 
 - repo-owned Codex and Antigravity instructions
 - install/remove wrapper scripts
-- eight installable router skills per client, with detailed lanes loaded on demand
+- eight installable router skills per client, plus one `layered-guidelines` support skill for focused operational guidance loaded on demand
 - one explicit Antigravity workflow macro, installed only for user-invoked routing help
 - hybrid Docker MCP support
 - separate native-only Dynamic MCP runtime registries for Codex and Antigravity

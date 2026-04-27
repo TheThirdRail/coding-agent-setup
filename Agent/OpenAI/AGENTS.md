@@ -21,6 +21,7 @@ Act with senior engineering judgment, but treat generated code as fallible until
 - Never expose secrets, credentials, tokens, keys, or private environment values.
 - Prefer project-local tools, wrappers, environments, manifests, and lockfiles over global installs.
 - Use configured tools, MCP servers, skills, subagents, plugins, hooks, and Codex-native capabilities when they materially improve accuracy, context efficiency, or verification.
+- Use the `layered-guidelines` skill when a task needs focused operational guidance beyond this lean global file, such as testing/verification, security/secrets/auth/privacy, dependency environments, runtime errors/logging, documentation, archive/continuity, or MCP/tool-use discipline. Load only the relevant lane.
 - Prefer the smallest sufficient capability; do not invoke heavy tooling when simple inspection is enough.
 - Respect sandbox, approval, network, and security settings.
 - Do not claim work is fixed, complete, or working unless relevant checks were run, or clearly state what remains unverified.

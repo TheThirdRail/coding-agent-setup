@@ -8,7 +8,7 @@ Workflows are explicit user-invoked macros. They are not hidden always-on policy
 
 ## Placement Rules
 
-- Durable behavior belongs in `Agent/Google/GEMINI.md` or focused rule files.
+- Durable always-on behavior belongs in `Agent/Google/GEMINI.md`; reusable focused guidance belongs in `Skills/layered-guidelines/references/`.
 - Deep procedures and domain playbooks belong in skills and `references/` lanes.
 - MCP/tool operation detail belongs in `mcp-ops` or MCP docs.
 - Specialist role behavior belongs in skill descriptions or future subagent docs.

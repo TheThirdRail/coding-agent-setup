@@ -1,10 +1,8 @@
-# Security
+# Security And Sensitive Data
 
-> Migration note: canonical active guidance now lives in `Agent/Google/Skills/layered-guidelines/references/security.md`.
+Use this lane for security-sensitive implementation, review, setup, and release work.
 
-Use this rule for security-sensitive implementation, review, setup, and release work.
-
-## Constraints
+## Guidelines
 
 - Never expose secrets, credentials, tokens, keys, private environment values, or sensitive personal data.
 - Do not commit or archive credentials or secrets.

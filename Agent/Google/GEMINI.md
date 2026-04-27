@@ -44,6 +44,8 @@ For non-trivial implementation, debugging, refactoring, setup, or review:
 
 Use skills when the task matches their description.
 
+Use the `layered-guidelines` skill when a task needs focused operational guidance beyond this lean global file, such as testing/verification, security/secrets/auth/privacy, dependency environments, runtime errors/logging, documentation, archive/continuity, or MCP/tool-use discipline. Load only the relevant lane.
+
 Use subagents for specialized investigation, review, security, docs, browser debugging, or codebase mapping when delegation improves quality or context efficiency.
 
 Use MCP tools when they materially improve access, accuracy, recency, browser interaction, or project-specific context.

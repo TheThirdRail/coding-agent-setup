@@ -15,7 +15,7 @@ It gives you:
 - one native Serena MCP server per client, using stdio mode
 - local archive tools for code, docs, graph, git, and memory
 
-The active skill catalog is intentionally small: Codex and Antigravity each install eight router skills, while detailed legacy skill bodies live under each router's `references/` folder and archived originals live under `deprecated-Skills/`.
+The active skill catalog is intentionally small: Codex and Antigravity each install eight router skills plus one `layered-guidelines` support skill. Detailed legacy skill bodies live under each router's `references/` folder, focused operational guidance lives under `layered-guidelines/references/`, and archived originals live under `deprecated-Skills/`.
 
 This file is the detailed operator guide for agents and power users. If you are a human end user, start with [README.md](d:/Coding/Tools/mcp-docker-stack/README.md).
 
@@ -54,8 +54,9 @@ The Antigravity wrapper installs:
 ## Instruction Placement Map
 
 - Lean always-on behavior: `Agent/OpenAI/AGENTS.md` and `Agent/Google/GEMINI.md`.
+- Focused operational guidance: vendor `Skills/layered-guidelines/SKILL.md` and `references/`.
 - Codex command allow/prompt policy: `Agent/OpenAI/default.rules`.
-- Google specialized rule docs: `Agent/Google/Rules/*.md`.
+- Google legacy focused rule docs: `Agent/Google/Rules/*.md` if retained as source/migration docs.
 - Task-specific procedures: vendor `Skills/*/SKILL.md` and each skill's `references/` folder.
 - Saved repeatable Antigravity procedures: `Agent/Google/Workflows/*.md`; index: `Agent/Google/workflows.md`.
 - Recurring Codex prompt templates: `Agent/OpenAI/Automations/*.automation.md`.

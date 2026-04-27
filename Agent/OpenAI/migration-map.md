@@ -1,7 +1,7 @@
 # OpenAI Migration Map
 
-- Updated: 2026-04-25
-- Active installable skills after consolidation: 8 router skills
+- Updated: 2026-04-27
+- Active installable skills after consolidation: 8 router skills plus 1 `layered-guidelines` support skill
 
 ## Workflow To Skill Mapping
 
@@ -35,3 +35,15 @@
 - Skill archive: `Agent/OpenAI/deprecated-Skills`
 - Workflow archive: `Agent/OpenAI/deprecated-Workflows`
 - Rule archive: `Agent/OpenAI/deprecated-Rules`
+
+## Focused Rules Migration
+
+| Legacy/source guidance | New canonical home |
+|---|---|
+| Google Rules/agent-discipline.md | Skills/layered-guidelines/references/agent-discipline.md |
+| Google Rules/environment.md | Skills/layered-guidelines/references/environment.md |
+| Google Rules/security.md | Skills/layered-guidelines/references/security.md |
+| Google Rules/testing.md | Skills/layered-guidelines/references/testing.md |
+| Google Rules/runtime-observability.md | Skills/layered-guidelines/references/runtime-observability.md |
+| Google Rules/archive.md | Skills/layered-guidelines/references/archive-continuity.md |
+| OpenAI default.rules | remains command policy at Agent/OpenAI/default.rules |

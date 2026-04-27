@@ -1,7 +1,7 @@
 # Gemini CLI Migration Plan (Google Vendor)
 
 ## Purpose
-Map Antigravity Google artifacts to official Gemini CLI primitives for a future cutover while keeping current local formats (`Rules`, `Skills`, `Workflows`) as the active source of truth.
+Map Antigravity Google artifacts to official Gemini CLI primitives for a future cutover while keeping current local formats (`Skills`, `Workflows`, and legacy `Rules` mirrors) aligned with the active source of truth.
 
 ## Source References
 - Gemini CLI context files (`GEMINI.md`) and hierarchy: https://google-gemini.github.io/gemini-cli/docs/cli/gemini-md.html
@@ -14,7 +14,8 @@ Map Antigravity Google artifacts to official Gemini CLI primitives for a future 
 | Antigravity artifact | Gemini CLI target | Notes |
 |---|---|---|
 | `Agent/Google/GEMINI.md` global instructions | Root `GEMINI.md` + optional `@imports` | Keep durable always-on behavior in the root file. |
-| Specialized rule docs in `Rules/*.md` | Imported policy sections (`@rules/*.md`) | Keep expanded domain guidance out of the always-on root file unless imports are explicitly adopted. |
+| Focused guidance in `Skills/layered-guidelines/references/*.md` | Imported policy sections or extension docs | Keep expanded domain guidance out of the always-on root file unless imports are explicitly adopted. |
+| Legacy rule docs in `Rules/*.md` | Compatibility/source mirrors | Preserve only as migration references while `layered-guidelines` remains canonical. |
 | `Workflows/*.md` command recipes | `.gemini/commands/*.toml` | Each workflow becomes a command with argument schema and prompt body. |
 | `Skills/*/SKILL.md` reusable capabilities | Extension components | Package capability docs/prompts/tools inside extension structure. |
 | Skill-driven tool checks | Extension-provided MCP/tool config | Keep tool routing in extension docs plus command-level prompting. |
@@ -33,7 +34,7 @@ Map Antigravity Google artifacts to official Gemini CLI primitives for a future 
    - Keep root `GEMINI.md` concise and import supporting policy files using `@file.md` only when a future Gemini CLI cutover needs explicit imports.
    - Separate always-on policy modules from procedural command references.
 4. Bridge compatibility:
-   - Keep current `Rules/*.md` wrappers pointing to canonical Antigravity modules during parallel-run.
+   - Keep current `Rules/*.md` wrappers pointing to canonical `layered-guidelines` references during parallel-run.
    - Add one mapping index that links each wrapper to its Gemini command/extension target.
 5. Validate behavior parity:
    - For each migrated workflow/skill, run side-by-side prompts and compare route decisions, gates, and safety outputs.
@@ -58,7 +59,7 @@ extensions/
 
 ## Cutover Strategy
 1. Parallel-run phase:
-   - Continue current Antigravity `Rules/Skills/Workflows` as primary.
+   - Continue current Antigravity skills and workflows as primary, with `Rules/*.md` retained only as legacy/source mirrors.
    - Execute equivalent Gemini CLI commands for the same scenarios in shadow mode.
 2. Confidence checks:
    - Route-selection equivalence for `task-router`.

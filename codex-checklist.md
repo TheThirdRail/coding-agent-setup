@@ -267,7 +267,7 @@ Success means:
 
 - `AGENTS.md` exists
 - `config.toml` exists
-- skills are installed
+- skills are installed, including eight router skills plus the `layered-guidelines` support skill
 - rules are installed
 - automations are installed
 - `config.toml` contains only `serena` and `MCP_DOCKER` MCP server blocks

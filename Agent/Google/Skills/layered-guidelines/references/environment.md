@@ -1,10 +1,8 @@
-# Environment
+# Environment And Dependencies
 
-> Migration note: canonical active guidance now lives in `Agent/Google/Skills/layered-guidelines/references/environment.md`.
+Use this lane when installing packages, selecting tooling, changing setup, or dealing with project environments.
 
-Use this rule when installing dependencies, selecting tooling, or changing setup instructions.
-
-## Constraints
+## Guidelines
 
 - Prefer project-local tools, wrappers, environments, manifests, and lockfiles over global installs.
 - Avoid global dependency installs unless the user explicitly requests them.

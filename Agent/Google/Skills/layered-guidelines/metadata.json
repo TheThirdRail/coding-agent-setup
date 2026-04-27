@@ -1,0 +1,22 @@
+{
+  "name": "layered-guidelines",
+  "version": "1.0.0",
+  "description": "Load focused operational guardrails on demand without bloating GEMINI.md.",
+  "category": "productivity",
+  "keywords": [
+    "guidelines",
+    "testing",
+    "security",
+    "environment",
+    "observability",
+    "documentation",
+    "archive",
+    "mcp"
+  ],
+  "related_skills": [
+    "quality-repair",
+    "project-continuity",
+    "archive-manager",
+    "mcp-ops"
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Layered Guidelines"
+  short_description: "Load focused operational guardrails on demand without bloating AGENTS.md."
+  default_prompt: "Use $layered-guidelines to route this request to the narrowest focused guidance lane."

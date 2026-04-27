@@ -263,7 +263,7 @@ Success means:
 
 - `GEMINI.md` exists
 - `mcp_config.json` exists
-- skills are installed
+- skills are installed, including eight router skills plus the `layered-guidelines` support skill
 - workflows are installed
 - `mcp_config.json` contains only `serena` and `MCP_DOCKER` MCP server entries
 - `MCP_DOCKER` points at `C:\Users\jerem\.docker\mcp\registry.hybrid-supplementals-antigravity.yaml`
